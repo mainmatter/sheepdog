@@ -1,14 +1,15 @@
 import { writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 
-type OurArgs = {
+type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
 	link: <T extends { cancel: () => void }>(task: T) => T;
 };
 
-export function task<TReturn, TArgs extends unknown[]>(
+export function task<TReturn, TArgs>(
 	gen_or_fun: (
-		...args: [OurArgs, ...TArgs]
+		args: TArgs,
+		utils: SvelteConcurrencyUtils,
 	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 ) {
 	const results: TReturn[] = [];
@@ -49,7 +50,7 @@ export function task<TReturn, TArgs extends unknown[]>(
 		cancel() {
 			abort_controller.abort();
 		},
-		perform(...args: TArgs) {
+		perform(args: TArgs) {
 			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
 			abort_controller = new AbortController();
 			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
@@ -60,7 +61,7 @@ export function task<TReturn, TArgs extends unknown[]>(
 			let resolve: (value: TReturn) => unknown;
 			queueMicrotask(async () => {
 				try {
-					const gen_or_value = await gen_or_fun({ signal: abort_controller.signal, link }, ...args);
+					const gen_or_value = await gen_or_fun(args, { signal: abort_controller.signal, link });
 					const is_generator =
 						gen_or_value &&
 						typeof gen_or_value === 'object' &&
