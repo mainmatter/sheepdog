@@ -6,7 +6,9 @@ type SvelteConcurrencyUtils = {
 	link: <T extends { cancel: () => void }>(task: T) => T;
 };
 
-export function task<TReturn, TArgs>(
+export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
+
+export function task<TArgs = undefined, TReturn = unknown>(
 	gen_or_fun: (
 		args: TArgs,
 		utils: SvelteConcurrencyUtils,
@@ -50,7 +52,7 @@ export function task<TReturn, TArgs>(
 		cancel() {
 			abort_controller.abort();
 		},
-		perform(args: TArgs) {
+		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
 			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
 			abort_controller = new AbortController();
 			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
@@ -61,7 +63,11 @@ export function task<TReturn, TArgs>(
 			let resolve: (value: TReturn) => unknown;
 			queueMicrotask(async () => {
 				try {
-					const gen_or_value = await gen_or_fun(args, { signal: abort_controller.signal, link });
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const gen_or_value = await gen_or_fun(args as any, {
+						signal: abort_controller.signal,
+						link,
+					});
 					const is_generator =
 						gen_or_value &&
 						typeof gen_or_value === 'object' &&

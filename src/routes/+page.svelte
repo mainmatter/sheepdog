@@ -1,3 +1,22 @@
-<h1>Welcome to your library project</h1>
-<p>Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { task } from '$lib/task.js';
+	import Child from './Child.svelte';
+
+	const parent = task(async function* (param: number) {
+		await new Promise((r) => setTimeout(r, 2000));
+		yield;
+		alert('Parent finished');
+		return param * 2;
+	});
+
+	let hidden = false;
+</script>
+
+<button
+	on:click={() => {
+		hidden = !hidden;
+	}}>{hidden ? 'mount' : 'unmount'} child</button
+>
+{#if !hidden}
+	<Child {parent} />
+{/if}
