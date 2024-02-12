@@ -1,5 +1,5 @@
-import { writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
+import { writable } from 'svelte/store';
 
 type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
