@@ -52,7 +52,7 @@ export function task<TArgs = undefined, TReturn = unknown>(
 		cancel() {
 			abort_controller.abort();
 		},
-		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
+		perform(...args: unknown[]) {
 			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
 			abort_controller = new AbortController();
 			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);

@@ -3,6 +3,7 @@
 	import Child from './Child.svelte';
 
 	const parent = task(async function* (param: number) {
+		debugger
 		await new Promise((r) => setTimeout(r, 2000));
 		yield;
 		alert('Parent finished');
