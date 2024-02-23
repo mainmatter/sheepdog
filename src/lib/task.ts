@@ -2,7 +2,7 @@ import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
 
 type SvelteConcurrencyUtils = {
-	signal: AbortSignal;
+	abortController: AbortController;
 	link: <T extends { cancel: () => void }>(task: T) => T;
 };
 
@@ -65,7 +65,7 @@ export function task<TArgs = undefined, TReturn = unknown>(
 				try {
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					const gen_or_value = await gen_or_fun(args as any, {
-						signal: abort_controller.signal,
+						abortController: abort_controller,
 						link,
 					});
 					const is_generator =
