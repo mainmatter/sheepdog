@@ -1,5 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
+import default_handler from './handlers/default';
+import enqueue from './handlers/enqueue';
+
+const handlers = {
+	default: default_handler,
+	enqueue,
+} as const;
+
+type HandlersMap = typeof handlers;
+
+type HandlerType = keyof HandlersMap;
+
+type TaskOptions = {
+	[K in HandlerType]: { kind: K } & (Parameters<HandlersMap[K]> extends []
+		? object
+		: Parameters<HandlersMap[K]>[0]);
+}[HandlerType];
 
 type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
@@ -13,7 +31,10 @@ export function task<TArgs = undefined, TReturn = unknown>(
 		args: TArgs,
 		utils: SvelteConcurrencyUtils,
 	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
+	options?: TaskOptions,
 ) {
+	const handler_factory = handlers[options?.kind ?? 'default'];
+	const handler = handler_factory(options as never);
 	const results: TReturn[] = [];
 
 	const { subscribe, ...result } = writable({
@@ -53,69 +74,77 @@ export function task<TArgs = undefined, TReturn = unknown>(
 			abort_controller.abort();
 		},
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
-			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
-			abort_controller = new AbortController();
-			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
-			result.update((old) => {
-				old.is_loading = true;
-				return old;
-			});
 			let resolve: (value: TReturn) => unknown;
-			queueMicrotask(async () => {
-				try {
-					const gen_or_value = await gen_or_fun(args[0]!, {
-						signal: abort_controller.signal,
-						link,
-					});
-					const is_generator =
-						gen_or_value &&
-						typeof gen_or_value === 'object' &&
-						Symbol.asyncIterator in gen_or_value;
-					if (is_generator) {
-						let next_val = await gen_or_value.next();
-						while (!next_val.done) {
-							if (abort_controller.signal.aborted) {
-								break;
-							}
-							next_val = await gen_or_value.next();
-						}
-						if (next_val.done) {
-							const last_result = next_val.value;
-							results.push(last_result);
-							result.update((old) => {
-								old.error = undefined;
-								old.is_loading = false;
-								old.last_successful = last_result;
-								return old;
-							});
-							resolve(next_val.value);
-						}
-					} else if (!abort_controller.signal.aborted) {
-						results.push(gen_or_value);
-						result.update((old) => {
-							old.error = undefined;
-							old.is_loading = false;
-							old.last_successful = gen_or_value;
-							return old;
-						});
-						resolve(gen_or_value);
-					}
-				} catch (e) {
-					if (!abort_controller.signal.aborted) {
-						result.update((old) => {
-							old.error = e;
-							old.is_loading = false;
-							return old;
-						});
-					}
-				}
-			});
-			return {
-				subscribe,
+			const promise = {
 				then(resolver: (value: TReturn) => TReturn) {
 					resolve = resolver;
 				},
 				//TODO: handle catch and finally
+			};
+			handler(
+				() => {
+					abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
+					abort_controller = new AbortController();
+					abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
+					result.update((old) => {
+						old.is_loading = true;
+						return old;
+					});
+					queueMicrotask(async () => {
+						try {
+							const gen_or_value = await gen_or_fun(args[0]!, {
+								signal: abort_controller.signal,
+								link,
+							});
+							const is_generator =
+								gen_or_value &&
+								typeof gen_or_value === 'object' &&
+								Symbol.asyncIterator in gen_or_value;
+							if (is_generator) {
+								let next_val = await gen_or_value.next();
+								while (!next_val.done) {
+									if (abort_controller.signal.aborted) {
+										break;
+									}
+									next_val = await gen_or_value.next();
+								}
+								if (next_val.done) {
+									const last_result = next_val.value;
+									results.push(last_result);
+									result.update((old) => {
+										old.error = undefined;
+										old.is_loading = false;
+										old.last_successful = last_result;
+										return old;
+									});
+									resolve(next_val.value);
+								}
+							} else if (!abort_controller.signal.aborted) {
+								results.push(gen_or_value);
+								result.update((old) => {
+									old.error = undefined;
+									old.is_loading = false;
+									old.last_successful = gen_or_value;
+									return old;
+								});
+								resolve(gen_or_value);
+							}
+						} catch (e) {
+							if (!abort_controller.signal.aborted) {
+								result.update((old) => {
+									old.error = e;
+									old.is_loading = false;
+									return old;
+								});
+							}
+						}
+					});
+				},
+				{ promise, abort_controller },
+			);
+			return {
+				subscribe,
+				...promise,
 			};
 		},
 	};
