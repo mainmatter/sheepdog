@@ -19,18 +19,45 @@
 		{ kind: 'enqueue', max: 3 },
 	);
 
+	const also_queue_log = task.enqueue(
+		async (param: number) => {
+			console.log('starting');
+			await new Promise((r) => setTimeout(r, 2000));
+			console.log(param);
+			return param;
+		},
+		{ max: 5 },
+	);
+
 	let hidden = false;
 </script>
 
-<pre>{JSON.stringify($queue_log, null, '	')}</pre>
+<fieldset>
+	<legend>queue_log</legend>
 
-<button
-	on:click={() => {
-		queue_log.perform(Math.random());
-	}}
->
-	Perform
-</button>
+	<pre>{JSON.stringify($queue_log, null, '	')}</pre>
+
+	<button
+		on:click={() => {
+			queue_log.perform(Math.random());
+		}}
+	>
+		Perform
+	</button>
+</fieldset>
+
+<fieldset>
+	<legend>also_queue_log</legend>
+	<pre>{JSON.stringify($also_queue_log, null, '	')}</pre>
+
+	<button
+		on:click={() => {
+			also_queue_log.perform(Math.random());
+		}}
+	>
+		Perform
+	</button>
+</fieldset>
 
 <button
 	on:click={() => {

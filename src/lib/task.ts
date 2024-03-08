@@ -26,7 +26,7 @@ type SvelteConcurrencyUtils = {
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
-export function task<TArgs = undefined, TReturn = unknown>(
+function _task<TArgs = undefined, TReturn = unknown>(
 	gen_or_fun: (
 		args: TArgs,
 		utils: SvelteConcurrencyUtils,
@@ -149,3 +149,28 @@ export function task<TArgs = undefined, TReturn = unknown>(
 		},
 	};
 }
+
+type HandlersShorthands = {
+	[K in HandlerType]: <TArgs = undefined, TReturn = unknown>(
+		gen_or_fun: (
+			args: TArgs,
+			utils: SvelteConcurrencyUtils,
+		) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
+		options?: Parameters<HandlersMap[K]> extends [] ? object : Parameters<HandlersMap[K]>[0],
+	) => ReturnType<typeof _task<TArgs, TReturn>>;
+};
+
+const to_assign: HandlersShorthands = {} as HandlersShorthands;
+
+function is_key(handler: string): handler is HandlerType {
+	return handler in handlers;
+}
+
+for (let handler in handlers) {
+	if (is_key(handler)) {
+		to_assign[handler] = (gen_or_fun, options) =>
+			_task(gen_or_fun, { kind: is_key(handler) ? handler : 'default', ...(options ?? {}) });
+	}
+}
+
+export const task = Object.assign(_task, to_assign);
