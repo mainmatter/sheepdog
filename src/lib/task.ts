@@ -63,8 +63,7 @@ export function task<TArgs = undefined, TReturn = unknown>(
 			let resolve: (value: TReturn) => unknown;
 			queueMicrotask(async () => {
 				try {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const gen_or_value = await gen_or_fun(args as any, {
+					const gen_or_value = await gen_or_fun(args[0]!, {
 						signal: abort_controller.signal,
 						link,
 					});
