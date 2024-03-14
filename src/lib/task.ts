@@ -166,7 +166,7 @@ function is_key(handler: string): handler is HandlerType {
 	return handler in handlers;
 }
 
-for (let handler in handlers) {
+for (const handler in handlers) {
 	if (is_key(handler)) {
 		to_assign[handler] = (gen_or_fun, options) =>
 			_task(gen_or_fun, { kind: is_key(handler) ? handler : 'default', ...(options ?? {}) });
