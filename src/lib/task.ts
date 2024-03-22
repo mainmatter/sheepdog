@@ -34,6 +34,9 @@ function _task<TArgs = undefined, TReturn = unknown>(
 	options?: TaskOptions,
 ) {
 	const handler_factory = handlers[options?.kind ?? 'default'];
+	if (!handler_factory) {
+		throw new Error(`Unexpected kind '${options?.kind}'`);
+	}
 	const handler = handler_factory(options as never);
 	const results: TReturn[] = [];
 
@@ -75,12 +78,11 @@ function _task<TArgs = undefined, TReturn = unknown>(
 		},
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
 			let resolve: (value: TReturn) => unknown;
-			const promise = {
-				then(resolver: (value: TReturn) => TReturn) {
-					resolve = resolver;
-				},
-				//TODO: handle catch and finally
-			};
+			let reject: (cause: unknown) => unknown;
+			const promise = new Promise<TReturn>((resolver, rejecter) => {
+				resolve = resolver;
+				reject = rejecter;
+			});
 			handler(
 				() => {
 					abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
@@ -137,6 +139,7 @@ function _task<TArgs = undefined, TReturn = unknown>(
 									return old;
 								});
 							}
+							reject(e);
 						}
 					});
 				},
