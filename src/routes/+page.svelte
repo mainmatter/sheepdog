@@ -30,6 +30,8 @@
 	);
 
 	let hidden = false;
+
+	let x;
 </script>
 
 <fieldset>
@@ -38,12 +40,13 @@
 	<pre>{JSON.stringify($queue_log, null, '	')}</pre>
 
 	<button
-		on:click={() => {
-			queue_log.perform(Math.random());
+		on:click={async () => {
+			x = queue_log.perform(Math.random());
 		}}
 	>
 		Perform
 	</button>
+	<pre>{JSON.stringify($x, null, '	')}</pre>
 </fieldset>
 
 <fieldset>

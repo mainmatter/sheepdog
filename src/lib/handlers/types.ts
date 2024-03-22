@@ -2,5 +2,5 @@
 export type Handler = (options?: any) => (
 	fn: () => void,
 
-	utils: { promise: { then: unknown }; abort_controller: AbortController },
+	utils: { promise: Promise<unknown>; abort_controller: AbortController },
 ) => void;

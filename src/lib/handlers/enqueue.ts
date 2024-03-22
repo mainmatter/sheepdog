@@ -20,8 +20,12 @@ const handler = (({ max = 1 }: { max?: number } = { max: 1 }) => {
 			return;
 		}
 		running++;
-		fn();
-		await utils.promise;
+		try {
+			fn();
+			await utils.promise;
+		} catch {
+			/** empty */
+		}
 		running--;
 		const next = queue.pop();
 		if (next) {
