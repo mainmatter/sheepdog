@@ -30,6 +30,11 @@
 		return param;
 	});
 
+	const drop_log = task.drop(async (param: number) => {
+		await new Promise((r) => setTimeout(r, 2000));
+		return param;
+	});
+
 	let hidden = false;
 
 	let x;
@@ -70,6 +75,19 @@
 	<button
 		on:click={() => {
 			restart_log.perform(Math.random());
+		}}
+	>
+		Perform
+	</button>
+</fieldset>
+
+<fieldset>
+	<legend>drop_log</legend>
+	<pre>{JSON.stringify($drop_log, null, '	')}</pre>
+
+	<button
+		on:click={() => {
+			drop_log.perform(Math.random());
 		}}
 	>
 		Perform
