@@ -3,10 +3,12 @@ import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
 import default_handler from './handlers/default';
 import enqueue from './handlers/enqueue';
+import restart from './handlers/restart';
 
 const handlers = {
 	default: default_handler,
 	enqueue,
+	restart,
 } as const;
 
 type HandlersMap = typeof handlers;
@@ -21,7 +23,7 @@ type TaskOptions = {
 
 type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
-	link: <T extends { cancel: () => void }>(task: T) => T;
+	link: <T extends { cancelAll: () => void }>(task: T) => T;
 };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
@@ -47,23 +49,25 @@ function _task<TArgs = undefined, TReturn = unknown>(
 		results,
 	});
 
-	let abort_controller = new AbortController();
-	abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
+	let abort_controllers = new Set<AbortController>();
 
 	onDestroy(() => {
-		abort_controller.abort();
+		abort_controllers.forEach((abort_controller) => {
+			abort_controller.abort();
+			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
+		});
 	});
 
-	const child_tasks = new Set<{ cancel: () => void }>();
+	const child_tasks = new Set<{ cancelAll: () => void }>();
 
-	function link<T extends { cancel: () => void }>(task: T) {
+	function link<T extends { cancelAll: () => void }>(task: T) {
 		child_tasks.add(task);
 		return task;
 	}
 
 	function cancel_linked_and_update_store() {
 		for (const child_task of child_tasks) {
-			child_task.cancel();
+			child_task.cancelAll();
 		}
 		result.update((old) => {
 			old.is_loading = false;
@@ -73,8 +77,10 @@ function _task<TArgs = undefined, TReturn = unknown>(
 
 	return {
 		subscribe,
-		cancel() {
-			abort_controller.abort();
+		cancelAll() {
+			abort_controllers.forEach((abort_controller) => {
+				abort_controller.abort();
+			});
 		},
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
 			let resolve: (value: TReturn) => unknown;
@@ -83,11 +89,11 @@ function _task<TArgs = undefined, TReturn = unknown>(
 				resolve = resolver;
 				reject = rejecter;
 			});
+			const abort_controller = new AbortController();
+			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
+			abort_controllers.add(abort_controller);
 			handler(
 				() => {
-					abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
-					abort_controller = new AbortController();
-					abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
 					result.update((old) => {
 						old.is_loading = true;
 						return old;
@@ -145,10 +151,13 @@ function _task<TArgs = undefined, TReturn = unknown>(
 				},
 				{ promise, abort_controller },
 			);
-			return {
+
+			return Object.assign(promise, {
 				subscribe,
-				...promise,
-			};
+				cancel() {
+					abort_controller.abort();
+				},
+			});
 		},
 	};
 }
