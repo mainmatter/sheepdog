@@ -2,3 +2,7 @@
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Ignore files that are created by release-plan
+CHANGELOG.md
+.release-plan.json
