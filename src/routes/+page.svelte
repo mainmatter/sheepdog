@@ -11,9 +11,7 @@
 
 	const queue_log = task(
 		async (param: number) => {
-			console.log('starting');
 			await new Promise((r) => setTimeout(r, 2000));
-			console.log(param);
 			return param;
 		},
 		{ kind: 'enqueue', max: 3 },
@@ -21,9 +19,7 @@
 
 	const also_queue_log = task.enqueue(
 		async (param: number) => {
-			console.log('starting');
 			await new Promise((r) => setTimeout(r, 2000));
-			console.log(param);
 			return param;
 		},
 		{ max: 5 },
