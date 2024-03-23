@@ -2,11 +2,13 @@
 import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
 import default_handler from './handlers/default';
+import drop from './handlers/drop';
 import enqueue from './handlers/enqueue';
 import restart from './handlers/restart';
 
 const handlers = {
 	default: default_handler,
+	drop,
 	enqueue,
 	restart,
 } as const;
