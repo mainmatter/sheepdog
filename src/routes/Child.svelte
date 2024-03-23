@@ -11,12 +11,19 @@
 		alert('Child finished');
 		return num * 2;
 	});
+
+	let num: ReturnType<typeof child.perform>;
 </script>
 
 <button
 	on:click={async () => {
-		const num = await child.perform();
-		alert(`Result: ${num}`);
+		num = child.perform();
+		alert(`Result: ${await num}`);
 	}}>Perform child</button
+>
+<button
+	on:click={() => {
+		num.cancel();
+	}}>cancel child last instance</button
 >
 <pre>{JSON.stringify($child, null, '	')}</pre>

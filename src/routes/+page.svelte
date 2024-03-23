@@ -11,9 +11,7 @@
 
 	const queue_log = task(
 		async (param: number) => {
-			console.log('starting');
 			await new Promise((r) => setTimeout(r, 2000));
-			console.log(param);
 			return param;
 		},
 		{ kind: 'enqueue', max: 3 },
@@ -21,13 +19,16 @@
 
 	const also_queue_log = task.enqueue(
 		async (param: number) => {
-			console.log('starting');
 			await new Promise((r) => setTimeout(r, 2000));
-			console.log(param);
 			return param;
 		},
 		{ max: 5 },
 	);
+
+	const restart_log = task.restart(async (param: number) => {
+		await new Promise((r) => setTimeout(r, 2000));
+		return param;
+	});
 
 	let hidden = false;
 
@@ -56,6 +57,19 @@
 	<button
 		on:click={() => {
 			also_queue_log.perform(Math.random());
+		}}
+	>
+		Perform
+	</button>
+</fieldset>
+
+<fieldset>
+	<legend>restart_log</legend>
+	<pre>{JSON.stringify($restart_log, null, '	')}</pre>
+
+	<button
+		on:click={() => {
+			restart_log.perform(Math.random());
 		}}
 	>
 		Perform
