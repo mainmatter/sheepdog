@@ -1,23 +1,22 @@
 import type { Handler } from './types';
 
 type Handle = ReturnType<Handler>;
-type Fn = Parameters<Handle>[0];
 
-const handler = (() => {
-	let running: null | Fn;
+const handler = (({ max = 1 }: { max?: number } = { max: 1 }) => {
+	let running = 0;
 
 	const handle: Handle = async (fn: () => void, utils) => {
-		if (running) {
+		if (running >= max) {
 			return;
 		}
-		running = fn;
+		running++;
 		try {
 			fn();
 			await utils.promise;
 		} catch {
 			/** empty */
 		}
-		running = null;
+		running--;
 	};
 	return handle;
 }) satisfies Handler;
