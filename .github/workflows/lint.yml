@@ -1,0 +1,9 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    name: Lint
+    steps:
+      - uses: pnpm/action-setup@v2
+      - run: pnpm i --frozen-lockfile
+      - run: pnpm run lint
