@@ -3,6 +3,7 @@ on: [push]
 jobs:
   build:
     name: Lint
+    runs-on: ubuntu-latest
     steps:
       - uses: pnpm/action-setup@v2
       - run: pnpm i --frozen-lockfile
