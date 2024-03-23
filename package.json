@@ -32,7 +32,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
-		"format": "prettier --write .",
+		"format": "eslint . --fix && prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"package": "svelte-kit sync && svelte-package && publint",
 		"prepublishOnly": "npm run package",

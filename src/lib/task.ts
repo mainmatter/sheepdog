@@ -51,7 +51,7 @@ function _task<TArgs = undefined, TReturn = unknown>(
 		results,
 	});
 
-	let abort_controllers = new Set<AbortController>();
+	const abort_controllers = new Set<AbortController>();
 
 	onDestroy(() => {
 		abort_controllers.forEach((abort_controller) => {
