@@ -77,7 +77,8 @@ jobs:
           fi
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: 'Fix linting'
+        run: pnpm format
       - uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Prepare Release using 'release-plan'"
