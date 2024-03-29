@@ -1,5 +1,26 @@
 # Changelog
 
+## Release (2024-03-27)
+
+svelte-concurrency 0.2.0 (minor)
+
+#### :rocket: Enhancement
+* `svelte-concurrency`
+  * [#27](https://github.com/mainmatter/svelte-concurrency/pull/27) Add `drop` task ([@beerinho](https://github.com/beerinho))
+  * [#29](https://github.com/mainmatter/svelte-concurrency/pull/29) Add `restart` task ([@beerinho](https://github.com/beerinho))
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#13](https://github.com/mainmatter/svelte-concurrency/pull/13) Update typescript-eslint monorepo to v7 (major) ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#36](https://github.com/mainmatter/svelte-concurrency/pull/36) fix formatter & linting ([@beerinho](https://github.com/beerinho))
+  * [#35](https://github.com/mainmatter/svelte-concurrency/pull/35) fix linting workflow ([@beerinho](https://github.com/beerinho))
+  * [#33](https://github.com/mainmatter/svelte-concurrency/pull/33) Fix lint workflow ([@beerinho](https://github.com/beerinho))
+  * [#32](https://github.com/mainmatter/svelte-concurrency/pull/32) Fix lint workflow ([@beerinho](https://github.com/beerinho))
+  * [#31](https://github.com/mainmatter/svelte-concurrency/pull/31) Fix linting ([@beerinho](https://github.com/beerinho))
+
+#### Committers: 1
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+
 ## Release (2024-03-22)
 
 svelte-concurrency 0.1.0 (minor)
