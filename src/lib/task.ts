@@ -23,7 +23,7 @@ type TaskOptions = {
 		: Parameters<HandlersMap[K]>[0]);
 }[HandlerType];
 
-type SvelteConcurrencyUtils = {
+export type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
 	link: <T extends { cancelAll: () => void }>(task: T) => T;
 };

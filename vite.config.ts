@@ -1,9 +1,13 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	plugins: [sveltekit()],
+	resolve: {
+		conditions: mode === 'test' ? ['browser'] : [],
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
+		setupFiles: './src/vitest-setup.ts',
 	},
-});
+}));
