@@ -1,5 +1,17 @@
 # Changelog
 
+## Release (2024-03-31)
+
+svelte-concurrency 0.2.1 (patch)
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#40](https://github.com/mainmatter/svelte-concurrency/pull/40) chore: add basic testing setup ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#39](https://github.com/mainmatter/svelte-concurrency/pull/39) chore: format after prepare release ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-03-27)
 
 svelte-concurrency 0.2.0 (minor)

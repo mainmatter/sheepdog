@@ -1,14 +1,10 @@
 {
   "solution": {
     "svelte-concurrency": {
-      "impact": "minor",
-      "oldVersion": "0.1.0",
-      "newVersion": "0.2.0",
+      "impact": "patch",
+      "oldVersion": "0.2.0",
+      "newVersion": "0.2.1",
       "constraints": [
-        {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
-        },
         {
           "impact": "patch",
           "reason": "Appears in changelog section :house: Internal"
@@ -17,5 +13,5 @@
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2024-03-27)\n\nsvelte-concurrency 0.2.0 (minor)\n\n#### :rocket: Enhancement\n* `svelte-concurrency`\n  * [#27](https://github.com/mainmatter/svelte-concurrency/pull/27) Add `drop` task ([@beerinho](https://github.com/beerinho))\n  * [#29](https://github.com/mainmatter/svelte-concurrency/pull/29) Add `restart` task ([@beerinho](https://github.com/beerinho))\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#13](https://github.com/mainmatter/svelte-concurrency/pull/13) Update typescript-eslint monorepo to v7 (major) ([@renovate[bot]](https://github.com/apps/renovate))\n  * [#36](https://github.com/mainmatter/svelte-concurrency/pull/36) fix formatter & linting ([@beerinho](https://github.com/beerinho))\n  * [#35](https://github.com/mainmatter/svelte-concurrency/pull/35) fix linting workflow ([@beerinho](https://github.com/beerinho))\n  * [#33](https://github.com/mainmatter/svelte-concurrency/pull/33) Fix lint workflow ([@beerinho](https://github.com/beerinho))\n  * [#32](https://github.com/mainmatter/svelte-concurrency/pull/32) Fix lint workflow ([@beerinho](https://github.com/beerinho))\n  * [#31](https://github.com/mainmatter/svelte-concurrency/pull/31) Fix linting ([@beerinho](https://github.com/beerinho))\n\n#### Committers: 1\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n"
+  "description": "## Release (2024-03-31)\n\nsvelte-concurrency 0.2.1 (patch)\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#40](https://github.com/mainmatter/svelte-concurrency/pull/40) chore: add basic testing setup ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#39](https://github.com/mainmatter/svelte-concurrency/pull/39) chore: format after prepare release ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
