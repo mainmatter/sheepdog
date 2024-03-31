@@ -27,7 +27,7 @@ const handler = (({ max = 1 }: { max?: number } = { max: 1 }) => {
 			/** empty */
 		}
 		running--;
-		const next = queue.pop();
+		const next = queue.shift();
 		if (next) {
 			handle(next.fn, next.utils);
 		}
