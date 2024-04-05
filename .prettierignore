@@ -8,3 +8,5 @@ CHANGELOG.md
 .release-plan.json
 
 /dist
+
+/src/lib/tests/expected-transforms/*/**
