@@ -30,3 +30,5 @@ allowing `svelte-concurrency` to interrupt your function if you call it mid-exec
 ## How to write async transform tests?
 
 If you want to write a new test for the async transformation you just need to create a `code.js` file in a new folder in `./src/lib/tests/expected-transforms`. Try to give the folder a descriptive name and the run `pnpm generate-expected`. This will create a series of `transform.js` files in the various folder which will later be used to test the transform. If you are modifying the transform make sure to run the tests before running the `generate-expected` script!
+
+P.s. If, after you run the script, you'll see a folder with `code.js` and no `transform.js` this means that in that case the transform will not apply.
