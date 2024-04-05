@@ -204,6 +204,31 @@ describe("task - specific functionality 'enqueue'", () => {
 			expect(max_concurrent).toBe(1);
 		});
 
+		it('runs multiple time if performed multiple time but only `max` at a time (max: 3)', async () => {
+			let concurrent = 0;
+			let max_concurrent = -Infinity;
+			const fn = vi.fn(async () => {
+				concurrent++;
+				max_concurrent = Math.max(max_concurrent, concurrent);
+				await wait(50);
+				concurrent--;
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+				max: 3,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(5);
+			});
+			expect(max_concurrent).toBe(3);
+		});
+
 		it("cancel the last instance if you call cancel on the returned instance, the function is a generator and there's a yield after every await", async () => {
 			let count = 0;
 			const wait_time = 50;
@@ -231,6 +256,71 @@ describe("task - specific functionality 'enqueue'", () => {
 			});
 			await wait(wait_time);
 			expect(count).toBe(2);
+		});
+	});
+});
+
+describe("task - specific functionality 'drop'", () => {
+	all_options((selector) => {
+		it('runs only `max` time if performed when other instances are already running', async () => {
+			let concurrent = 0;
+			let max_concurrent = -Infinity;
+			const fn = vi.fn(async () => {
+				concurrent++;
+				max_concurrent = Math.max(max_concurrent, concurrent);
+				await wait(50);
+				concurrent--;
+			});
+			const { getByTestId } = render(Drop, {
+				fn,
+				max: 1,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(1);
+			});
+			expect(max_concurrent).toBe(1);
+			await vi.waitFor(() => {
+				expect(concurrent).toBe(0);
+			});
+			expect(fn).toHaveBeenCalledTimes(1);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(2);
+			});
+		});
+
+		it('runs only `max` time if performed when other instances are already running (max: 3)', async () => {
+			let concurrent = 0;
+			let max_concurrent = -Infinity;
+			const fn = vi.fn(async () => {
+				concurrent++;
+				max_concurrent = Math.max(max_concurrent, concurrent);
+				await wait(50);
+				concurrent--;
+			});
+			const { getByTestId } = render(Drop, {
+				fn,
+				max: 3,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(3);
+			});
+			expect(max_concurrent).toBe(3);
+			await vi.waitFor(() => {
+				expect(concurrent).toBe(0);
+			});
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(4);
+			});
 		});
 	});
 });
