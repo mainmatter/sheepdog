@@ -36,7 +36,7 @@ describe.each([
 
 		it("runs to completion if it's not cancelled", async () => {
 			let count = 0;
-			const wait_time = 2000;
+			const wait_time = 50;
 			async function* fn() {
 				await wait(wait_time);
 				yield;
@@ -47,19 +47,14 @@ describe.each([
 			});
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await vi.waitFor(
-				() => {
-					expect(count).toBe(1);
-				},
-				{
-					timeout: 3000,
-				},
-			);
+			await vi.waitFor(() => {
+				expect(count).toBe(1);
+			});
 		});
 
 		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
 			let count = 0;
-			const wait_time = 2000;
+			const wait_time = 50;
 			let task_signal: AbortSignal;
 			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
 				task_signal = signal;
@@ -73,7 +68,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
-			await wait(500);
+			await wait(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -155,10 +150,10 @@ describe("task - specific functionality 'default'", () => {
 
 		it("cancel the last instance if you call cancel on the returned instance, the function is a generator and there's a yield after every await", async () => {
 			let count = 0;
-			const wait_time = 2000;
-			let task_signal: AbortSignal;
+			const wait_time = 50;
+			const task_signals: AbortSignal[] = [];
 			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
-				task_signal = signal;
+				task_signals.push(signal);
 				await wait(wait_time);
 				yield;
 				count++;
@@ -171,10 +166,12 @@ describe("task - specific functionality 'default'", () => {
 			perform.click();
 			perform.click();
 			perform.click();
-			await wait(500);
+			await vi.waitFor(() => {
+				expect(task_signals.length).toBe(3);
+			});
 			cancel.click();
 			await vi.waitFor(() => {
-				expect(task_signal.aborted).toBeTruthy();
+				expect(task_signals[2].aborted).toBeTruthy();
 			});
 			await wait(wait_time);
 			expect(count).toBe(2);
@@ -190,7 +187,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			const fn = vi.fn(async () => {
 				concurrent++;
 				max_concurrent = Math.max(max_concurrent, concurrent);
-				await wait(200);
+				await wait(50);
 				concurrent--;
 			});
 			const { getByTestId } = render(Enqueue, {
@@ -209,7 +206,7 @@ describe("task - specific functionality 'enqueue'", () => {
 
 		it("cancel the last instance if you call cancel on the returned instance, the function is a generator and there's a yield after every await", async () => {
 			let count = 0;
-			const wait_time = 600;
+			const wait_time = 50;
 			const task_signals: AbortSignal[] = [];
 			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
 				task_signals.push(signal);
@@ -225,13 +222,9 @@ describe("task - specific functionality 'enqueue'", () => {
 			perform.click();
 			perform.click();
 			perform.click();
-			await vi.waitFor(
-				() => {
-					expect(task_signals.length).toBe(3);
-				},
-				{ timeout: wait_time * 3 },
-			);
-			await wait(500);
+			await vi.waitFor(() => {
+				expect(task_signals.length).toBe(3);
+			});
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signals[2].aborted).toBeTruthy();
