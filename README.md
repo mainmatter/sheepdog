@@ -1,58 +1,32 @@
-# create-svelte
+# svelte-concurrency
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Handle async task with ease thanks to `svelte-concurrency`
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+## Async transform
 
-## Creating a project
+One of the problems of Promises is that they can't be really canceled...once you invoke a promise there's no other way than do a series of if checks to "cancel" it. This is not the case for async generators. When you yield something back it's up to the invoker to continue calling next or stop indefinitely.
 
-If you're seeing this, you've probably already done this step. Congrats!
+> But generators are scary!
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Understandable...that's why `svelte-concurrency` also includes a `vite` plugin that transforms your async functions in generators! This will transform your code from this:
 
-# create a new project in my-app
-npm create svelte@latest my-app
+```ts
+const instance = task(async () => {
+	const res = await fetch('...');
+});
 ```
 
-## Developing
+to this
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```ts
+const instance = task(async function* () {
+	const res = await fetch('...');
+	yield;
+});
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+allowing `svelte-concurrency` to interrupt your function if you call it mid-execution. And have no fear, this will only apply to async functions that you pass as parameter to the task function from `svelte-concurrency`!
 
-## Building
+## How to write async transform tests?
 
-To build your library:
-
-```bash
-npm run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+If you want to write a new test for the async transformation you just need to create a `code.js` file in a new folder in `./src/lib/tests/expected-transforms`. Try to give the folder a descriptive name and the run `pnpm generate-expected`. This will create a series of `transform.js` files in the various folder which will later be used to test the transform. If you are modifying the transform make sure to run the tests before running the `generate-expected` script!
