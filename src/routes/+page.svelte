@@ -25,10 +25,16 @@
 		{ max: 5 },
 	);
 
-	const restart_log = task.restart(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param;
-	});
+	const restart_log = task.restart(
+		async function* (param: number) {
+			console.log('started ', param);
+			await new Promise((r) => setTimeout(r, 2000));
+			yield;
+			console.log('finished ', param);
+			return param;
+		},
+		{ max: 3 },
+	);
 
 	const drop_log = task.drop(async (param: number) => {
 		await new Promise((r) => setTimeout(r, 2000));

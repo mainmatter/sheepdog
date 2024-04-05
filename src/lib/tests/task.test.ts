@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from 'vitest';
 import Default from './components/default.svelte';
 import Enqueue from './components/enqueue.svelte';
 import Drop from './components/drop.svelte';
+import Restart from './components/restart.svelte';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,6 +21,7 @@ describe.each([
 	{ component: Default, name: 'default' },
 	{ component: Enqueue, name: 'enqueue' },
 	{ component: Drop, name: 'drop' },
+	{ component: Restart, name: 'restart' },
 ])('task - basic functionality $name', ({ component }) => {
 	all_options((selector) => {
 		it('calls the function you pass in', async () => {
@@ -321,6 +323,83 @@ describe("task - specific functionality 'drop'", () => {
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(4);
 			});
+		});
+	});
+});
+
+describe("task - specific functionality 'restart'", () => {
+	all_options((selector) => {
+		it('completes only `max` time if performed when other instances are already running', async () => {
+			let finished = 0;
+			const abort_signals: AbortSignal[] = [];
+			const fn = vi.fn(async function* (_: number, { signal }: SvelteConcurrencyUtils) {
+				abort_signals.push(signal);
+				await wait(50);
+				yield;
+				finished++;
+			});
+			const { getByTestId } = render(Restart, {
+				fn,
+				max: 1,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(3);
+			});
+			await vi.waitFor(() => {
+				expect(finished).toBe(1);
+			});
+			expect(abort_signals.map((signal) => signal.aborted)).toStrictEqual([true, true, false]);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(finished).toBe(2);
+			});
+			expect(abort_signals.at(-1)?.aborted).toBe(false);
+		});
+
+		it('completes only `max` time if performed when other instances are already running (max: 3)', async () => {
+			let finished = 0;
+			const abort_signals: AbortSignal[] = [];
+			const fn = vi.fn(async function* (_: number, { signal }: SvelteConcurrencyUtils) {
+				abort_signals.push(signal);
+				await wait(50);
+				yield;
+				finished++;
+			});
+			const { getByTestId } = render(Restart, {
+				fn,
+				max: 3,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(abort_signals[0]?.aborted).toBe(true);
+			});
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(5);
+			});
+			await vi.waitFor(() => {
+				expect(finished).toBe(3);
+			});
+			expect(abort_signals.map((signal) => signal.aborted)).toStrictEqual([
+				true,
+				true,
+				false,
+				false,
+				false,
+			]);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(finished).toBe(4);
+			});
+			expect(abort_signals.at(-1)?.aborted).toBe(false);
 		});
 	});
 });
