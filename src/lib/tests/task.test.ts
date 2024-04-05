@@ -6,6 +6,7 @@ import { render } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
 import Default from './components/default.svelte';
 import Enqueue from './components/enqueue.svelte';
+import Drop from './components/drop.svelte';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,6 +19,7 @@ function all_options(fn: (selector: string) => void) {
 describe.each([
 	{ component: Default, name: 'default' },
 	{ component: Enqueue, name: 'enqueue' },
+	{ component: Drop, name: 'drop' },
 ])('task - basic functionality $name', ({ component }) => {
 	all_options((selector) => {
 		it('calls the function you pass in', async () => {
