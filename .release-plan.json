@@ -1,10 +1,18 @@
 {
   "solution": {
     "svelte-concurrency": {
-      "impact": "patch",
-      "oldVersion": "0.2.0",
-      "newVersion": "0.2.1",
+      "impact": "minor",
+      "oldVersion": "0.2.1",
+      "newVersion": "0.3.0",
       "constraints": [
+        {
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
         {
           "impact": "patch",
           "reason": "Appears in changelog section :house: Internal"
@@ -13,5 +21,5 @@
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2024-03-31)\n\nsvelte-concurrency 0.2.1 (patch)\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#40](https://github.com/mainmatter/svelte-concurrency/pull/40) chore: add basic testing setup ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#39](https://github.com/mainmatter/svelte-concurrency/pull/39) chore: format after prepare release ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-04-19)\n\nsvelte-concurrency 0.3.0 (minor)\n\n#### :rocket: Enhancement\n* `svelte-concurrency`\n  * [#45](https://github.com/mainmatter/svelte-concurrency/pull/45) feat: add max to restartable ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :bug: Bug Fix\n* `svelte-concurrency`\n  * [#41](https://github.com/mainmatter/svelte-concurrency/pull/41) fix: abort when dropping ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#46](https://github.com/mainmatter/svelte-concurrency/pull/46) chore: async transform tests ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#42](https://github.com/mainmatter/svelte-concurrency/pull/42) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))\n  * [#43](https://github.com/mainmatter/svelte-concurrency/pull/43) chore: restructure testing and add tests for enqueue ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

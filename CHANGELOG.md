@@ -1,5 +1,26 @@
 # Changelog
 
+## Release (2024-04-19)
+
+svelte-concurrency 0.3.0 (minor)
+
+#### :rocket: Enhancement
+* `svelte-concurrency`
+  * [#45](https://github.com/mainmatter/svelte-concurrency/pull/45) feat: add max to restartable ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :bug: Bug Fix
+* `svelte-concurrency`
+  * [#41](https://github.com/mainmatter/svelte-concurrency/pull/41) fix: abort when dropping ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#46](https://github.com/mainmatter/svelte-concurrency/pull/46) chore: async transform tests ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#42](https://github.com/mainmatter/svelte-concurrency/pull/42) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#43](https://github.com/mainmatter/svelte-concurrency/pull/43) chore: restructure testing and add tests for enqueue ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-03-31)
 
 svelte-concurrency 0.2.1 (patch)
