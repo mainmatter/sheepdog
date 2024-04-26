@@ -9,6 +9,7 @@ import type {
 	CallExpression,
 	Statement,
 	Expression,
+	YieldExpression,
 } from 'acorn';
 
 type Nodes = ImportDeclaration | FunctionExpression | ArrowFunctionExpression | CallExpression;
@@ -16,64 +17,64 @@ type Nodes = ImportDeclaration | FunctionExpression | ArrowFunctionExpression | 
 /**
  * This should handle most situation where you can top level await in an async function
  */
-function has_expression_await(expression: Expression): boolean {
+function get_expressions_await(expression: Expression): Expression[] {
 	switch (expression.type) {
 		case 'ArrayExpression':
 			// const x = [await promise];
-			return expression.elements.some(
+			return expression.elements.flatMap(
 				(element) =>
-					element?.type !== 'SpreadElement' && element !== null && has_expression_await(element),
+					element?.type !== 'SpreadElement' && element !== null ? get_expressions_await(element) : [],
 			);
 		case 'AssignmentExpression':
 			// x = await promise; x = { value: await promise }; x = [await promise]
 			// TODO: [x = await promise] = [undefined]
-			return has_expression_await(expression.right);
+			return get_expressions_await(expression.right);
 		case 'AwaitExpression':
 			// await promise;
-			return true;
+			return [expression];
 		case 'BinaryExpression':
 			// await promise + something;
-			return (
-				(expression.left.type !== 'PrivateIdentifier' && has_expression_await(expression.left)) ||
-				has_expression_await(expression.right)
-			);
+			if(expression.left.type !== "PrivateIdentifier"){
+				return get_expressions_await(expression.left).concat(get_expressions_await(expression.right));
+			}
+			return get_expressions_await(expression.right);
 		case 'CallExpression':
 			// fn_call(await stuff);
 			// TODO: fns[await name]();
-			return expression.arguments.some(
-				(argument) => argument.type !== 'SpreadElement' && has_expression_await(argument),
+			return expression.arguments.flatMap(
+				(argument) => argument.type !== 'SpreadElement' ? get_expressions_await(argument) : [],
 			);
 		case 'ConditionalExpression':
 			// await test ? await consequent : await alternate;
 			return (
-				has_expression_await(expression.alternate) ||
-				has_expression_await(expression.consequent) ||
-				has_expression_await(expression.test)
+				get_expressions_await(expression.alternate).concat(
+				get_expressions_await(expression.consequent)).concat(
+				get_expressions_await(expression.test))
 			);
 		case 'LogicalExpression':
 			// await promise || await another;
-			return has_expression_await(expression.left) || has_expression_await(expression.right);
+			return get_expressions_await(expression.left).concat(get_expressions_await(expression.right));
 		case 'MemberExpression':
 			return (
-				expression.property.type !== 'PrivateIdentifier' &&
-				has_expression_await(expression.property)
+				expression.property.type !== 'PrivateIdentifier' ?
+				get_expressions_await(expression.property) : []
 			);
 		case 'ObjectExpression':
-			return expression.properties.some(
+			return expression.properties.flatMap(
 				(property) =>
-					property.type !== 'SpreadElement' &&
-					(has_expression_await(property.key) || has_expression_await(property.value)),
+					property.type !== 'SpreadElement' ?
+					(get_expressions_await(property.key).concat(get_expressions_await(property.value))) : [],
 			);
 		case 'TaggedTemplateExpression':
-			return has_expression_await(expression.quasi);
+			return get_expressions_await(expression.quasi);
 		case 'TemplateLiteral':
-			return expression.expressions.some((template_expression) =>
-				has_expression_await(template_expression),
+			return expression.expressions.flatMap((template_expression) =>
+				get_expressions_await(template_expression),
 			);
 		case 'UnaryExpression':
-			return has_expression_await(expression.argument);
+			return get_expressions_await(expression.argument);
 		default:
-			return false;
+			return [];
 	}
 }
 
@@ -82,26 +83,22 @@ function update_body(task: FunctionExpression) {
 
 	for (const statement of task.body.body) {
 		body.push(statement);
-		if (
-			(statement.type === 'ExpressionStatement' && has_expression_await(statement.expression)) ||
-			(statement.type === 'VariableDeclaration' &&
-				statement.declarations.some((declarator) => {
-					return declarator.init && has_expression_await(declarator.init);
-				})) ||
-			(statement.type === 'ForInStatement' && has_expression_await(statement.right)) ||
-			(statement.type === 'ForOfStatement' && has_expression_await(statement.right))
-		) {
-			body.push({
-				type: 'ExpressionStatement',
-				expression: {
-					type: 'YieldExpression',
-					delegate: false,
-					start: 0,
-					end: 0,
-				},
-				start: 0,
-				end: 0,
-			});
+		let expressions: Expression[] = [];
+		if(statement.type === "ExpressionStatement"){
+			expressions = get_expressions_await(statement.expression);
+		}else if(statement.type === "VariableDeclaration"){
+			for(let declaration of statement.declarations){
+				if(declaration.init){
+					expressions = expressions.concat(get_expressions_await(declaration.init));
+				}
+			}
+		}else if(statement.type === "ForInStatement" || statement.type === "ForOfStatement"){
+			expressions = get_expressions_await(statement.right)
+		}
+		for(let expression of expressions){
+			if(expression.type==="AwaitExpression"){
+				(expression as unknown as YieldExpression).type="YieldExpression";
+			}
 		}
 	}
 	task.body.body = body;

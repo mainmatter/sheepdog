@@ -116,7 +116,7 @@ function _task<TArgs = undefined, TReturn = unknown>(
 									if (abort_controller.signal.aborted) {
 										break;
 									}
-									next_val = await gen_or_value.next();
+									next_val = await gen_or_value.next(next_val.value);
 								}
 								if (next_val.done) {
 									const last_result = next_val.value;
