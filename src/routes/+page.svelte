@@ -41,9 +41,19 @@
 		return param;
 	});
 
+	const latest_log = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param;
+		},
+		{ kind: 'keepLatest', max: 3 },
+	);
+
 	let hidden = false;
 
 	let x;
+
+	let numbers: number[] = [];
 </script>
 
 <fieldset>
@@ -98,6 +108,35 @@
 	>
 		Perform
 	</button>
+</fieldset>
+
+<fieldset>
+	<legend>latest_log</legend>
+	<pre>{JSON.stringify($latest_log, null, '	')}</pre>
+
+	<button
+		on:click={() => {
+			const num = Math.random();
+			numbers = [...numbers, num];
+			latest_log.perform(num);
+		}}
+	>
+		Perform
+	</button>
+	<button
+		on:click={() => {
+			numbers = [];
+		}}
+	>
+		Clear numbers
+	</button>
+	<ul>
+		{#each numbers as number}
+			<li>
+				{number}
+			</li>
+		{/each}
+	</ul>
 </fieldset>
 
 <button

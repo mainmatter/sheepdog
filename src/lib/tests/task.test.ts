@@ -11,6 +11,7 @@ import Link from './components/link/parent.svelte';
 import WrongKind from './components/wrong-kind.svelte';
 import type { Task, SvelteConcurrencyUtils } from '../index';
 import { get } from 'svelte/store';
+import KeepLatest from './components/keep_latest.svelte';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -24,6 +25,7 @@ describe.each([
 	{ component: Default, name: 'default' },
 	{ component: Enqueue, name: 'enqueue' },
 	{ component: Drop, name: 'drop' },
+	{ component: KeepLatest, name: 'keepLatest' },
 	{ component: Restart, name: 'restart' },
 ])('task - basic functionality $name', ({ component }) => {
 	all_options((selector) => {
@@ -356,6 +358,67 @@ describe("task - specific functionality 'drop'", () => {
 			perform.click();
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(4);
+			});
+		});
+	});
+});
+
+describe("task - specific functionality 'keepLatest'", () => {
+	all_options((selector) => {
+		it('completes only `max` + 1 times if performed when other instances are already running', async () => {
+			let finished = 0;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished++;
+			});
+			const { getByTestId } = render(KeepLatest, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(2);
+			});
+			await vi.waitFor(() => {
+				expect(finished).toBe(2);
+			});
+			perform.click();
+			await vi.waitFor(() => {
+				expect(finished).toBe(3);
+			});
+		});
+
+		it('completes only `max` + 1 times if performed when other instances are already running (max: 3)', async () => {
+			let finished = 0;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished++;
+			});
+			const { getByTestId } = render(KeepLatest, {
+				fn,
+				max: 3,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(4);
+			});
+			await vi.waitFor(() => {
+				expect(finished).toBe(4);
+			});
+			perform.click();
+			await vi.waitFor(() => {
+				expect(finished).toBe(4);
 			});
 		});
 	});

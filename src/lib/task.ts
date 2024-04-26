@@ -4,12 +4,14 @@ import { writable } from 'svelte/store';
 import default_handler from './handlers/default';
 import drop from './handlers/drop';
 import enqueue from './handlers/enqueue';
+import keep_latest from './handlers/keep_latest';
 import restart from './handlers/restart';
 
 const handlers = {
 	default: default_handler,
 	drop,
 	enqueue,
+	keepLatest: keep_latest,
 	restart,
 } as const;
 
