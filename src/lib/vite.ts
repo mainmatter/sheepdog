@@ -21,9 +21,8 @@ function get_expressions_await(expression: Expression): Expression[] {
 	switch (expression.type) {
 		case 'ArrayExpression':
 			// const x = [await promise];
-			return expression.elements.flatMap(
-				(element) =>
-					element?.type !== 'SpreadElement' && element !== null ? get_expressions_await(element) : [],
+			return expression.elements.flatMap((element) =>
+				element?.type !== 'SpreadElement' && element !== null ? get_expressions_await(element) : [],
 			);
 		case 'AssignmentExpression':
 			// x = await promise; x = { value: await promise }; x = [await promise]
@@ -34,36 +33,35 @@ function get_expressions_await(expression: Expression): Expression[] {
 			return [expression];
 		case 'BinaryExpression':
 			// await promise + something;
-			if(expression.left.type !== "PrivateIdentifier"){
-				return get_expressions_await(expression.left).concat(get_expressions_await(expression.right));
+			if (expression.left.type !== 'PrivateIdentifier') {
+				return get_expressions_await(expression.left).concat(
+					get_expressions_await(expression.right),
+				);
 			}
 			return get_expressions_await(expression.right);
 		case 'CallExpression':
 			// fn_call(await stuff);
 			// TODO: fns[await name]();
-			return expression.arguments.flatMap(
-				(argument) => argument.type !== 'SpreadElement' ? get_expressions_await(argument) : [],
+			return expression.arguments.flatMap((argument) =>
+				argument.type !== 'SpreadElement' ? get_expressions_await(argument) : [],
 			);
 		case 'ConditionalExpression':
 			// await test ? await consequent : await alternate;
-			return (
-				get_expressions_await(expression.alternate).concat(
-				get_expressions_await(expression.consequent)).concat(
-				get_expressions_await(expression.test))
-			);
+			return get_expressions_await(expression.alternate)
+				.concat(get_expressions_await(expression.consequent))
+				.concat(get_expressions_await(expression.test));
 		case 'LogicalExpression':
 			// await promise || await another;
 			return get_expressions_await(expression.left).concat(get_expressions_await(expression.right));
 		case 'MemberExpression':
-			return (
-				expression.property.type !== 'PrivateIdentifier' ?
-				get_expressions_await(expression.property) : []
-			);
+			return expression.property.type !== 'PrivateIdentifier'
+				? get_expressions_await(expression.property)
+				: [];
 		case 'ObjectExpression':
-			return expression.properties.flatMap(
-				(property) =>
-					property.type !== 'SpreadElement' ?
-					(get_expressions_await(property.key).concat(get_expressions_await(property.value))) : [],
+			return expression.properties.flatMap((property) =>
+				property.type !== 'SpreadElement'
+					? get_expressions_await(property.key).concat(get_expressions_await(property.value))
+					: [],
 			);
 		case 'TaggedTemplateExpression':
 			return get_expressions_await(expression.quasi);
@@ -84,20 +82,20 @@ function update_body(task: FunctionExpression) {
 	for (const statement of task.body.body) {
 		body.push(statement);
 		let expressions: Expression[] = [];
-		if(statement.type === "ExpressionStatement"){
+		if (statement.type === 'ExpressionStatement') {
 			expressions = get_expressions_await(statement.expression);
-		}else if(statement.type === "VariableDeclaration"){
-			for(let declaration of statement.declarations){
-				if(declaration.init){
+		} else if (statement.type === 'VariableDeclaration') {
+			for (const declaration of statement.declarations) {
+				if (declaration.init) {
 					expressions = expressions.concat(get_expressions_await(declaration.init));
 				}
 			}
-		}else if(statement.type === "ForInStatement" || statement.type === "ForOfStatement"){
-			expressions = get_expressions_await(statement.right)
+		} else if (statement.type === 'ForInStatement' || statement.type === 'ForOfStatement') {
+			expressions = get_expressions_await(statement.right);
 		}
-		for(let expression of expressions){
-			if(expression.type==="AwaitExpression"){
-				(expression as unknown as YieldExpression).type="YieldExpression";
+		for (const expression of expressions) {
+			if (expression.type === 'AwaitExpression') {
+				(expression as unknown as YieldExpression).type = 'YieldExpression';
 			}
 		}
 	}
