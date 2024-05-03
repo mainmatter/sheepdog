@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2024-05-03)
+
+svelte-concurrency 0.5.0 (minor)
+
+#### :rocket: Enhancement
+* `svelte-concurrency`
+  * [#58](https://github.com/mainmatter/svelte-concurrency/pull/58) feat: better async transform (yield replace await) ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#59](https://github.com/mainmatter/svelte-concurrency/pull/59) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#53](https://github.com/mainmatter/svelte-concurrency/pull/53) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-04-19)
 
 svelte-concurrency 0.4.0 (minor)
