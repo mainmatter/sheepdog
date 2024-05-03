@@ -2,12 +2,13 @@
  * @vitest-environment happy-dom
  */
 import type { SvelteConcurrencyUtils } from '$lib/task';
-import { render } from '@testing-library/svelte';
+import { render, waitFor } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
 import Default from './components/default.svelte';
 import Enqueue from './components/enqueue.svelte';
 import Drop from './components/drop.svelte';
 import Restart from './components/restart.svelte';
+import Link from './components/link/parent.svelte';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -400,6 +401,151 @@ describe("task - specific functionality 'restart'", () => {
 				expect(finished).toBe(4);
 			});
 			expect(abort_signals.at(-1)?.aborted).toBe(false);
+		});
+	});
+});
+
+describe('link - invoke a task inside a task and cancel the instance if parent is cancelled', () => {
+	all_options((selector) => {
+		it('cancel the linked parent task if the child is cancelled with cancelAll', async () => {
+			let cancelled = true;
+			let finish_waiting = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				finish_waiting = true;
+				yield;
+				cancelled = false;
+			});
+
+			const { getByTestId } = render(Link, {
+				fn,
+			});
+			const perform = getByTestId(`perform-child-${selector}`);
+			const cancel = getByTestId(`cancel-child-${selector}`);
+			perform.click();
+			await waitFor(() => {
+				expect(fn).toHaveBeenCalled();
+			});
+			cancel.click();
+			await waitFor(() => {
+				expect(finish_waiting).toBeTruthy();
+			});
+			expect(cancelled).toBeTruthy();
+		});
+
+		it('cancel the linked parent task if the child is cancelled with cancel', async () => {
+			let cancelled = true;
+			let finish_waiting = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				finish_waiting = true;
+				yield;
+				cancelled = false;
+			});
+
+			const { getByTestId } = render(Link, {
+				fn,
+			});
+			const perform = getByTestId(`perform-child-${selector}`);
+			const cancel = getByTestId(`cancel-child-${selector}-last`);
+			perform.click();
+			await waitFor(() => {
+				expect(fn).toHaveBeenCalled();
+			});
+			cancel.click();
+			await waitFor(() => {
+				expect(finish_waiting).toBeTruthy();
+			});
+			expect(cancelled).toBeTruthy();
+		});
+
+		it('cancel the linked parent task if the child is cancelled when the child component unmount', async () => {
+			let cancelled = true;
+			let finish_waiting = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				finish_waiting = true;
+				yield;
+				cancelled = false;
+			});
+
+			const { getByTestId } = render(Link, {
+				fn,
+			});
+			const perform = getByTestId(`child-component-perform-${selector}`);
+			const cancel = getByTestId(`unmount-child-component`);
+			perform.click();
+			await waitFor(() => {
+				expect(fn).toHaveBeenCalled();
+			});
+			cancel.click();
+			await waitFor(() => {
+				expect(finish_waiting).toBeTruthy();
+			});
+			expect(cancelled).toBeTruthy();
+		});
+
+		it("doesn't cancel the other instance of the linked parent task if the child is cancelled with cancel", async () => {
+			const cancelled = [true, true];
+			const finish_waiting = [false, false];
+			let instance = 0;
+			const fn = vi.fn(async function* () {
+				const current_instance = instance++;
+				await wait(50);
+				finish_waiting[current_instance] = true;
+				yield;
+				cancelled[current_instance] = false;
+			});
+
+			const { getByTestId } = render(Link, {
+				fn,
+			});
+			const perform = getByTestId(`perform-child-${selector}`);
+			const cancel = getByTestId(`cancel-child-${selector}-last`);
+			perform.click();
+			perform.click();
+			await waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(2);
+			});
+			cancel.click();
+			await waitFor(() => {
+				expect(finish_waiting[0]).toBeTruthy();
+				expect(finish_waiting[1]).toBeTruthy();
+			});
+			expect(cancelled[0]).toBeFalsy();
+			expect(cancelled[1]).toBeTruthy();
+		});
+
+		it("doesn't cancel the other instance of the linked parent task if the child is cancelled when the child component unmount", async () => {
+			const cancelled = [true, true];
+			const finish_waiting = [false, false];
+			let instance = 0;
+			const fn = vi.fn(async function* () {
+				const current_instance = instance++;
+				await wait(50);
+				finish_waiting[current_instance] = true;
+				yield;
+				cancelled[current_instance] = false;
+			});
+
+			const { getByTestId } = render(Link, {
+				fn,
+			});
+			const perform_parent = getByTestId(`perform-${selector}`);
+			const perform_child = getByTestId(`child-component-perform-${selector}`);
+			const cancel = getByTestId(`unmount-child-component`);
+			perform_parent.click();
+			perform_child.click();
+			await waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(2);
+			});
+			cancel.click();
+			await waitFor(() => {
+				expect(finish_waiting[0]).toBeTruthy();
+				expect(finish_waiting[1]).toBeTruthy();
+			});
+			expect(cancelled[0]).toBeFalsy();
+			expect(cancelled[1]).toBeTruthy();
 		});
 	});
 });
