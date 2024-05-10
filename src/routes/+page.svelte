@@ -3,7 +3,7 @@
 	import Child from './Child.svelte';
 
 	const parent = task(async function* (param: number) {
-		await new Promise((r) => setTimeout(r, 2000));
+		await new Promise((r) => setTimeout(r, 5000));
 		yield;
 		alert('Parent finished');
 		return param * 2;
@@ -104,6 +104,11 @@
 	on:click={() => {
 		hidden = !hidden;
 	}}>{hidden ? 'mount' : 'unmount'} child</button
+>
+<button
+	on:click={() => {
+		parent.perform(43);
+	}}>perform parent</button
 >
 {#if !hidden}
 	<Child {parent} />

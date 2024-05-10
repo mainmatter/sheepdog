@@ -25,7 +25,7 @@ type TaskOptions = {
 
 export type SvelteConcurrencyUtils = {
 	signal: AbortSignal;
-	link: <T extends { cancelAll: () => void }>(task: T) => T;
+	link: <TArgs, TReturn>(task: Task<TArgs, TReturn>) => Task<TArgs, TReturn>;
 };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
@@ -51,40 +51,35 @@ function _task<TArgs = undefined, TReturn = unknown>(
 		results,
 	});
 
-	const abort_controllers = new Set<AbortController>();
+	const abort_controllers = new Set<{ controller: AbortController; listener: () => void }>();
 
 	onDestroy(() => {
 		abort_controllers.forEach((abort_controller) => {
-			abort_controller.abort();
-			abort_controller.signal.removeEventListener('abort', cancel_linked_and_update_store);
+			abort_controller.controller.abort();
+			abort_controller.controller.signal.removeEventListener('abort', abort_controller.listener);
 		});
 	});
-
-	const child_tasks = new Set<{ cancelAll: () => void }>();
-
-	function link<T extends { cancelAll: () => void }>(task: T) {
-		child_tasks.add(task);
-		return task;
-	}
-
-	function cancel_linked_and_update_store() {
-		for (const child_task of child_tasks) {
-			child_task.cancelAll();
-		}
-		result.update((old) => {
-			old.is_loading = false;
-			return old;
-		});
-	}
 
 	return {
 		subscribe,
 		cancelAll() {
 			abort_controllers.forEach((abort_controller) => {
-				abort_controller.abort();
+				abort_controller.controller.abort();
 			});
 		},
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
+			const child_tasks = new Set<ReturnType<Task<any, any>['perform']>>();
+
+			function cancel_linked_and_update_store() {
+				for (const child_task of child_tasks) {
+					child_task.cancel();
+				}
+				result.update((old) => {
+					old.is_loading = false;
+					return old;
+				});
+			}
+
 			let resolve: (value: TReturn) => unknown;
 			let reject: (cause: unknown) => unknown;
 			const promise = new Promise<TReturn>((resolver, rejecter) => {
@@ -93,7 +88,23 @@ function _task<TArgs = undefined, TReturn = unknown>(
 			});
 			const abort_controller = new AbortController();
 			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
-			abort_controllers.add(abort_controller);
+			abort_controllers.add({
+				controller: abort_controller,
+				listener: cancel_linked_and_update_store,
+			});
+			function link<TLinkArgs, TLinkReturn>(
+				task: Task<TLinkArgs, TLinkReturn>,
+			): Task<TLinkArgs, TLinkReturn> {
+				const old_perform = task.perform;
+				return {
+					...task,
+					perform(...args) {
+						const instance = old_perform(...args);
+						child_tasks.add(instance);
+						return instance;
+					},
+				};
+			}
 			handler(
 				() => {
 					result.update((old) => {
