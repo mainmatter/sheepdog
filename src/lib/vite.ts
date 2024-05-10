@@ -7,9 +7,10 @@ import type {
 	FunctionExpression,
 	ArrowFunctionExpression,
 	CallExpression,
-	Statement,
 	Expression,
 	YieldExpression,
+	BlockStatement,
+	Statement,
 } from 'acorn';
 
 type Nodes = ImportDeclaration | FunctionExpression | ArrowFunctionExpression | CallExpression;
@@ -27,7 +28,9 @@ function get_expressions_await(expression: Expression): Expression[] {
 		case 'AssignmentExpression':
 			// x = await promise; x = { value: await promise }; x = [await promise]
 			// TODO: [x = await promise] = [undefined]
-			return get_expressions_await(expression.right);
+			return get_expressions_await(expression.right).concat(
+				expression.left.type === 'MemberExpression' ? get_expressions_await(expression.left) : [],
+			);
 		case 'AwaitExpression':
 			// await promise;
 			return [expression];
@@ -76,11 +79,17 @@ function get_expressions_await(expression: Expression): Expression[] {
 	}
 }
 
-function update_body(task: FunctionExpression) {
-	const body: Statement[] = [];
+function to_fake_block_statement(statement: Statement) {
+	return {
+		body: [statement],
+		type: 'BlockStatement' as const,
+		end: 0,
+		start: 0,
+	};
+}
 
-	for (const statement of task.body.body) {
-		body.push(statement);
+function update_body(task: BlockStatement) {
+	for (const statement of task.body) {
 		let expressions: Expression[] = [];
 		if (statement.type === 'ExpressionStatement') {
 			expressions = get_expressions_await(statement.expression);
@@ -90,8 +99,64 @@ function update_body(task: FunctionExpression) {
 					expressions = expressions.concat(get_expressions_await(declaration.init));
 				}
 			}
-		} else if (statement.type === 'ForInStatement' || statement.type === 'ForOfStatement') {
-			expressions = get_expressions_await(statement.right);
+		} else if (
+			statement.type === 'ForInStatement' ||
+			statement.type === 'ForOfStatement' ||
+			statement.type === 'WhileStatement' ||
+			statement.type === 'DoWhileStatement' ||
+			statement.type === 'ForStatement' ||
+			statement.type === 'LabeledStatement'
+		) {
+			if (statement.body.type === 'BlockStatement') {
+				update_body(statement.body);
+			} else if (statement.body.type === 'ExpressionStatement') {
+				expressions = expressions.concat(get_expressions_await(statement.body.expression));
+			}
+			if (statement.type === 'ForInStatement' || statement.type === 'ForOfStatement') {
+				expressions = expressions.concat(get_expressions_await(statement.right));
+			} else if (statement.type === 'ForStatement') {
+				if (statement.init && statement.init.type !== 'VariableDeclaration') {
+					expressions = expressions.concat(get_expressions_await(statement.init));
+				} else if (statement.init) {
+					update_body(to_fake_block_statement(statement.init));
+				}
+				if (statement.test) {
+					expressions = expressions.concat(get_expressions_await(statement.test));
+				}
+				if (statement.update) {
+					expressions = expressions.concat(get_expressions_await(statement.update));
+				}
+			} else if (statement.type === 'WhileStatement' || statement.type === 'DoWhileStatement') {
+				expressions = expressions.concat(get_expressions_await(statement.test));
+			}
+		} else if (statement.type === 'IfStatement') {
+			if (statement.consequent.type === 'BlockStatement') {
+				update_body(statement.consequent);
+			} else if (statement.consequent.type === 'ExpressionStatement') {
+				expressions = expressions.concat(get_expressions_await(statement.consequent.expression));
+			}
+			expressions = expressions.concat(get_expressions_await(statement.test));
+			if (statement.alternate?.type === 'ExpressionStatement') {
+				expressions = expressions.concat(get_expressions_await(statement.alternate.expression));
+			} else if (statement.alternate) {
+				update_body(to_fake_block_statement(statement.alternate));
+			}
+		} else if (statement.type === 'SwitchStatement') {
+			for (const switch_case of statement.cases) {
+				for (const consequent of switch_case.consequent) {
+					if (consequent.type === 'BlockStatement') {
+						update_body(consequent);
+					} else if (consequent.type === 'ExpressionStatement') {
+						expressions = expressions.concat(get_expressions_await(consequent.expression));
+					}
+				}
+				if (switch_case.test) {
+					expressions = expressions.concat(get_expressions_await(switch_case.test));
+				}
+			}
+			if (statement.discriminant) {
+				expressions = expressions.concat(get_expressions_await(statement.discriminant));
+			}
 		}
 		for (const expression of expressions) {
 			if (expression.type === 'AwaitExpression') {
@@ -99,7 +164,6 @@ function update_body(task: FunctionExpression) {
 			}
 		}
 	}
-	task.body.body = body;
 }
 
 export function concurrency_transform() {
@@ -145,7 +209,7 @@ export function concurrency_transform() {
 										const to_change = task_arg as unknown as FunctionExpression;
 										to_change.type = 'FunctionExpression';
 										to_change.generator = true;
-										update_body(to_change);
+										update_body(to_change.body);
 										changed = true;
 									} else if (
 										task_arg &&
@@ -155,7 +219,7 @@ export function concurrency_transform() {
 									) {
 										const to_change = task_arg as unknown as FunctionExpression;
 										to_change.generator = true;
-										update_body(to_change);
+										update_body(to_change.body);
 										changed = true;
 									}
 								}
