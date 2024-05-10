@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task, type SvelteConcurrencyUtils } from '../../../task';
+	import { task, type SvelteConcurrencyUtils } from '../../../index';
 	import Child from './child.svelte';
 
 	export let fn: (

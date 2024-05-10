@@ -1,7 +1,6 @@
 /**
  * @vitest-environment happy-dom
  */
-import type { SvelteConcurrencyUtils } from '$lib/task';
 import { render, waitFor } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
 import Default from './components/default.svelte';
@@ -9,6 +8,9 @@ import Enqueue from './components/enqueue.svelte';
 import Drop from './components/drop.svelte';
 import Restart from './components/restart.svelte';
 import Link from './components/link/parent.svelte';
+import WrongKind from './components/wrong-kind.svelte';
+import type { Task, SvelteConcurrencyUtils } from '../index';
+import { get } from 'svelte/store';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -114,6 +116,37 @@ describe.each([
 			});
 			expect(passed_in_value).toBe(argument);
 		});
+	});
+
+	it('re-throws any error thrown in the perform function and has the error in the error field of the store', async () => {
+		const to_throw = new Error('my error');
+		const fn = vi.fn(async () => {
+			throw to_throw;
+		});
+		let returned_value: { error: Error; store: Task } | undefined;
+		const { getByTestId } = render(component, {
+			fn,
+			return_value(value) {
+				returned_value = value as never;
+			},
+		});
+		const perform = getByTestId(`perform-error`);
+		perform.click();
+		await vi.waitFor(() => {
+			expect(fn).toHaveBeenCalled();
+		});
+		expect(returned_value).toBeDefined();
+		if (!returned_value) throw new Error('No returned value');
+		expect(returned_value.error).toBe(to_throw);
+		expect(get(returned_value.store).error).toBe(to_throw);
+	});
+});
+
+describe('task - error if wrong kind', () => {
+	it('throws if you try to instanciate a task with the wrong kind', () => {
+		expect(() => render(WrongKind)).toThrowErrorMatchingInlineSnapshot(
+			`[Error: Unexpected kind 'something']`,
+		);
 	});
 });
 
