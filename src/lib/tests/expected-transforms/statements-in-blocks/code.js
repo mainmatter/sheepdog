@@ -63,4 +63,16 @@ task(async ()=>{
 	if(await Promise.resolve(true)){
 		console.log(await Promise.resolve());
 	}else console.log(await Promise.resolve());
+
+	// nested test
+	for(const x of await Promise.resolve([])){
+		console.log(await Promise.resolve("for of"));
+		while(await Promise.resolve(true)){
+			console.log(await Promise.resolve("while"));
+			for(const xx in await Promise.resolve({})){
+				console.log(await Promise.resolve("for in"));
+				
+			}
+		}
+	}
 });

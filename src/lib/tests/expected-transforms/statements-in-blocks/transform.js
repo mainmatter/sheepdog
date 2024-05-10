@@ -81,4 +81,16 @@ task(async function* () {
 	if (yield Promise.resolve(true)) {
 		console.log(yield Promise.resolve());
 	} else console.log(yield Promise.resolve());
+
+	for (const x of yield Promise.resolve([])) {
+		console.log(yield Promise.resolve("for of"));
+
+		while (yield Promise.resolve(true)) {
+			console.log(yield Promise.resolve("while"));
+
+			for (const xx in yield Promise.resolve({})) {
+				console.log(yield Promise.resolve("for in"));
+			}
+		}
+	}
 });
