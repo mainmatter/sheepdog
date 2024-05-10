@@ -1,13 +1,13 @@
 {
   "solution": {
     "svelte-concurrency": {
-      "impact": "minor",
-      "oldVersion": "0.4.0",
-      "newVersion": "0.5.0",
+      "impact": "patch",
+      "oldVersion": "0.5.0",
+      "newVersion": "0.5.1",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
         },
         {
           "impact": "patch",
@@ -17,5 +17,5 @@
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2024-05-03)\n\nsvelte-concurrency 0.5.0 (minor)\n\n#### :rocket: Enhancement\n* `svelte-concurrency`\n  * [#58](https://github.com/mainmatter/svelte-concurrency/pull/58) feat: better async transform (yield replace await) ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#59](https://github.com/mainmatter/svelte-concurrency/pull/59) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))\n  * [#53](https://github.com/mainmatter/svelte-concurrency/pull/53) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-05-10)\n\nsvelte-concurrency 0.5.1 (patch)\n\n#### :bug: Bug Fix\n* `svelte-concurrency`\n  * [#61](https://github.com/mainmatter/svelte-concurrency/pull/61) feat: link only cancel the instance of the task that was linked ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `svelte-concurrency`\n  * [#65](https://github.com/mainmatter/svelte-concurrency/pull/65) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))\n  * [#62](https://github.com/mainmatter/svelte-concurrency/pull/62) chore: add svelte exports to avoid warning ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
