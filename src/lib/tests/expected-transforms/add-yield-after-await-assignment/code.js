@@ -18,6 +18,8 @@ function str(quasi, strings){
 
 task(async ()=>{
 	const assign = await Promise.resolve();
+	let assignment = null;
+	assignment = await Promise.resolve();
 	const array = [await Promise.resolve()];
 	const sum = await Promise.resolve(1) + 2;
 	const sum2 = 2 + await Promise.resolve(1);
@@ -25,6 +27,8 @@ task(async ()=>{
 	const conditional1 = await Promise.resolve(true) ? 1 : 2;
 	const conditional2 = true ? await Promise.resolve(1) : 2;
 	const conditional3 = false ? 1: await Promise.resolve(2);
+	const member = {property: null};
+	member[await Promise.resolve("property")] = await Promise.resolve(null);
 	const logical1 = await Promise.resolve(null) ?? 3;
 	const logical2 = null ?? await Promise.resolve(null);
 	const logical3 = null || await Promise.resolve(null);

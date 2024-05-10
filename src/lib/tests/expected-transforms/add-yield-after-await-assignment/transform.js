@@ -8,6 +8,10 @@ function str(quasi, strings) {}
 
 task(async function* () {
 	const assign = yield Promise.resolve();
+	let assignment = null;
+
+	assignment = yield Promise.resolve();
+
 	const array = [yield Promise.resolve()];
 	const sum = (yield Promise.resolve(1)) + 2;
 	const sum2 = 2 + (yield Promise.resolve(1));
@@ -15,6 +19,10 @@ task(async function* () {
 	const conditional1 = (yield Promise.resolve(true)) ? 1 : 2;
 	const conditional2 = true ? yield Promise.resolve(1) : 2;
 	const conditional3 = false ? 1 : yield Promise.resolve(2);
+	const member = { property: null };
+
+	member[yield Promise.resolve("property")] = yield Promise.resolve(null);
+
 	const logical1 = (yield Promise.resolve(null)) ?? 3;
 	const logical2 = null ?? (yield Promise.resolve(null));
 	const logical3 = null || (yield Promise.resolve(null));
