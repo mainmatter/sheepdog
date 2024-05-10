@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2024-05-10)
+
+svelte-concurrency 0.5.1 (patch)
+
+#### :bug: Bug Fix
+* `svelte-concurrency`
+  * [#61](https://github.com/mainmatter/svelte-concurrency/pull/61) feat: link only cancel the instance of the task that was linked ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#65](https://github.com/mainmatter/svelte-concurrency/pull/65) chore(deps): update all non-major dependencies ([@renovate[bot]](https://github.com/apps/renovate))
+  * [#62](https://github.com/mainmatter/svelte-concurrency/pull/62) chore: add svelte exports to avoid warning ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-05-03)
 
 svelte-concurrency 0.5.0 (minor)
