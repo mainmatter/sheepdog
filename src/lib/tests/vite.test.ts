@@ -1,7 +1,7 @@
-import { concurrency_transform } from '../vite';
+import { concurrencyTransform } from '../vite';
 import { describe, it, expect } from 'vitest';
 
-const plugin = concurrency_transform();
+const plugin = concurrencyTransform();
 
 const expected_entries = Object.entries(
 	import.meta.glob('./expected-transforms/**/*.js', { as: 'raw', eager: true }),

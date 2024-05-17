@@ -26,8 +26,8 @@ All tasks will return a store with the same structure:
 
 - error: Error - if an error occurred, it will be returned here,
 - results: Array - all of the results from previous invocations of this task,
-- last_successful: Any - the return value from the last successful run of the task
-- is_loading: Boolean - whether the task is currently running on not
+- lastSuccessful: Any - the return value from the last successful run of the task
+- isLoading: Boolean - whether the task is currently running on not
 
 ## Task types
 
@@ -158,8 +158,8 @@ Both of the above will result in 3 simultaneous tasks being allowed to run. Any 
 As the return value from the task wrapper is a store, you can access it just like you would with any other store:
 
 ```
-{$my_task.is_loading}
-{$my_task.last_successful}
+{$my_task.isLoading}
+{$my_task.lastSuccessful}
 {$my_task.error}
 ```
 
