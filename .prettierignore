@@ -10,3 +10,4 @@ CHANGELOG.md
 /dist
 
 /src/lib/tests/expected-transforms/*/**
+/docs

@@ -54,6 +54,7 @@ export default tsEslint.config(
 			'**/test-results',
 			'**/expected-transforms',
 			'**/dist',
+			'**/docs',
 			'**/coverage',
 			'CHANGELOG.md',
 			'.release-plan-json',

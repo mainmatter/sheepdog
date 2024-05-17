@@ -1,0 +1,53 @@
+/* Dark mode colors. */
+:root {
+	--sl-color-accent-low: #421107;
+	--sl-color-accent: #bd2b00;
+	--sl-color-accent-high: #f7b7a7;
+	--sl-color-white: #ffffff;
+	--sl-color-gray-1: #f1edea;
+	--sl-color-gray-2: #c5c1be;
+	--sl-color-gray-3: #928a84;
+	--sl-color-gray-4: #5e5651;
+	--sl-color-gray-5: #3e3732;
+	--sl-color-gray-6: #2c2521;
+	--sl-color-black: #1b1715;
+}
+
+/* Light mode colors. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #fbcabe;
+	--sl-color-accent: #c02c00;
+	--sl-color-accent-high: #5f1100;
+	--sl-color-white: #1b1715;
+	--sl-color-gray-1: #2c2521;
+	--sl-color-gray-2: #3e3732;
+	--sl-color-gray-3: #5e5651;
+	--sl-color-gray-4: #928a84;
+	--sl-color-gray-5: #c5c1be;
+	--sl-color-gray-6: #f1edea;
+	--sl-color-gray-7: #f8f6f5;
+	--sl-color-black: #ffffff;
+}
+
+[data-has-hero] {
+	& body {
+		background: linear-gradient(var(--sl-color-bg), var(--sl-color-accent));
+	}
+
+	& header {
+		background-color: transparent;
+		border-bottom: 1px solid rgb(255 255 255 / .1);
+		backdrop-filter: blur(5px);
+	}
+}
+
+.hero {
+	grid-template-columns: 1fr;
+	place-items: center;
+
+	& :where(.copy, .actions) {
+		justify-content: center;
+		align-items: center;
+	}
+
+}
