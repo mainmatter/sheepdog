@@ -143,7 +143,7 @@ describe.each([
 });
 
 describe('task - error if wrong kind', () => {
-	it('throws if you try to instanciate a task with the wrong kind', () => {
+	it('throws if you try to instantiate a task with the wrong kind', () => {
 		expect(() => render(WrongKind)).toThrowErrorMatchingInlineSnapshot(
 			`[Error: Unexpected kind 'something']`,
 		);
