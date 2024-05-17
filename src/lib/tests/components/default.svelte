@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task, type SvelteConcurrencyUtils } from '../../task';
+	import { task, type SvelteConcurrencyUtils } from '../../index';
 
 	export let fn: (
 		args: number,
@@ -62,4 +62,18 @@
 			latest_options_task_instance.cancel();
 		}
 	}}>cancel last options instance</button
+>
+
+<button
+	data-testid="perform-error"
+	on:click={async () => {
+		try {
+			await default_task.perform(argument);
+		} catch (e) {
+			return_value({
+				error: e,
+				store: default_task,
+			});
+		}
+	}}>perform</button
 >
