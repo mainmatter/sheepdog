@@ -5,6 +5,7 @@ import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
+	site: 'https://jsonsheet.com',
 	integrations: [
 		starlight({
 			title: 'svelte-concurrency',
