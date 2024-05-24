@@ -51,6 +51,7 @@ function _task<TArgs = undefined, TReturn = unknown>(
 		last_successful: undefined as undefined | TReturn,
 		error: undefined as undefined | unknown,
 		results,
+		performCount: 0,
 	});
 
 	const abort_controllers = new Set<{ controller: AbortController; listener: () => void }>();
@@ -111,6 +112,7 @@ function _task<TArgs = undefined, TReturn = unknown>(
 				() => {
 					result.update((old) => {
 						old.is_loading = true;
+						old.performCount++;
 						return old;
 					});
 					queueMicrotask(async () => {

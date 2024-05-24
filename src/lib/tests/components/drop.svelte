@@ -10,8 +10,8 @@
 	export let argument = 0;
 	export let max = 1;
 
-	const default_task = task.drop(fn, { max });
-	const options_task = task(fn, { kind: 'drop', max });
+	export const default_task = task.drop(fn, { max });
+	export const options_task = task(fn, { kind: 'drop', max });
 
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
 	let latest_options_task_instance: ReturnType<typeof options_task.perform>;

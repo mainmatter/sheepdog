@@ -22,12 +22,42 @@ function all_options(fn: (selector: string) => void) {
 }
 
 describe.each([
-	{ component: Default, name: 'default' },
-	{ component: Enqueue, name: 'enqueue' },
-	{ component: Drop, name: 'drop' },
-	{ component: KeepLatest, name: 'keepLatest' },
-	{ component: Restart, name: 'restart' },
-])('task - basic functionality $name', ({ component }) => {
+	{
+		component: Default,
+		name: 'default',
+		perform_count: {
+			expected: 5,
+		},
+	},
+	{
+		component: Enqueue,
+		name: 'enqueue',
+		perform_count: {
+			expected: 5,
+		},
+	},
+	{
+		component: Drop,
+		name: 'drop',
+		perform_count: {
+			expected: 1,
+		},
+	},
+	{
+		component: KeepLatest,
+		name: 'keepLatest',
+		perform_count: {
+			expected: 2,
+		},
+	},
+	{
+		component: Restart,
+		name: 'restart',
+		perform_count: {
+			expected: 5,
+		},
+	},
+])('task - basic functionality $name', ({ component, perform_count }) => {
 	all_options((selector) => {
 		it('calls the function you pass in', async () => {
 			const fn = vi.fn();
@@ -117,6 +147,24 @@ describe.each([
 				expect(fn).toHaveBeenCalled();
 			});
 			expect(passed_in_value).toBe(argument);
+		});
+
+		it('has the correct derived state for performCount', async () => {
+			const fn = vi.fn();
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const store = instance[`${selector}_task`] as Task;
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			perform.click();
+			await vi.waitFor(() => {
+				expect(fn).toHaveBeenCalledTimes(perform_count.expected);
+			});
+			expect(get(store).performCount).toBe(perform_count.expected);
 		});
 	});
 
