@@ -9,8 +9,8 @@
 	export let return_value: (value: unknown) => void = () => {};
 	export let argument = 0;
 
-	const default_task = task.default(fn);
-	const options_task = task(fn, { kind: 'default' });
+	export const default_task = task.default(fn);
+	export const options_task = task(fn, { kind: 'default' });
 
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
 	let latest_options_task_instance: ReturnType<typeof options_task.perform>;
