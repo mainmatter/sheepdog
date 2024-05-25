@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => ({
 				'src/routes/**/*',
 				'src/lib/tests/expected-transforms/generate-expected.ts',
 				'*.[j|t]s',
+				'docs/**/*',
 				...coverageConfigDefaults.exclude,
 			],
 		},
