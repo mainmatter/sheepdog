@@ -109,6 +109,62 @@ describe.each([
 			});
 		});
 
+		it('it can be rerun after being cancelled using `cancelAll`', async () => {
+			let count = 0;
+			const wait_time = 50;
+			let task_signal: AbortSignal;
+			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+				task_signal = signal;
+				await wait(wait_time);
+				yield;
+				count++;
+			}
+			const { getByTestId } = render(component, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await wait(20);
+			cancel.click();
+			await vi.waitFor(() => {
+				expect(task_signal.aborted).toBeTruthy();
+			});
+			expect(count).toBe(0);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(count).toBe(1);
+			});
+		});
+
+		it('it can be rerun after the last instance is cancelled', async () => {
+			let count = 0;
+			const wait_time = 50;
+			let task_signal: AbortSignal;
+			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+				task_signal = signal;
+				await wait(wait_time);
+				yield;
+				count++;
+			}
+			const { getByTestId } = render(component, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}-last`);
+			perform.click();
+			await wait(20);
+			cancel.click();
+			await vi.waitFor(() => {
+				expect(task_signal.aborted).toBeTruthy();
+			});
+			expect(count).toBe(0);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(count).toBe(1);
+			});
+		});
+
 		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
 			let count = 0;
 			const wait_time = 50;
