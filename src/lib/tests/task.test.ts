@@ -28,7 +28,7 @@ describe.each([
 		perform_count: {
 			expected: 5,
 		},
-		is_loading: {
+		is_running: {
 			wait_for: 3,
 			wait_after: 5,
 		},
@@ -39,7 +39,7 @@ describe.each([
 		perform_count: {
 			expected: 5,
 		},
-		is_loading: {
+		is_running: {
 			wait_for: 3,
 			wait_after: 5,
 		},
@@ -50,7 +50,7 @@ describe.each([
 		perform_count: {
 			expected: 1,
 		},
-		is_loading: {
+		is_running: {
 			wait_for: 0,
 			wait_after: 1,
 		},
@@ -61,7 +61,7 @@ describe.each([
 		perform_count: {
 			expected: 2,
 		},
-		is_loading: {
+		is_running: {
 			wait_for: 1,
 			wait_after: 2,
 		},
@@ -72,12 +72,12 @@ describe.each([
 		perform_count: {
 			expected: 5,
 		},
-		is_loading: {
+		is_running: {
 			wait_for: 0,
 			wait_after: 1,
 		},
 	},
-])('task - basic functionality $name', ({ component, perform_count, is_loading }) => {
+])('task - basic functionality $name', ({ component, perform_count, is_running }) => {
 	all_options((selector) => {
 		it('calls the function you pass in', async () => {
 			const fn = vi.fn();
@@ -187,7 +187,7 @@ describe.each([
 			expect(get(store).performCount).toBe(perform_count.expected);
 		});
 
-		it('has the correct derived state for isLoading', async () => {
+		it('has the correct derived state for isRunning', async () => {
 			let finished = 0;
 			const fn = vi.fn(async function* () {
 				await wait(50);
@@ -210,17 +210,17 @@ describe.each([
 			perform.click();
 			await vi.waitFor(
 				() => {
-					expect(finished).toBe(is_loading.wait_for);
+					expect(finished).toBe(is_running.wait_for);
 				},
 				{
 					interval: 10,
 				},
 			);
-			expect(get(store).isLoading).toBe(true);
+			expect(get(store).isRunning).toBe(true);
 			await vi.waitFor(() => {
-				expect(finished).toBe(is_loading.wait_after);
+				expect(finished).toBe(is_running.wait_after);
 			});
-			expect(get(store).isLoading).toBe(false);
+			expect(get(store).isRunning).toBe(false);
 		});
 	});
 
