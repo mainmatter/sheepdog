@@ -1,5 +1,30 @@
 # Changelog
 
+## Release (2024-05-31)
+
+svelte-concurrency 0.6.0 (minor)
+
+#### :rocket: Enhancement
+* `svelte-concurrency`
+  * [#92](https://github.com/mainmatter/svelte-concurrency/pull/92) breaking: add instance id and derive is loading ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#89](https://github.com/mainmatter/svelte-concurrency/pull/89) feat: abstract task logic to core ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#88](https://github.com/mainmatter/svelte-concurrency/pull/88) feat: add performCount to derived state ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#56](https://github.com/mainmatter/svelte-concurrency/pull/56) Add keep_latest ([@beerinho](https://github.com/beerinho))
+  * [#66](https://github.com/mainmatter/svelte-concurrency/pull/66) feat: more exhaustive async transform ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `svelte-concurrency`
+  * [#76](https://github.com/mainmatter/svelte-concurrency/pull/76) feat: setup starlight for documentation ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#75](https://github.com/mainmatter/svelte-concurrency/pull/75) Update pnpm-lock.yml to use pnpm v9 ([@beerinho](https://github.com/beerinho))
+  * [#74](https://github.com/mainmatter/svelte-concurrency/pull/74) Update packages ([@beerinho](https://github.com/beerinho))
+  * [#67](https://github.com/mainmatter/svelte-concurrency/pull/67) chore: test for errors thrown in perform ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#72](https://github.com/mainmatter/svelte-concurrency/pull/72) chore: upgrade eslint to v9 and flat config ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#68](https://github.com/mainmatter/svelte-concurrency/pull/68) chore: use pnpm 9 in workflows ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 2
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-05-10)
 
 svelte-concurrency 0.5.1 (patch)
