@@ -1,4 +1,4 @@
-import { concurrency_transform } from '../../vite';
+import { concurrencyTransform } from '../../vite';
 import { readdirSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 
@@ -7,7 +7,7 @@ const dir = readdirSync('./src/lib/tests/expected-transforms', {
 	recursive: true,
 });
 
-const plugin = concurrency_transform();
+const plugin = concurrencyTransform();
 
 for (const file of dir) {
 	if (file.isFile() && file.name === 'code.js') {

@@ -166,7 +166,7 @@ function update_body(task: BlockStatement) {
 	}
 }
 
-export function concurrency_transform() {
+export function concurrencyTransform() {
 	return {
 		name: 'concurrency-transform',
 		async transform(code, id) {
