@@ -21,6 +21,12 @@ function all_options(fn: (selector: string) => void) {
 	describe.each(['default', 'options'])('version with %s', fn);
 }
 
+//last
+//lastErrored
+//lastCanceled
+//lastSuccessful
+//lastRunning
+
 describe.each([
 	{
 		component: Default,
@@ -244,7 +250,7 @@ describe.each([
 		expect(returned_value).toBeDefined();
 		if (!returned_value) throw new Error('No returned value');
 		expect(returned_value.error).toBe(to_throw);
-		expect(get(returned_value.store).error).toBe(to_throw);
+		expect(get(returned_value.store).last?.error).toBe(to_throw);
 	});
 });
 

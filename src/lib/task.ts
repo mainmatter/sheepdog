@@ -6,6 +6,15 @@ export type { SvelteConcurrencyUtils, TaskOptions };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
+interface TaskInstance {
+	error?: undefined | unknown;
+	isCanceled: boolean;
+	isError: boolean;
+	isRunning: boolean;
+	isSuccessful: boolean;
+	value?: undefined | unknown;
+}
+
 export function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: (
 		args: TArgs,
@@ -17,13 +26,45 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 
 	const { subscribe, ...result } = writable({
 		isRunning: false,
-		lastSuccessful: undefined as undefined | TReturn,
-		error: undefined as undefined | unknown,
+		last: undefined as undefined | TaskInstance,
+		lastCanceled: undefined as undefined | TaskInstance,
+		lastErrored: undefined as undefined | TaskInstance,
+		lastRunning: undefined as undefined | TaskInstance,
+		lastSuccessful: undefined as undefined | TaskInstance,
 		results,
 		performCount: 0,
 	});
 
-	const instances = new Map<string, { is_running: boolean }>();
+	const updateResult = (instance: TaskInstance | undefined, new_instance: boolean = false) => {
+		return result.update((old) => {
+			if (!instance) {
+				return old;
+			}
+			if (new_instance) {
+				old.performCount++;
+			}
+			const { isSuccessful, isError, isCanceled, isRunning } = instance;
+			if (isCanceled) {
+				old.lastCanceled = instance;
+			}
+			if (isError) {
+				old.lastErrored = instance;
+			}
+			if (isSuccessful) {
+				old.lastSuccessful = instance;
+			}
+			if (isRunning) {
+				old.lastRunning = instance;
+			} else {
+				old.lastRunning = undefined;
+			}
+			old.last = instance;
+			old.isRunning = [...instances.values()].some((val) => val.isRunning);
+			return old;
+		});
+	};
+
+	const instances = new Map<string, TaskInstance>();
 
 	const actual_task = createTask<TArgs, TReturn>(
 		{
@@ -32,39 +73,40 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 			},
 			onError(instance_id, error) {
 				const instance = instances.get(instance_id);
-				if (instance) instance.is_running = false;
-				result.update((old) => {
-					old.error = error;
-					old.isRunning = [...instances.values()].some((val) => val.is_running);
-					return old;
-				});
+				if (instance) {
+					instance.error = error;
+					instance.isRunning = false;
+					instance.isError = true;
+				}
+				updateResult(instance);
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
-				if (instance) instance.is_running = false;
-				result.update((old) => {
-					old.isRunning = [...instances.values()].some((val) => val.is_running);
-					return old;
-				});
+				if (instance) {
+					instance.isRunning = false;
+					instance.isCanceled = true;
+				}
+				updateResult(instance);
 			},
 			onInstanceStart(instance_id) {
-				instances.set(instance_id, { is_running: true });
-				result.update((old) => {
-					old.isRunning = [...instances.values()].some((val) => val.is_running);
-					old.performCount++;
-					return old;
+				instances.set(instance_id, {
+					isRunning: true,
+					isCanceled: false,
+					isError: false,
+					isSuccessful: false,
 				});
+				const instance = instances.get(instance_id);
+				updateResult(instance, true);
 			},
 			onInstanceComplete(instance_id, last_result) {
 				results.push(last_result);
 				const instance = instances.get(instance_id);
-				if (instance) instance.is_running = false;
-				result.update((old) => {
-					old.error = undefined;
-					old.isRunning = [...instances.values()].some((val) => val.is_running);
-					old.lastSuccessful = last_result;
-					return old;
-				});
+				if (instance) {
+					instance.isRunning = false;
+					instance.isSuccessful = true;
+					instance.value = last_result;
+				}
+				updateResult(instance);
 			},
 		},
 		gen_or_fun,
