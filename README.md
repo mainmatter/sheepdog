@@ -12,10 +12,10 @@ Choose whether you want to keep the oldest, keep the newest or keep all instance
 
 ## How to use `svelte-concurrency`
 
-Install it using your favourite package manager:
+Install it using your favorite package manager:
 
 ```bash
-	pnpm install svelte-concurrency
+pnpm install svelte-concurrency
 ```
 
 Then put it to work immediately wherever you want cancellable promises. (Cancellation is only available when using the generator function or async transform, but more on that later).
@@ -24,11 +24,11 @@ Then put it to work immediately wherever you want cancellable promises. (Cancell
 
 All tasks will return a store with the same structure:
 
-- error: Error - if an error occurred, it will be returned here,
-- isRunning: Boolean - whether the task is currently running or not
-- lastSuccessful: Any - the return value from the last successful run of the task
-- performCount: Number - the number of times the task has been run,
-- results: Array - all of the results from previous invocations of this task,
+- `error`: Error - if an error occurred, it will be returned here,
+- `isRunning`: Boolean - whether the task is currently running or not
+- `lastSuccessful`: Any - the return value from the last successful run of the task
+- `performCount`: Number - the number of times the task has been run,
+- `results`: Array - all of the results from previous invocations of this task,
 
 ## Task types
 
@@ -36,7 +36,7 @@ There are several flavours of tasks to choose from (check out the interactive do
 
 With all types of task, it is possible to invoke it directly or add the `kind` parameter to the options object.
 
-If you don't care about mid-call cancellation, then you can utilise the concurrency with any of the following task types.
+If you don't care about mid-call cancellation, then you can utilize the concurrency with any of the following task types.
 
 If you do care about mid-call cancellation, be sure to check out the [Task Cancellation](#task-cancellation) section.
 
@@ -44,11 +44,11 @@ If you do care about mid-call cancellation, be sure to check out the [Task Cance
 
 This simply gives you a task wrapper around your function. It will not handle any kind of concurrency for you.
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
+	const myTask = task(async (param: number) => {
 		await new Promise((r) => setTimeout(r, 2000));
 		return param * 2;
 	});
@@ -57,14 +57,17 @@ This simply gives you a task wrapper around your function. It will not handle an
 
 OR
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { kind: 'default' });
+	const myTask = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ kind: 'default' },
+	);
 </script>
 ```
 
@@ -72,27 +75,33 @@ OR
 
 This will cancel the oldest instance of the task and start a new instance of it. You can also provide a `max` that will only restart the oldest task instance if the threshold is exceeded.
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task.restart(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { max: 3 });
+	const myTask = task.restart(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ max: 3 },
+	);
 </script>
 ```
 
 OR
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { kind: 'restart', max: 3 });
+	const myTask = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ kind: 'restart', max: 3 },
+	);
 </script>
 ```
 
@@ -102,27 +111,33 @@ Both of the above will result in 3 simultaneous tasks being allowed to run. Trig
 
 This will cancel any new instances of the task. You can also provide a `max` that will only drop the task instances if the threshold is exceeded.
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task.drop(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { max: 3 });
+	const myTask = task.drop(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ max: 3 },
+	);
 </script>
 ```
 
 OR
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { kind: 'drop', max: 3 });
+	const myTask = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ kind: 'drop', max: 3 },
+	);
 </script>
 ```
 
@@ -132,27 +147,33 @@ Both of the above will result in 3 simultaneous tasks being allowed to run. Trig
 
 This will add all task instances to a list and each task will be run in order. You can also provide a `max` that will dictate the number of task instances that will run at the same time.
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task.enqueue(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { max: 3 });
+	const myTask = task.enqueue(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ max: 3 },
+	);
 </script>
 ```
 
 OR
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { kind: 'enqueue', max: 3 });
+	const myTask = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ kind: 'enqueue', max: 3 },
+	);
 </script>
 ```
 
@@ -162,27 +183,33 @@ Both of the above will result in 3 simultaneous tasks being allowed to run. Any 
 
 This will run the initial tasks and then ensure that the very last task instance is also run. You can also provide a `max` that will dictate the number of task instances that will run initially. Note: `keepLatest` will only preserve the final _one_ task instance.
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task.keepLatest(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { max: 3 });
+	const myTask = task.keepLatest(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ max: 3 },
+	);
 </script>
 ```
 
 OR
 
-```ts
+```svelte
 <script>
 	import { task } from 'svelte-concurrency';
 
-	const my_task = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
-		return param * 2;
-	}, { kind: 'keepLatest', max: 3 });
+	const myTask = task(
+		async (param: number) => {
+			await new Promise((r) => setTimeout(r, 2000));
+			return param * 2;
+		},
+		{ kind: 'keepLatest', max: 3 },
+	);
 </script>
 ```
 
@@ -192,12 +219,21 @@ Both of the above will result in 3 simultaneous tasks being allowed to run initi
 
 As the return value from the task wrapper is a store, you can access it just like you would with any other store:
 
-```
-{$my_task.error}
-{$my_task.isRunning}
-{$my_task.lastSuccessful}
-{$my_task.performCount}
-{$my_task.results}
+```svelte
+<script>
+	import { task } from 'svelte-concurrency';
+
+	const myTask = task(async (param: number) => {
+		await new Promise((r) => setTimeout(r, 2000));
+		return param * 2;
+	});
+</script>
+
+{$myTask.error}
+{$myTask.isRunning}
+{$myTask.lastSuccessful}
+{$myTask.performCount}
+{$myTask.results}
 ```
 
 ## Task Cancellation
@@ -206,9 +242,9 @@ With normal Promises, once you have triggered it to run, the only way to interru
 
 ### Generator functions
 
-`svelte-concurrency` can utilise generator functions to give us fine-grain control of how far through our task will run when cancelled.
+`svelte-concurrency` can utilize generator functions to give us fine-grain control of how far through our task will run when cancelled.
 
-```js
+```ts
 let data;
 
 const instance = task(async function*() {
@@ -226,7 +262,7 @@ Using a generator function, we can now stop our function as soon as it is cancel
 
 To set this up, you simply need to important the vite plugin and add it to your `plugins` array:
 
-```ts
+```diff
 // vite.config.ts
 
 import { sveltekit } from '@sveltejs/kit/vite';
@@ -266,7 +302,7 @@ As well as providing your own parameter as the first argument when creating your
 `signal` is the `AbortSignal` from the `AbortController`, this can be used to investigate the state of the signal of the current task instance.
 `link` allows you to link the current task to another task, allowing automatic cancellation if the parent task is aborted, or if the child is cancelled, the parent will also be cancelled.
 
-```js
+```ts
 const parent_task = task(async () => {
 	const res = await fetch('...');
 	return res;
