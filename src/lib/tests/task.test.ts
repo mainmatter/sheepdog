@@ -28,12 +28,20 @@ describe.each([
 		perform_count: {
 			expected: 5,
 		},
+		is_loading: {
+			wait_for: 3,
+			wait_after: 5,
+		},
 	},
 	{
 		component: Enqueue,
 		name: 'enqueue',
 		perform_count: {
 			expected: 5,
+		},
+		is_loading: {
+			wait_for: 3,
+			wait_after: 5,
 		},
 	},
 	{
@@ -42,12 +50,20 @@ describe.each([
 		perform_count: {
 			expected: 1,
 		},
+		is_loading: {
+			wait_for: 0,
+			wait_after: 1,
+		},
 	},
 	{
 		component: KeepLatest,
 		name: 'keepLatest',
 		perform_count: {
 			expected: 2,
+		},
+		is_loading: {
+			wait_for: 1,
+			wait_after: 2,
 		},
 	},
 	{
@@ -56,8 +72,12 @@ describe.each([
 		perform_count: {
 			expected: 5,
 		},
+		is_loading: {
+			wait_for: 0,
+			wait_after: 1,
+		},
 	},
-])('task - basic functionality $name', ({ component, perform_count }) => {
+])('task - basic functionality $name', ({ component, perform_count, is_loading }) => {
 	all_options((selector) => {
 		it('calls the function you pass in', async () => {
 			const fn = vi.fn();
@@ -165,6 +185,42 @@ describe.each([
 				expect(fn).toHaveBeenCalledTimes(perform_count.expected);
 			});
 			expect(get(store).performCount).toBe(perform_count.expected);
+		});
+
+		it('has the correct derived state for isLoading', async () => {
+			let finished = 0;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished++;
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const store = instance[`${selector}_task`] as Task;
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			await wait(10);
+			perform.click();
+			await wait(10);
+			perform.click();
+			await wait(10);
+			perform.click();
+			await wait(10);
+			perform.click();
+			await vi.waitFor(
+				() => {
+					expect(finished).toBe(is_loading.wait_for);
+				},
+				{
+					interval: 10,
+				},
+			);
+			expect(get(store).isLoading).toBe(true);
+			await vi.waitFor(() => {
+				expect(finished).toBe(is_loading.wait_after);
+			});
+			expect(get(store).isLoading).toBe(false);
 		});
 	});
 

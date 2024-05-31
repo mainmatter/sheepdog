@@ -34,10 +34,10 @@ export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<
 
 type TaskAdapter<TReturn = unknown> = {
 	onDestroy: (fn: () => void) => void;
-	onInstanceCancel: () => void;
-	onInstanceStart: () => void;
-	onInstanceComplete: (new_value: TReturn) => void;
-	onError: (error: unknown | undefined) => void;
+	onInstanceCancel: (instance_id: string) => void;
+	onInstanceStart: (instance_id: string) => void;
+	onInstanceComplete: (instance_id: string, new_value: TReturn) => void;
+	onError: (instance_id: string, error: unknown | undefined) => void;
 };
 
 export function createTask<TArgs = unknown, TReturn = unknown>(
@@ -72,11 +72,13 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
 			const child_tasks = new Set<ReturnType<Task<any, any>['perform']>>();
 
+			const instance_id = crypto.randomUUID();
+
 			function cancel_linked_and_update_store() {
 				for (const child_task of child_tasks) {
 					child_task.cancel();
 				}
-				adapter.onInstanceCancel();
+				adapter.onInstanceCancel(instance_id);
 			}
 
 			let resolve: (value: TReturn) => unknown;
@@ -106,7 +108,7 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 			}
 			handler(
 				() => {
-					adapter.onInstanceStart();
+					adapter.onInstanceStart(instance_id);
 					queueMicrotask(async () => {
 						try {
 							const gen_or_value = await gen_or_fun(args[0]!, {
@@ -127,16 +129,16 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 								}
 								if (next_val.done) {
 									const last_result = next_val.value;
-									adapter.onInstanceComplete(last_result);
+									adapter.onInstanceComplete(instance_id, last_result);
 									resolve(next_val.value);
 								}
 							} else if (!abort_controller.signal.aborted) {
-								adapter.onInstanceComplete(gen_or_value);
+								adapter.onInstanceComplete(instance_id, gen_or_value);
 								resolve(gen_or_value);
 							}
 						} catch (e) {
 							if (!abort_controller.signal.aborted) {
-								adapter.onError(e);
+								adapter.onError(instance_id, e);
 							}
 							reject(e);
 						}
