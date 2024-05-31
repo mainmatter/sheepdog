@@ -6,14 +6,14 @@ export type { SvelteConcurrencyUtils, TaskOptions };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
-interface TaskInstance {
+export type TaskInstance<TReturn = undefined> = {
 	error?: undefined | unknown;
 	isCanceled: boolean;
 	isError: boolean;
 	isRunning: boolean;
 	isSuccessful: boolean;
-	value?: undefined | unknown;
-}
+	value?: undefined | TReturn;
+};
 
 export function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: (
@@ -26,16 +26,19 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 
 	const { subscribe, ...result } = writable({
 		isRunning: false,
-		last: undefined as undefined | TaskInstance,
-		lastCanceled: undefined as undefined | TaskInstance,
-		lastErrored: undefined as undefined | TaskInstance,
-		lastRunning: undefined as undefined | TaskInstance,
-		lastSuccessful: undefined as undefined | TaskInstance,
+		last: undefined as undefined | TaskInstance<TReturn>,
+		lastCanceled: undefined as undefined | TaskInstance<TReturn>,
+		lastErrored: undefined as undefined | TaskInstance<TReturn>,
+		lastRunning: undefined as undefined | TaskInstance<TReturn>,
+		lastSuccessful: undefined as undefined | TaskInstance<TReturn>,
 		results,
 		performCount: 0,
 	});
 
-	const updateResult = (instance: TaskInstance | undefined, new_instance: boolean = false) => {
+	const updateResult = (
+		instance: TaskInstance<TReturn> | undefined,
+		new_instance: boolean = false,
+	) => {
 		return result.update((old) => {
 			if (!instance) {
 				return old;
@@ -55,7 +58,7 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 			}
 			if (isRunning) {
 				old.lastRunning = instance;
-			} else {
+			} else if (old.lastRunning === instance) {
 				old.lastRunning = undefined;
 			}
 			old.last = instance;
@@ -64,7 +67,7 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 		});
 	};
 
-	const instances = new Map<string, TaskInstance>();
+	const instances = new Map<string, TaskInstance<TReturn>>();
 
 	const actual_task = createTask<TArgs, TReturn>(
 		{
@@ -89,13 +92,13 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 				updateResult(instance);
 			},
 			onInstanceStart(instance_id) {
-				instances.set(instance_id, {
+				const instance = {
 					isRunning: true,
 					isCanceled: false,
 					isError: false,
 					isSuccessful: false,
-				});
-				const instance = instances.get(instance_id);
+				};
+				instances.set(instance_id, instance);
 				updateResult(instance, true);
 			},
 			onInstanceComplete(instance_id, last_result) {
