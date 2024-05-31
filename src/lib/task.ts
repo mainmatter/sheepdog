@@ -1,8 +1,10 @@
 import { onDestroy } from 'svelte';
 import { createTask, handlers } from './core';
 import { writable } from 'svelte/store';
-import type { SvelteConcurrencyUtils, Task, TaskOptions, HandlerType, HandlersMap } from './core';
-export type { SvelteConcurrencyUtils, Task, TaskOptions };
+import type { SvelteConcurrencyUtils, TaskOptions, HandlerType, HandlersMap } from './core';
+export type { SvelteConcurrencyUtils, TaskOptions };
+
+export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
 export function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: (
@@ -21,36 +23,45 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 		performCount: 0,
 	});
 
+	const instances = new Map<string, { isLoading: boolean }>();
+
 	const actual_task = createTask<TArgs, TReturn>(
 		{
 			onDestroy(fn) {
 				onDestroy(fn);
 			},
-			onError(error) {
+			onError(instance_id, error) {
+				const instance = instances.get(instance_id);
+				if (instance) instance.isLoading = false;
 				result.update((old) => {
 					old.error = error;
-					old.isLoading = false;
+					old.isLoading = [...instances.values()].some((val) => val.isLoading);
 					return old;
 				});
 			},
-			onInstanceCancel() {
+			onInstanceCancel(instance_id) {
+				const instance = instances.get(instance_id);
+				if (instance) instance.isLoading = false;
 				result.update((old) => {
-					old.isLoading = false;
+					old.isLoading = [...instances.values()].some((val) => val.isLoading);
 					return old;
 				});
 			},
-			onInstanceStart() {
+			onInstanceStart(instance_id) {
+				instances.set(instance_id, { isLoading: true });
 				result.update((old) => {
-					old.isLoading = true;
+					old.isLoading = [...instances.values()].some((val) => val.isLoading);
 					old.performCount++;
 					return old;
 				});
 			},
-			onInstanceComplete(last_result) {
+			onInstanceComplete(instance_id, last_result) {
 				results.push(last_result);
+				const instance = instances.get(instance_id);
+				if (instance) instance.isLoading = false;
 				result.update((old) => {
 					old.error = undefined;
-					old.isLoading = false;
+					old.isLoading = [...instances.values()].some((val) => val.isLoading);
 					old.lastSuccessful = last_result;
 					return old;
 				});
