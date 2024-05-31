@@ -16,14 +16,14 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 	const results: TReturn[] = [];
 
 	const { subscribe, ...result } = writable({
-		isLoading: false,
+		isRunning: false,
 		lastSuccessful: undefined as undefined | TReturn,
 		error: undefined as undefined | unknown,
 		results,
 		performCount: 0,
 	});
 
-	const instances = new Map<string, { isLoading: boolean }>();
+	const instances = new Map<string, { is_running: boolean }>();
 
 	const actual_task = createTask<TArgs, TReturn>(
 		{
@@ -32,25 +32,25 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 			},
 			onError(instance_id, error) {
 				const instance = instances.get(instance_id);
-				if (instance) instance.isLoading = false;
+				if (instance) instance.is_running = false;
 				result.update((old) => {
 					old.error = error;
-					old.isLoading = [...instances.values()].some((val) => val.isLoading);
+					old.isRunning = [...instances.values()].some((val) => val.is_running);
 					return old;
 				});
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
-				if (instance) instance.isLoading = false;
+				if (instance) instance.is_running = false;
 				result.update((old) => {
-					old.isLoading = [...instances.values()].some((val) => val.isLoading);
+					old.isRunning = [...instances.values()].some((val) => val.is_running);
 					return old;
 				});
 			},
 			onInstanceStart(instance_id) {
-				instances.set(instance_id, { isLoading: true });
+				instances.set(instance_id, { is_running: true });
 				result.update((old) => {
-					old.isLoading = [...instances.values()].some((val) => val.isLoading);
+					old.isRunning = [...instances.values()].some((val) => val.is_running);
 					old.performCount++;
 					return old;
 				});
@@ -58,10 +58,10 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 			onInstanceComplete(instance_id, last_result) {
 				results.push(last_result);
 				const instance = instances.get(instance_id);
-				if (instance) instance.isLoading = false;
+				if (instance) instance.is_running = false;
 				result.update((old) => {
 					old.error = undefined;
-					old.isLoading = [...instances.values()].some((val) => val.isLoading);
+					old.isRunning = [...instances.values()].some((val) => val.is_running);
 					old.lastSuccessful = last_result;
 					return old;
 				});
