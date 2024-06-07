@@ -2,16 +2,16 @@
  * @vitest-environment happy-dom
  */
 import { render, waitFor } from '@testing-library/svelte';
-import { describe, expect, it, vi } from 'vitest';
-import Default from './components/default.svelte';
-import Enqueue from './components/enqueue.svelte';
-import Drop from './components/drop.svelte';
-import Restart from './components/restart.svelte';
-import Link from './components/link/parent.svelte';
-import WrongKind from './components/wrong-kind.svelte';
-import type { Task, SvelteConcurrencyUtils } from '../index';
 import { get } from 'svelte/store';
+import { describe, expect, it, vi } from 'vitest';
+import type { SvelteConcurrencyUtils, Task } from '../index';
+import Default from './components/default.svelte';
+import Drop from './components/drop.svelte';
+import Enqueue from './components/enqueue.svelte';
 import KeepLatest from './components/keep_latest.svelte';
+import Link from './components/link/parent.svelte';
+import Restart from './components/restart.svelte';
+import WrongKind from './components/wrong-kind.svelte';
 
 function wait(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,12 +20,6 @@ function wait(ms: number) {
 function all_options(fn: (selector: string) => void) {
 	describe.each(['default', 'options'])('version with %s', fn);
 }
-
-//last
-//lastErrored
-//lastCanceled
-//lastSuccessful
-//lastRunning
 
 describe.each([
 	{
@@ -227,6 +221,170 @@ describe.each([
 				expect(finished).toBe(is_running.wait_after);
 			});
 			expect(get(store).isRunning).toBe(false);
+		});
+
+		it('has the correct derived state for last', async () => {
+			let finished = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished = true;
+				return 42;
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const store = instance[`${selector}_task`] as Task;
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			await waitFor(() => expect(fn).toHaveBeenCalled());
+			expect(get(store).last).toStrictEqual({
+				isRunning: true,
+				isSuccessful: false,
+				isError: false,
+				isCanceled: false,
+			});
+			await waitFor(() => expect(finished).toBeTruthy());
+			expect(get(store).last).toStrictEqual({
+				isRunning: false,
+				isSuccessful: true,
+				isError: false,
+				isCanceled: false,
+				value: 42,
+			});
+		});
+
+		it('has the correct derived state for lastRunning', async () => {
+			let finished = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished = true;
+				return 42;
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const store = instance[`${selector}_task`] as Task;
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			await waitFor(() => expect(fn).toHaveBeenCalled());
+			expect(get(store).lastRunning).toStrictEqual({
+				isRunning: true,
+				isSuccessful: false,
+				isError: false,
+				isCanceled: false,
+			});
+			await waitFor(() => expect(finished).toBeTruthy());
+			expect(get(store).lastRunning).toBeUndefined();
+		});
+
+		it('has the correct derived state for lastCanceled', async () => {
+			let finished = false;
+			const fn = vi.fn(async function* () {
+				await wait(50);
+				yield;
+				finished = true;
+				return 42;
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const store = instance[`${selector}_task`] as Task;
+			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			await waitFor(() => expect(fn).toHaveBeenCalled());
+			expect(get(store).lastCanceled).toBeUndefined();
+			await waitFor(() => expect(finished).toBeTruthy());
+			expect(get(store).lastCanceled).toBeUndefined();
+			finished = false;
+			perform.click();
+			await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+			const cancel = getByTestId(`cancel-${selector}-last`);
+			cancel.click();
+			expect(get(store).lastCanceled).toStrictEqual({
+				isRunning: false,
+				isSuccessful: false,
+				isError: false,
+				isCanceled: true,
+			});
+		});
+	});
+
+	it('has the correct derived state for lastErrored', async () => {
+		let finished = false;
+		let error: Error | undefined = undefined;
+		const fn = vi.fn(async () => {
+			await wait(50);
+			finished = true;
+			if (error) {
+				throw error;
+			}
+		});
+		let returned_value: { error: Error; store: Task } | undefined;
+		const { getByTestId, component: instance } = render(component, {
+			fn,
+			return_value(value) {
+				returned_value = value as never;
+			},
+		});
+		const store = instance.default_task as Task;
+		const perform = getByTestId(`perform-error`);
+		perform.click();
+		await waitFor(() => expect(fn).toHaveBeenCalled());
+		expect(get(store).lastErrored).toBeUndefined();
+		await waitFor(() => expect(finished).toBeTruthy());
+		expect(get(store).lastErrored).toBeUndefined();
+		finished = false;
+		error = new Error();
+		perform.click();
+		await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+		await waitFor(() => expect(returned_value).toBeDefined());
+		expect(get(store).lastErrored).toStrictEqual({
+			error,
+			isRunning: false,
+			isSuccessful: false,
+			isError: true,
+			isCanceled: false,
+		});
+	});
+
+	it('has the correct derived state for lastSuccessful', async () => {
+		let finished = false;
+		let error: Error | undefined = new Error();
+		const fn = vi.fn(async () => {
+			await wait(50);
+			finished = true;
+			if (error) {
+				throw error;
+			}
+			return 42;
+		});
+		let returned_value: { error: Error; store: Task } | undefined;
+		const { getByTestId, component: instance } = render(component, {
+			fn,
+			return_value(value) {
+				returned_value = value as never;
+			},
+		});
+		const store = instance.default_task as Task;
+		const perform = getByTestId(`perform-error`);
+		perform.click();
+		await waitFor(() => expect(fn).toHaveBeenCalled());
+		expect(get(store).lastSuccessful).toBeUndefined();
+		await waitFor(() => expect(returned_value).toBeDefined());
+		expect(get(store).lastSuccessful).toBeUndefined();
+		finished = false;
+		error = undefined;
+		perform.click();
+		await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+		await waitFor(() => expect(finished).toBeTruthy());
+		expect(get(store).lastSuccessful).toStrictEqual({
+			isRunning: false,
+			isSuccessful: true,
+			isError: false,
+			isCanceled: false,
+			value: 42,
 		});
 	});
 
