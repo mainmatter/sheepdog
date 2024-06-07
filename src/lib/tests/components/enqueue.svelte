@@ -20,16 +20,24 @@
 <button
 	data-testid="perform-default"
 	on:click={async () => {
-		latest_task_instance = default_task.perform(argument);
-		return_value(await latest_task_instance);
+		try {
+			latest_task_instance = default_task.perform(argument);
+			return_value(await latest_task_instance);
+		} catch {
+			/**empty*/
+		}
 	}}>perform</button
 >
 
 <button
 	data-testid="perform-options"
 	on:click={async () => {
-		latest_options_task_instance = options_task.perform(argument);
-		return_value(await latest_options_task_instance);
+		try {
+			latest_options_task_instance = options_task.perform(argument);
+			return_value(await latest_options_task_instance);
+		} catch {
+			/**empty*/
+		}
 	}}>perform options</button
 >
 
