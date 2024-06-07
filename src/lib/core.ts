@@ -40,6 +40,13 @@ type TaskAdapter<TReturn = unknown> = {
 	onError: (instance_id: string, error: unknown | undefined) => void;
 };
 
+export class CancelationError extends Error {
+	constructor() {
+		super('CancelationError: the task instance was cancelled' + new Date().getTime());
+		super.name = 'CancelationError';
+	}
+}
+
 export function createTask<TArgs = unknown, TReturn = unknown>(
 	adapter: TaskAdapter<TReturn>,
 	gen_or_fun: (
@@ -74,15 +81,15 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 
 			const instance_id = crypto.randomUUID();
 
+			let resolve: (value: TReturn) => unknown;
+			let reject: (cause: unknown) => unknown;
 			function cancel_linked_and_update_store() {
 				for (const child_task of child_tasks) {
 					child_task.cancel();
 				}
 				adapter.onInstanceCancel(instance_id);
+				reject(new CancelationError());
 			}
-
-			let resolve: (value: TReturn) => unknown;
-			let reject: (cause: unknown) => unknown;
 			const promise = new Promise<TReturn>((resolver, rejecter) => {
 				resolve = resolver;
 				reject = rejecter;
