@@ -42,7 +42,7 @@ type TaskAdapter<TReturn = unknown> = {
 
 export class CancelationError extends Error {
 	constructor() {
-		super('CancelationError: the task instance was cancelled' + new Date().getTime());
+		super('CancelationError: the task instance was cancelled');
 		super.name = 'CancelationError';
 	}
 }
