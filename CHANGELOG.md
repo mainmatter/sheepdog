@@ -2,6 +2,17 @@
 
 ## Release (2024-06-21)
 
+@sheepdog/svelte 0.6.1 (patch)
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#106](https://github.com/mainmatter/sheepdog/pull/106) chore: delete tgz ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
+## Release (2024-06-21)
+
 @sheepdog/svelte 0.7.0 (minor)
 
 #### :rocket: Enhancement
