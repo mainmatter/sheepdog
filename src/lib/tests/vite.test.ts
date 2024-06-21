@@ -1,7 +1,7 @@
-import { concurrencyTransform } from '../vite';
+import { sheepdogTransform } from '../vite';
 import { describe, it, expect } from 'vitest';
 
-const plugin = concurrencyTransform();
+const plugin = sheepdogTransform();
 
 const expected_entries = Object.entries(
 	import.meta.glob('./expected-transforms/**/*.js', { as: 'raw', eager: true }),
@@ -22,7 +22,7 @@ for (const [file, code] of expected_entries) {
 	}
 }
 
-describe('concurrency transform', () => {
+describe('sheepdog transform', () => {
 	it.each([...expected.entries()])('%s', async (id, { code, transform }) => {
 		// @ts-expect-error we don't have the correct `this` here but we are not using it
 		const actual_transform = await plugin.transform(code, 'myfile.js');

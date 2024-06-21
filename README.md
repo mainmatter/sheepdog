@@ -1,21 +1,21 @@
-# svelte-concurrency
+# @sheepdog/svelte
 
-Handle async tasks with ease thanks to `svelte-concurrency`.
+Handle async tasks in your svelte application with ease thanks to `@sheepdog/svelte`.
 
 ## What is it?
 
-`svelte-concurrency` supplies a simple way to introduce cancellable concurrency into your app. Not only do they provide the cancellability that is missing from normal Promises, `svelte-concurrency` also provides a public API that allows you to observe the running state of your task without having to set a single flag manually.
+`@sheepdog/svelte` supplies a simple way to introduce cancellable concurrency into your app. Not only do they provide the cancellability that is missing from normal Promises, `@sheepdog/svelte` also provides a public API that allows you to observe the running state of your task without having to set a single flag manually.
 
 Tasks that live on components are automatically cancelled when their context is destroyed, meaning you don't need to worry about the clean up - we've got you covered.
 
 Choose whether you want to keep the oldest, keep the newest or keep all instances of your task to help boost the performance of your app and reduce unnecessary server load.
 
-## How to use `svelte-concurrency`
+## How to use `@sheepdog/svelte`
 
 Install it using your favorite package manager:
 
 ```bash
-pnpm install svelte-concurrency
+pnpm install @sheepdog/svelte
 ```
 
 Then put it to work immediately wherever you want cancellable promises. (Cancellation is only available when using the generator function or async transform, but more on that later).
@@ -46,7 +46,7 @@ This simply gives you a task wrapper around your function. It will not handle an
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(async (param: number) => {
 		await new Promise((r) => setTimeout(r, 2000));
@@ -59,7 +59,7 @@ OR
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
@@ -77,7 +77,7 @@ This will cancel the oldest instance of the task and start a new instance of it.
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task.restart(
 		async (param: number) => {
@@ -93,7 +93,7 @@ OR
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
@@ -113,7 +113,7 @@ This will cancel any new instances of the task. You can also provide a `max` tha
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task.drop(
 		async (param: number) => {
@@ -129,7 +129,7 @@ OR
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
@@ -149,7 +149,7 @@ This will add all task instances to a list and each task will be run in order. Y
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task.enqueue(
 		async (param: number) => {
@@ -165,7 +165,7 @@ OR
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
@@ -185,7 +185,7 @@ This will run the initial tasks and then ensure that the very last task instance
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task.keepLatest(
 		async (param: number) => {
@@ -201,7 +201,7 @@ OR
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
@@ -221,7 +221,7 @@ As the return value from the task wrapper is a store, you can access it just lik
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const myTask = task(async (param: number) => {
 		await new Promise((r) => setTimeout(r, 2000));
@@ -238,11 +238,11 @@ As the return value from the task wrapper is a store, you can access it just lik
 
 ## Task Cancellation
 
-With normal Promises, once you have triggered it to run, the only way to interrupt it is to implement your own series of checks at different intervals. With `svelte-concurrency` we offer two ways to attain this ability without having to handle it yourself:
+With normal Promises, once you have triggered it to run, the only way to interrupt it is to implement your own series of checks at different intervals. With `@sheepdog/svelte` we offer two ways to attain this ability without having to handle it yourself:
 
 ### Generator functions
 
-`svelte-concurrency` can utilize generator functions to give us fine-grain control of how far through our task will run when cancelled.
+`@sheepdog/svelte` can utilize generator functions to give us fine-grain control of how far through our task will run when cancelled.
 
 ```ts
 let data;
@@ -258,7 +258,7 @@ Using a generator function, we can now stop our function as soon as it is cancel
 
 ### Async transform (recommended)
 
-`svelte-concurrency` also includes a vite plugin that transforms your async functions into generators.
+`@sheepdog/svelte` also includes a vite plugin that transforms your async functions into generators.
 
 To set this up, you simply need to important the vite plugin and add it to your `plugins` array:
 
@@ -267,11 +267,11 @@ To set this up, you simply need to important the vite plugin and add it to your 
 
 import { sveltekit } from '@sveltejs/kit/vite';
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
-+ import { concurrencyTransform } from 'svelte-concurrency/lib/vite';
++ import { sheepdogTransform } from '@sheepdog/svelte/lib/vite';
 
 export default defineConfig(({ mode }) => ({
 -	plugins: [sveltekit()],
-+	plugins: [sveltekit(), concurrencyTransform()],
++	plugins: [sveltekit(), sheepdogTransform()],
 	...
 	})
 )
@@ -293,7 +293,7 @@ const instance = task(async function* () {
 });
 ```
 
-Meaning you get all of the functionality of generators without having to implement them yourself. And have no fear, this will only apply to async functions that you pass as a parameter to the `task` function from `svelte-concurrency`. (You can still use standard async promises as you would normally.)
+Meaning you get all of the functionality of generators without having to implement them yourself. And have no fear, this will only apply to async functions that you pass as a parameter to the `task` function from `@sheepdog/svelte`. (You can still use standard async promises as you would normally.)
 
 ## Task Utilities
 

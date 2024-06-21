@@ -1,4 +1,4 @@
-import { task } from "svelte-concurrency";
+import { task } from "@sheepdog/svelte";
 
 task(async function* () {
 	const arr = [0, 1];

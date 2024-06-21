@@ -8,7 +8,7 @@ export default defineConfig({
 	site: 'https://sheepdogjs.com',
 	integrations: [
 		starlight({
-			title: 'svelte-concurrency',
+			title: '@sheepdog/svelte',
 			social: {
 				github: 'https://github.com/mainmatter/sheepdog',
 			},
