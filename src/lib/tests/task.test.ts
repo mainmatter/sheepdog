@@ -4,7 +4,7 @@
 import { render } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
-import type { SvelteConcurrencyUtils, Task } from '../index';
+import type { SheepdogUtils, Task } from '../index';
 import Default from './components/default.svelte';
 import Drop from './components/drop.svelte';
 import Enqueue from './components/enqueue.svelte';
@@ -113,7 +113,7 @@ describe.each([
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
-			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
 				await wait(wait_time);
 				yield;
@@ -141,7 +141,7 @@ describe.each([
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
-			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
 				await wait(wait_time);
 				yield;
@@ -169,7 +169,7 @@ describe.each([
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
-			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
 				await wait(wait_time);
 				yield;
@@ -514,7 +514,7 @@ describe("task - specific functionality 'default'", () => {
 			let count = 0;
 			const wait_time = 50;
 			const task_signals: AbortSignal[] = [];
-			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signals.push(signal);
 				await wait(wait_time);
 				yield;
@@ -595,7 +595,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			let count = 0;
 			const wait_time = 50;
 			const task_signals: AbortSignal[] = [];
-			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signals.push(signal);
 				await wait(wait_time);
 				yield;
@@ -753,7 +753,7 @@ describe("task - specific functionality 'restart'", () => {
 		it('completes only `max` time if performed when other instances are already running', async () => {
 			let finished = 0;
 			const abort_signals: AbortSignal[] = [];
-			const fn = vi.fn(async function* (_: number, { signal }: SvelteConcurrencyUtils) {
+			const fn = vi.fn(async function* (_: number, { signal }: SheepdogUtils) {
 				abort_signals.push(signal);
 				await wait(50);
 				yield;
@@ -784,7 +784,7 @@ describe("task - specific functionality 'restart'", () => {
 		it('completes only `max` time if performed when other instances are already running (max: 3)', async () => {
 			let finished = 0;
 			const abort_signals: AbortSignal[] = [];
-			const fn = vi.fn(async function* (_: number, { signal }: SvelteConcurrencyUtils) {
+			const fn = vi.fn(async function* (_: number, { signal }: SheepdogUtils) {
 				abort_signals.push(signal);
 				await wait(50);
 				yield;

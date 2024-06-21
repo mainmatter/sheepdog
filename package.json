@@ -1,9 +1,9 @@
 {
-	"name": "svelte-concurrency",
+	"name": "@sheepdog/svelte",
 	"version": "0.6.0",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:mainmatter/svelte-concurrency.git"
+		"url": "git@github.com:mainmatter/sheepdog.git"
 	},
 	"type": "module",
 	"exports": {

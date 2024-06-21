@@ -1,4 +1,4 @@
-import { task } from "svelte-concurrency";
+import { task } from "@sheepdog/svelte";
 
 function fn(val) {
 	return val;

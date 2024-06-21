@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { task, type SvelteConcurrencyUtils } from '../../../index';
+	import { task, type SheepdogUtils } from '../../../index';
 	import Child from './child.svelte';
 
 	export let fn: (
 		args: number,
-		utils: SvelteConcurrencyUtils,
+		utils: SheepdogUtils,
 	) => Promise<unknown> | AsyncGenerator<unknown, unknown, unknown>;
 
 	export let return_value: (value: unknown) => void = () => {};
