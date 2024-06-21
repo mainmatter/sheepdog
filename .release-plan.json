@@ -1,25 +1,17 @@
 {
   "solution": {
     "@sheepdog/svelte": {
-      "impact": "minor",
+      "impact": "patch",
       "oldVersion": "0.6.0",
-      "newVersion": "0.7.0",
+      "newVersion": "0.6.1",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
-        },
-        {
           "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :memo: Documentation"
+          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2024-05-31)\n\n@sheepdog/svelte 0.6.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/svelte`\n  * [#92](https://github.com/mainmatter/sheepdog/pull/92) breaking: add instance id and derive is loading ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#89](https://github.com/mainmatter/sheepdog/pull/89) feat: abstract task logic to core ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#88](https://github.com/mainmatter/sheepdog/pull/88) feat: add performCount to derived state ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#56](https://github.com/mainmatter/sheepdog/pull/56) Add keep_latest ([@beerinho](https://github.com/beerinho))\n  * [#66](https://github.com/mainmatter/sheepdog/pull/66) feat: more exhaustive async transform ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#76](https://github.com/mainmatter/sheepdog/pull/76) feat: setup starlight for documentation ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#75](https://github.com/mainmatter/sheepdog/pull/75) Update pnpm-lock.yml to use pnpm v9 ([@beerinho](https://github.com/beerinho))\n  * [#74](https://github.com/mainmatter/sheepdog/pull/74) Update packages ([@beerinho](https://github.com/beerinho))\n  * [#67](https://github.com/mainmatter/sheepdog/pull/67) chore: test for errors thrown in perform ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#72](https://github.com/mainmatter/sheepdog/pull/72) chore: upgrade eslint to v9 and flat config ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#68](https://github.com/mainmatter/sheepdog/pull/68) chore: use pnpm 9 in workflows ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 2\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-06-21)\n\n@sheepdog/svelte 0.6.1 (patch)\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#106](https://github.com/mainmatter/sheepdog/pull/106) chore: delete tgz ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
