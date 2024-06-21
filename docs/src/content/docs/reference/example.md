@@ -5,7 +5,7 @@ description: the task function
 
 ```svelte
 <script>
-	import { task } from 'svelte-concurrency';
+	import { task } from '@sheepdog/svelte';
 
 	const getCameras = task(async () => {
 		return await getCameras();

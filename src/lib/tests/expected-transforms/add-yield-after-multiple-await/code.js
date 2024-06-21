@@ -1,6 +1,6 @@
-import { task } from "svelte-concurrency";
+import { task } from "@sheepdog/svelte";
 
-task(async ()=>{
+task(async () => {
 	await Promise.resolve();
 	await Promise.resolve();
 });

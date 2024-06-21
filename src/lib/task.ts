@@ -1,8 +1,8 @@
 import { onDestroy } from 'svelte';
 import { createTask, handlers, CancelationError } from './core';
 import { writable } from 'svelte/store';
-import type { SvelteConcurrencyUtils, TaskOptions, HandlerType, HandlersMap } from './core';
-export type { SvelteConcurrencyUtils, TaskOptions };
+import type { SheepdogUtils, TaskOptions, HandlerType, HandlersMap } from './core';
+export type { SheepdogUtils, TaskOptions };
 
 export { CancelationError };
 
@@ -20,7 +20,7 @@ export type TaskDerivedState<TReturn = undefined> = {
 export function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: (
 		args: TArgs,
-		utils: SvelteConcurrencyUtils,
+		utils: SheepdogUtils,
 	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 	options?: TaskOptions,
 ) {
@@ -126,7 +126,7 @@ type HandlersShorthands = {
 	[K in HandlerType]: <TArgs = undefined, TReturn = unknown>(
 		gen_or_fun: (
 			args: TArgs,
-			utils: SvelteConcurrencyUtils,
+			utils: SheepdogUtils,
 		) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 		options?: Parameters<HandlersMap[K]> extends [] ? object : Parameters<HandlersMap[K]>[0],
 	) => ReturnType<typeof _task<TArgs, TReturn>>;

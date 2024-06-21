@@ -23,7 +23,7 @@ export type TaskOptions = {
 		: Parameters<HandlersMap[K]>[0]);
 }[HandlerType];
 
-export type SvelteConcurrencyUtils = {
+export type SheepdogUtils = {
 	signal: AbortSignal;
 	link: <TArgs, TReturn>(task: Task<TArgs, TReturn>) => Task<TArgs, TReturn>;
 };
@@ -51,7 +51,7 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 	adapter: TaskAdapter<TReturn>,
 	gen_or_fun: (
 		args: TArgs,
-		utils: SvelteConcurrencyUtils,
+		utils: SheepdogUtils,
 	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 	options?: TaskOptions,
 ) {

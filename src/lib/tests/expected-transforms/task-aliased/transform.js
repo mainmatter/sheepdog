@@ -1,4 +1,4 @@
-import { task as other_name } from "svelte-concurrency";
+import { task as other_name } from "@sheepdog/svelte";
 
 other_name(async function* () {
 	yield Promise.resolve();

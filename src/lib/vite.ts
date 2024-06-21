@@ -166,9 +166,9 @@ function update_body(task: BlockStatement) {
 	}
 }
 
-export function concurrencyTransform() {
+export function sheepdogTransform() {
 	return {
-		name: 'concurrency-transform',
+		name: 'sheepdog-transform',
 		async transform(code, id) {
 			try {
 				const ast = parse(code, {
@@ -188,7 +188,7 @@ export function concurrencyTransform() {
 					},
 					{
 						ImportDeclaration(node) {
-							if (node.source.value === 'svelte-concurrency') {
+							if (node.source.value === '@sheepdog/svelte') {
 								const task_fn = node.specifiers.find((specifier) => {
 									return (
 										specifier.type === 'ImportSpecifier' &&

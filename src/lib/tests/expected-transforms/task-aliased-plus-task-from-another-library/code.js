@@ -1,12 +1,12 @@
-import { task as other_name } from "svelte-concurrency";
+import { task as other_name } from "@sheepdog/svelte";
 import { task } from "another-library";
 
-task(async ()=>{
+task(async () => {
 	await Promise.resolve();
 	await Promise.resolve();
 });
 
-other_name(async ()=>{
+other_name(async () => {
 	await Promise.resolve();
 	await Promise.resolve();
 });
