@@ -6,11 +6,19 @@
 	export let kind: string;
 
 	const default_task = task.default(async (_, { link }) => {
-		await link(parent).perform(0);
+		try {
+			await link(parent).perform(0);
+		} catch {
+			/** empty */
+		}
 	});
 	const options_task = task(
 		async (_, { link }) => {
-			await link(parent).perform(0);
+			try {
+				await link(parent).perform(0);
+			} catch {
+				/** */
+			}
 		},
 		{ kind: 'default' },
 	);
@@ -19,10 +27,14 @@
 <button
 	data-testid="child-component-perform-{kind}"
 	on:click={async () => {
-		if (kind === 'default') {
-			default_task.perform();
-		} else {
-			options_task.perform();
+		try {
+			if (kind === 'default') {
+				await default_task.perform();
+			} else {
+				await options_task.perform();
+			}
+		} catch {
+			/**empty*/
 		}
 	}}>perform</button
 >

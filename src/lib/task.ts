@@ -1,8 +1,10 @@
 import { onDestroy } from 'svelte';
-import { createTask, handlers } from './core';
+import { createTask, handlers, CancelationError } from './core';
 import { writable } from 'svelte/store';
 import type { SvelteConcurrencyUtils, TaskOptions, HandlerType, HandlersMap } from './core';
 export type { SvelteConcurrencyUtils, TaskOptions };
+
+export { CancelationError };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 

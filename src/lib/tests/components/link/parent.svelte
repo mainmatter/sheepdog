@@ -14,11 +14,19 @@
 	const options_task = task(fn, { kind: 'default' });
 
 	const default_task_child = task.default(async (_, { link }) => {
-		await link(default_task).perform(argument);
+		try {
+			await link(default_task).perform(argument);
+		} catch {
+			/** empty */
+		}
 	});
 
 	const default_options_task_child = task.default(async (_, { link }) => {
-		await link(options_task).perform(argument);
+		try {
+			await link(options_task).perform(argument);
+		} catch {
+			/** catch */
+		}
 	});
 
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
@@ -32,30 +40,48 @@
 <button
 	data-testid="perform-default"
 	on:click={async () => {
-		latest_task_instance = default_task.perform(argument);
-		return_value(await latest_task_instance);
+		try {
+			latest_task_instance = default_task.perform(argument);
+			return_value(await latest_task_instance);
+		} catch {
+			/**empty*/
+		}
 	}}>perform</button
 >
 
 <button
 	data-testid="perform-options"
 	on:click={async () => {
-		latest_options_task_instance = options_task.perform(argument);
-		return_value(await latest_options_task_instance);
+		try {
+			latest_options_task_instance = options_task.perform(argument);
+			return_value(await latest_options_task_instance);
+		} catch {
+			/**empty*/
+		}
 	}}>perform options</button
 >
 
 <button
 	data-testid="perform-child-default"
 	on:click={async () => {
-		latest_task_child_instance = default_task_child.perform();
+		try {
+			latest_task_child_instance = default_task_child.perform();
+			await latest_task_child_instance;
+		} catch {
+			/**empty*/
+		}
 	}}>perform child</button
 >
 
 <button
 	data-testid="perform-child-options"
 	on:click={async () => {
-		latest_options_task_child_instance = default_options_task_child.perform();
+		try {
+			latest_options_task_child_instance = default_options_task_child.perform();
+			await latest_options_task_child_instance;
+		} catch {
+			/**empty*/
+		}
 	}}>perform child options</button
 >
 

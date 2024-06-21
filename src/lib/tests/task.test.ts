@@ -1,7 +1,7 @@
 /**
  * @vitest-environment happy-dom
  */
-import { render, waitFor } from '@testing-library/svelte';
+import { render } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
 import type { SvelteConcurrencyUtils, Task } from '../index';
@@ -103,6 +103,62 @@ describe.each([
 				fn,
 			});
 			const perform = getByTestId(`perform-${selector}`);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(count).toBe(1);
+			});
+		});
+
+		it('it can be rerun after being cancelled using `cancelAll`', async () => {
+			let count = 0;
+			const wait_time = 50;
+			let task_signal: AbortSignal;
+			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+				task_signal = signal;
+				await wait(wait_time);
+				yield;
+				count++;
+			}
+			const { getByTestId } = render(component, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await wait(20);
+			cancel.click();
+			await vi.waitFor(() => {
+				expect(task_signal.aborted).toBeTruthy();
+			});
+			expect(count).toBe(0);
+			perform.click();
+			await vi.waitFor(() => {
+				expect(count).toBe(1);
+			});
+		});
+
+		it('it can be rerun after the last instance is cancelled', async () => {
+			let count = 0;
+			const wait_time = 50;
+			let task_signal: AbortSignal;
+			async function* fn(_: number, { signal }: SvelteConcurrencyUtils) {
+				task_signal = signal;
+				await wait(wait_time);
+				yield;
+				count++;
+			}
+			const { getByTestId } = render(component, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}-last`);
+			perform.click();
+			await wait(20);
+			cancel.click();
+			await vi.waitFor(() => {
+				expect(task_signal.aborted).toBeTruthy();
+			});
+			expect(count).toBe(0);
 			perform.click();
 			await vi.waitFor(() => {
 				expect(count).toBe(1);
@@ -237,14 +293,14 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await waitFor(() => expect(fn).toHaveBeenCalled());
+			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 			expect(get(store).last).toStrictEqual({
 				isRunning: true,
 				isSuccessful: false,
 				isError: false,
 				isCanceled: false,
 			});
-			await waitFor(() => expect(finished).toBeTruthy());
+			await vi.waitFor(() => expect(finished).toBeTruthy());
 			expect(get(store).last).toStrictEqual({
 				isRunning: false,
 				isSuccessful: true,
@@ -268,14 +324,14 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await waitFor(() => expect(fn).toHaveBeenCalled());
+			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 			expect(get(store).lastRunning).toStrictEqual({
 				isRunning: true,
 				isSuccessful: false,
 				isError: false,
 				isCanceled: false,
 			});
-			await waitFor(() => expect(finished).toBeTruthy());
+			await vi.waitFor(() => expect(finished).toBeTruthy());
 			expect(get(store).lastRunning).toBeUndefined();
 		});
 
@@ -293,13 +349,13 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await waitFor(() => expect(fn).toHaveBeenCalled());
+			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 			expect(get(store).lastCanceled).toBeUndefined();
-			await waitFor(() => expect(finished).toBeTruthy());
+			await vi.waitFor(() => expect(finished).toBeTruthy());
 			expect(get(store).lastCanceled).toBeUndefined();
 			finished = false;
 			perform.click();
-			await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+			await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			cancel.click();
 			expect(get(store).lastCanceled).toStrictEqual({
@@ -331,15 +387,15 @@ describe.each([
 		const store = instance.default_task as Task;
 		const perform = getByTestId(`perform-error`);
 		perform.click();
-		await waitFor(() => expect(fn).toHaveBeenCalled());
+		await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 		expect(get(store).lastErrored).toBeUndefined();
-		await waitFor(() => expect(finished).toBeTruthy());
+		await vi.waitFor(() => expect(finished).toBeTruthy());
 		expect(get(store).lastErrored).toBeUndefined();
 		finished = false;
 		error = new Error();
 		perform.click();
-		await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
-		await waitFor(() => expect(returned_value).toBeDefined());
+		await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+		await vi.waitFor(() => expect(returned_value).toBeDefined());
 		expect(get(store).lastErrored).toStrictEqual({
 			error,
 			isRunning: false,
@@ -370,15 +426,15 @@ describe.each([
 		const store = instance.default_task as Task;
 		const perform = getByTestId(`perform-error`);
 		perform.click();
-		await waitFor(() => expect(fn).toHaveBeenCalled());
+		await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 		expect(get(store).lastSuccessful).toBeUndefined();
-		await waitFor(() => expect(returned_value).toBeDefined());
+		await vi.waitFor(() => expect(returned_value).toBeDefined());
 		expect(get(store).lastSuccessful).toBeUndefined();
 		finished = false;
 		error = undefined;
 		perform.click();
-		await waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
-		await waitFor(() => expect(finished).toBeTruthy());
+		await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+		await vi.waitFor(() => expect(finished).toBeTruthy());
 		expect(get(store).lastSuccessful).toStrictEqual({
 			isRunning: false,
 			isSuccessful: true,
@@ -787,11 +843,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			const perform = getByTestId(`perform-child-${selector}`);
 			const cancel = getByTestId(`cancel-child-${selector}`);
 			perform.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalled();
 			});
 			cancel.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(finish_waiting).toBeTruthy();
 			});
 			expect(cancelled).toBeTruthy();
@@ -813,11 +869,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			const perform = getByTestId(`perform-child-${selector}`);
 			const cancel = getByTestId(`cancel-child-${selector}-last`);
 			perform.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalled();
 			});
 			cancel.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(finish_waiting).toBeTruthy();
 			});
 			expect(cancelled).toBeTruthy();
@@ -839,11 +895,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			const perform = getByTestId(`child-component-perform-${selector}`);
 			const cancel = getByTestId(`unmount-child-component`);
 			perform.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalled();
 			});
 			cancel.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(finish_waiting).toBeTruthy();
 			});
 			expect(cancelled).toBeTruthy();
@@ -868,11 +924,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			const cancel = getByTestId(`cancel-child-${selector}-last`);
 			perform.click();
 			perform.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(2);
 			});
 			cancel.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(finish_waiting[0]).toBeTruthy();
 				expect(finish_waiting[1]).toBeTruthy();
 			});
@@ -900,11 +956,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			const cancel = getByTestId(`unmount-child-component`);
 			perform_parent.click();
 			perform_child.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(2);
 			});
 			cancel.click();
-			await waitFor(() => {
+			await vi.waitFor(() => {
 				expect(finish_waiting[0]).toBeTruthy();
 				expect(finish_waiting[1]).toBeTruthy();
 			});
