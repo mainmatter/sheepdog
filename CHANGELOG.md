@@ -2,18 +2,18 @@
 
 ## Release (2024-06-21)
 
-svelte-concurrency 0.7.0 (minor)
+@sheepdog/svelte 0.7.0 (minor)
 
 #### :rocket: Enhancement
-* `svelte-concurrency`
+* `@sheepdog/svelte`
   * [#95](https://github.com/mainmatter/sheepdog/pull/95) Add TaskInstance and derive `last` ([@beerinho](https://github.com/beerinho))
 
 #### :bug: Bug Fix
-* `svelte-concurrency`
+* `@sheepdog/svelte`
   * [#98](https://github.com/mainmatter/sheepdog/pull/98) fix: cancelled instances hanging indefinitely ([@paoloricciuti](https://github.com/paoloricciuti))
 
 #### :memo: Documentation
-* `svelte-concurrency`
+* `@sheepdog/svelte`
   * [#104](https://github.com/mainmatter/sheepdog/pull/104) chore: change website and repo in docs ([@paoloricciuti](https://github.com/paoloricciuti))
 
 #### Committers: 2
