@@ -5,16 +5,16 @@ import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://ricciuti.site',
+	site: 'https://sheepdogjs.com',
 	integrations: [
 		starlight({
 			title: 'svelte-concurrency',
 			social: {
-				github: 'https://github.com/mainmatter/svelte-concurrency',
+				github: 'https://github.com/mainmatter/sheepdog',
 			},
 			customCss: ['./src/styles/global.css'],
 			editLink: {
-				baseUrl: 'https://github.com/mainmatter/svelte-concurrency/edit/main',
+				baseUrl: 'https://github.com/mainmatter/sheepdog/edit/main',
 			},
 			sidebar: [
 				{
