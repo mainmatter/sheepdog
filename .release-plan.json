@@ -2,8 +2,8 @@
   "solution": {
     "@sheepdog/svelte": {
       "impact": "minor",
-      "oldVersion": "0.5.1",
-      "newVersion": "0.6.0",
+      "oldVersion": "0.6.0",
+      "newVersion": "0.7.0",
       "constraints": [
         {
           "impact": "minor",
@@ -11,7 +11,11 @@
         },
         {
           "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :memo: Documentation"
         }
       ],
       "pkgJSONPath": "./package.json"

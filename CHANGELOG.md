@@ -1,5 +1,25 @@
 # Changelog
 
+## Release (2024-06-21)
+
+@sheepdog/svelte 0.7.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/svelte`
+  * [#95](https://github.com/mainmatter/sheepdog/pull/95) Add TaskInstance and derive `last` ([@beerinho](https://github.com/beerinho))
+
+#### :bug: Bug Fix
+* `@sheepdog/svelte`
+  * [#98](https://github.com/mainmatter/sheepdog/pull/98) fix: cancelled instances hanging indefinitely ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :memo: Documentation
+* `@sheepdog/svelte`
+  * [#104](https://github.com/mainmatter/sheepdog/pull/104) chore: change website and repo in docs ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 2
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-05-31)
 
 @sheepdog/svelte 0.6.0 (minor)
