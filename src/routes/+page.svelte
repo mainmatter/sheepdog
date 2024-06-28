@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { task } from '$lib/task.js';
+	import { timeout } from '$lib/utils.js';
 	import Child from './Child.svelte';
 
 	const parent = task(async function* (param: number) {
-		await new Promise((r) => setTimeout(r, 5000));
+		await timeout(5000);
 		yield;
 		alert('Parent finished');
 		return param * 2;
@@ -11,7 +12,7 @@
 
 	const queue_log = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param;
 		},
 		{ kind: 'enqueue', max: 3 },
@@ -19,7 +20,7 @@
 
 	const also_queue_log = task.enqueue(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param;
 		},
 		{ max: 5 },
@@ -28,7 +29,7 @@
 	const restart_log = task.restart(
 		async function* (param: number) {
 			console.log('started ', param);
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			yield;
 			console.log('finished ', param);
 			return param;
@@ -37,13 +38,13 @@
 	);
 
 	const drop_log = task.drop(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
+		await timeout(2000);
 		return param;
 	});
 
 	const latest_log = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param;
 		},
 		{ kind: 'keepLatest', max: 3 },

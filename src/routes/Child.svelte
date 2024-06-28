@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { timeout } from '$lib';
 	import { task } from '$lib/task.js';
 	import type { Task } from '$lib/task.js';
 
@@ -6,7 +7,7 @@
 
 	const child = task(async function* (_, { link }) {
 		const num = await link(parent).perform(1);
-		await new Promise((r) => setTimeout(r, 2000));
+		await timeout(2000);
 		yield;
 		alert('Child finished');
 		return num * 2;

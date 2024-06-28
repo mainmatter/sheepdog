@@ -4,7 +4,7 @@
 import { render } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
-import type { SheepdogUtils, Task } from '../index';
+import { type SheepdogUtils, type Task, timeout } from '../index';
 import Default from './components/default.svelte';
 import Drop from './components/drop.svelte';
 import Enqueue from './components/enqueue.svelte';
@@ -12,10 +12,6 @@ import KeepLatest from './components/keep_latest.svelte';
 import Link from './components/link/parent.svelte';
 import Restart from './components/restart.svelte';
 import WrongKind from './components/wrong-kind.svelte';
-
-function wait(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 function all_options(fn: (selector: string) => void) {
 	describe.each(['default', 'options'])('version with %s', fn);
@@ -95,7 +91,7 @@ describe.each([
 			let count = 0;
 			const wait_time = 50;
 			async function* fn() {
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -115,7 +111,7 @@ describe.each([
 			let task_signal: AbortSignal;
 			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -125,7 +121,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
-			await wait(20);
+			await timeout(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -143,7 +139,7 @@ describe.each([
 			let task_signal: AbortSignal;
 			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -153,7 +149,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			perform.click();
-			await wait(20);
+			await timeout(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -171,7 +167,7 @@ describe.each([
 			let task_signal: AbortSignal;
 			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signal = signal;
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -181,7 +177,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
-			await wait(20);
+			await timeout(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -246,7 +242,7 @@ describe.each([
 		it('has the correct derived state for isRunning', async () => {
 			let finished = 0;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished++;
 			});
@@ -256,13 +252,13 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await wait(10);
+			await timeout(10);
 			perform.click();
-			await wait(10);
+			await timeout(10);
 			perform.click();
-			await wait(10);
+			await timeout(10);
 			perform.click();
-			await wait(10);
+			await timeout(10);
 			perform.click();
 			await vi.waitFor(
 				() => {
@@ -282,7 +278,7 @@ describe.each([
 		it('has the correct derived state for last', async () => {
 			let finished = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished = true;
 				return 42;
@@ -313,7 +309,7 @@ describe.each([
 		it('has the correct derived state for lastRunning', async () => {
 			let finished = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished = true;
 				return 42;
@@ -338,7 +334,7 @@ describe.each([
 		it('has the correct derived state for lastCanceled', async () => {
 			let finished = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished = true;
 				return 42;
@@ -371,7 +367,7 @@ describe.each([
 		let finished = false;
 		let error: Error | undefined = undefined;
 		const fn = vi.fn(async () => {
-			await wait(50);
+			await timeout(50);
 			finished = true;
 			if (error) {
 				throw error;
@@ -409,7 +405,7 @@ describe.each([
 		let finished = false;
 		let error: Error | undefined = new Error();
 		const fn = vi.fn(async () => {
-			await wait(50);
+			await timeout(50);
 			finished = true;
 			if (error) {
 				throw error;
@@ -516,7 +512,7 @@ describe("task - specific functionality 'default'", () => {
 			const task_signals: AbortSignal[] = [];
 			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signals.push(signal);
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -535,7 +531,7 @@ describe("task - specific functionality 'default'", () => {
 			await vi.waitFor(() => {
 				expect(task_signals[2].aborted).toBeTruthy();
 			});
-			await wait(wait_time);
+			await timeout(wait_time);
 			expect(count).toBe(2);
 		});
 	});
@@ -549,7 +545,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			const fn = vi.fn(async () => {
 				concurrent++;
 				max_concurrent = Math.max(max_concurrent, concurrent);
-				await wait(50);
+				await timeout(50);
 				concurrent--;
 			});
 			const { getByTestId } = render(Enqueue, {
@@ -572,7 +568,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			const fn = vi.fn(async () => {
 				concurrent++;
 				max_concurrent = Math.max(max_concurrent, concurrent);
-				await wait(50);
+				await timeout(50);
 				concurrent--;
 			});
 			const { getByTestId } = render(Enqueue, {
@@ -597,7 +593,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			const task_signals: AbortSignal[] = [];
 			async function* fn(_: number, { signal }: SheepdogUtils) {
 				task_signals.push(signal);
-				await wait(wait_time);
+				await timeout(wait_time);
 				yield;
 				count++;
 			}
@@ -616,7 +612,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			await vi.waitFor(() => {
 				expect(task_signals[2].aborted).toBeTruthy();
 			});
-			await wait(wait_time);
+			await timeout(wait_time);
 			expect(count).toBe(2);
 		});
 	});
@@ -630,7 +626,7 @@ describe("task - specific functionality 'drop'", () => {
 			const fn = vi.fn(async () => {
 				concurrent++;
 				max_concurrent = Math.max(max_concurrent, concurrent);
-				await wait(50);
+				await timeout(50);
 				concurrent--;
 			});
 			const { getByTestId } = render(Drop, {
@@ -661,7 +657,7 @@ describe("task - specific functionality 'drop'", () => {
 			const fn = vi.fn(async () => {
 				concurrent++;
 				max_concurrent = Math.max(max_concurrent, concurrent);
-				await wait(50);
+				await timeout(50);
 				concurrent--;
 			});
 			const { getByTestId } = render(Drop, {
@@ -692,7 +688,7 @@ describe("task - specific functionality 'keepLatest'", () => {
 		it('completes only `max` + 1 times if performed when other instances are already running', async () => {
 			let finished = 0;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished++;
 			});
@@ -719,7 +715,7 @@ describe("task - specific functionality 'keepLatest'", () => {
 		it('completes only `max` + 1 times if performed when other instances are already running (max: 3)', async () => {
 			let finished = 0;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished++;
 			});
@@ -755,7 +751,7 @@ describe("task - specific functionality 'restart'", () => {
 			const abort_signals: AbortSignal[] = [];
 			const fn = vi.fn(async function* (_: number, { signal }: SheepdogUtils) {
 				abort_signals.push(signal);
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished++;
 			});
@@ -786,7 +782,7 @@ describe("task - specific functionality 'restart'", () => {
 			const abort_signals: AbortSignal[] = [];
 			const fn = vi.fn(async function* (_: number, { signal }: SheepdogUtils) {
 				abort_signals.push(signal);
-				await wait(50);
+				await timeout(50);
 				yield;
 				finished++;
 			});
@@ -831,7 +827,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			let cancelled = true;
 			let finish_waiting = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				finish_waiting = true;
 				yield;
 				cancelled = false;
@@ -857,7 +853,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			let cancelled = true;
 			let finish_waiting = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				finish_waiting = true;
 				yield;
 				cancelled = false;
@@ -883,7 +879,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			let cancelled = true;
 			let finish_waiting = false;
 			const fn = vi.fn(async function* () {
-				await wait(50);
+				await timeout(50);
 				finish_waiting = true;
 				yield;
 				cancelled = false;
@@ -911,7 +907,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			let instance = 0;
 			const fn = vi.fn(async function* () {
 				const current_instance = instance++;
-				await wait(50);
+				await timeout(50);
 				finish_waiting[current_instance] = true;
 				yield;
 				cancelled[current_instance] = false;
@@ -942,7 +938,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			let instance = 0;
 			const fn = vi.fn(async function* () {
 				const current_instance = instance++;
-				await wait(50);
+				await timeout(50);
 				finish_waiting[current_instance] = true;
 				yield;
 				cancelled[current_instance] = false;
