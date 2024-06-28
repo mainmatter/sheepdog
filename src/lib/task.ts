@@ -17,7 +17,7 @@ export type TaskInstance<TReturn = undefined> = {
 	value?: undefined | TReturn;
 };
 
-export function _task<TArgs = unknown, TReturn = undefined>(
+function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: (
 		args: TArgs,
 		utils: SheepdogUtils,
