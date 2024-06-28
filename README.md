@@ -315,6 +315,31 @@ const child_task = task(async ({ my_param1, my_param2 }, { signal, link }) => {
 });
 ```
 
+## Utility functions
+
+### didCancel
+
+When a task is canceled, it will throw a `CancelationError` when it aborts the current controller. Though this can be useful, it's not something we ever want to show to the end user.
+
+For this reason we expose `didCancel` which allows us to distinguish an actual error from one thrown internally by `sheepdog`.
+
+```ts
+import { didCancel } from '@sheepdog/svelte';
+
+const parent_task = task(async () => {
+	const res = await fetch('...');
+	return res;
+});
+
+parent_task.perform().catch((e) => {
+	// return early if it's sheepdog cancelation error
+	if (didCancel(e)) return;
+	// do something with the actual error from our task
+});
+```
+
+In this example, our `fetch` call might throw an error or our task might be canceled. With `didCancel` we can check the error and ignore any cancelation errors, while doing something meaningful with any real errors that come from our task.
+
 ## Contributing
 
 ### How to write async transform tests?
