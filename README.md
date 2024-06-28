@@ -28,7 +28,7 @@ All tasks will return a store with the same structure:
 - `isRunning`: Boolean - whether the task is currently running or not
 - `lastSuccessful`: Any - the return value from the last successful run of the task
 - `performCount`: Number - the number of times the task has been run,
-- `results`: Array - all of the results from previous invocations of this task,
+
 
 ## Task types
 
@@ -233,7 +233,6 @@ As the return value from the task wrapper is a store, you can access it just lik
 {$myTask.isRunning}
 {$myTask.lastSuccessful}
 {$myTask.performCount}
-{$myTask.results}
 ```
 
 ## Task Cancellation

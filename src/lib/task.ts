@@ -24,8 +24,6 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 	options?: TaskOptions,
 ) {
-	const results: TReturn[] = [];
-
 	const { subscribe, ...result } = writable({
 		isRunning: false,
 		last: undefined as undefined | TaskDerivedState<TReturn>,
@@ -104,7 +102,6 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 				updateResult(instance, true);
 			},
 			onInstanceComplete(instance_id, last_result) {
-				results.push(last_result);
 				const instance = instances.get(instance_id);
 				if (instance) {
 					instance.isRunning = false;
