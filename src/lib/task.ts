@@ -8,7 +8,7 @@ export { CancelationError };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
-export type TaskDerivedState<TReturn = undefined> = {
+export type TaskInstance<TReturn = undefined> = {
 	error?: undefined | unknown;
 	isCanceled: boolean;
 	isError: boolean;
@@ -26,17 +26,16 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 ) {
 	const { subscribe, ...result } = writable({
 		isRunning: false,
-		last: undefined as undefined | TaskDerivedState<TReturn>,
-		lastCanceled: undefined as undefined | TaskDerivedState<TReturn>,
-		lastErrored: undefined as undefined | TaskDerivedState<TReturn>,
-		lastRunning: undefined as undefined | TaskDerivedState<TReturn>,
-		lastSuccessful: undefined as undefined | TaskDerivedState<TReturn>,
-		results,
+		last: undefined as undefined | TaskInstance<TReturn>,
+		lastCanceled: undefined as undefined | TaskInstance<TReturn>,
+		lastErrored: undefined as undefined | TaskInstance<TReturn>,
+		lastRunning: undefined as undefined | TaskInstance<TReturn>,
+		lastSuccessful: undefined as undefined | TaskInstance<TReturn>,
 		performCount: 0,
 	});
 
 	const updateResult = (
-		instance: TaskDerivedState<TReturn> | undefined,
+		instance: TaskInstance<TReturn> | undefined,
 		new_instance: boolean = false,
 	) => {
 		return result.update((old) => {
@@ -67,7 +66,7 @@ export function _task<TArgs = unknown, TReturn = undefined>(
 		});
 	};
 
-	const instances = new Map<string, TaskDerivedState<TReturn>>();
+	const instances = new Map<string, TaskInstance<TReturn>>();
 
 	const actual_task = createTask<TArgs, TReturn>(
 		{

@@ -24,11 +24,24 @@ Then put it to work immediately wherever you want cancellable promises. (Cancell
 
 All tasks will return a store with the same structure:
 
-- `error`: Error - if an error occurred, it will be returned here,
 - `isRunning`: Boolean - whether the task is currently running or not
-- `lastSuccessful`: Any - the return value from the last successful run of the task
+- `last`: TaskInstance | undefined - the last task instance, regardless of whether it errored, was canceled, or was successful
+- `lastCanceled`: TaskInstance | undefined - the last canceled task instance
+- `lastErrored`: TaskInstance | undefined - the last errored task instance
+- `lastRunning`: TaskInstance | undefined - the last running task instance, as soon as the task stops running, this will be undefined
+- `lastSuccessful`: TaskInstance | undefined - the last successful task instance
 - `performCount`: Number - the number of times the task has been run,
 
+## Task Instance
+
+All TaskInstances will have the same structure:
+
+- `error`: undefined | unknown - if an error is thrown inside the task instance, it will be found here
+- `isCanceled`: boolean - whether the task instance was canceled
+- `isError`: boolean - whether the task instance throw an error before completing
+- `isRunning`: boolean - whether the task instance is currently running
+- `isSuccessful`: boolean - whether the task instance completed successfully
+- `value`: undefined | TReturn - if the task instance completed successfully, this will be the return value
 
 ## Task types
 
@@ -217,7 +230,7 @@ Both of the above will result in 3 simultaneous tasks being allowed to run initi
 
 ### Accessing the task in the template
 
-As the return value from the task wrapper is a store, you can access it just like you would with any other store:
+As the return value from the task wrapper is a store, you can access it just like you would with any other store (check the [Task Instance](#task-instance) section for more detail about what to expect):
 
 ```svelte
 <script>
@@ -229,9 +242,8 @@ As the return value from the task wrapper is a store, you can access it just lik
 	});
 </script>
 
-{$myTask.error}
 {$myTask.isRunning}
-{$myTask.lastSuccessful}
+{$myTask.last.value}
 {$myTask.performCount}
 ```
 
