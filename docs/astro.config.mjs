@@ -1,14 +1,40 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import path from 'node:path';
 
 import svelte from '@astrojs/svelte';
 
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://sheepdogjs.com',
+	vite: {
+		resolve: {
+			alias: {
+				'@assets': path.resolve(process.cwd(), './src/assets'),
+			},
+		},
+	},
 	integrations: [
 		starlight({
 			title: '@sheepdog/svelte',
+			head: [
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'shortcut icon',
+						href: '/logo-light.svg',
+						media: '(prefers-color-scheme: light)',
+					},
+				},
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'shortcut icon',
+						href: '/logo-dark.svg',
+						media: '(prefers-color-scheme: dark)',
+					},
+				},
+			],
 			social: {
 				github: 'https://github.com/mainmatter/sheepdog',
 			},
@@ -21,8 +47,16 @@ export default defineConfig({
 					label: 'Getting started',
 					items: [
 						{
+							label: 'What it is?',
+							link: '/getting-started/what-it-is/',
+						},
+						{
 							label: 'Installation',
 							link: '/getting-started/installation/',
+						},
+						{
+							label: 'Basic Usage',
+							link: '/getting-started/usage/',
 						},
 					],
 				},
@@ -33,6 +67,10 @@ export default defineConfig({
 						{
 							label: 'Async Transform',
 							link: '/guides/async-transform/',
+						},
+						{
+							label: 'Task modifiers',
+							link: '/guides/task-modifiers/',
 						},
 					],
 				},
