@@ -1,5 +1,26 @@
 # Changelog
 
+## Release (2024-07-05)
+
+@sheepdog/svelte 0.7.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/svelte`
+  * [#114](https://github.com/mainmatter/sheepdog/pull/114) Add timeout utility function ([@nickschot](https://github.com/nickschot))
+  * [#112](https://github.com/mainmatter/sheepdog/pull/112) Add didCancel util ([@beerinho](https://github.com/beerinho))
+
+#### :bug: Bug Fix
+* `@sheepdog/svelte`
+  * [#108](https://github.com/mainmatter/sheepdog/pull/108) Fix docs site title ([@beerinho](https://github.com/beerinho))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#113](https://github.com/mainmatter/sheepdog/pull/113) Remove `results` array ([@beerinho](https://github.com/beerinho))
+
+#### Committers: 2
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+
 ## Release (2024-06-21)
 
 @sheepdog/svelte 0.6.1 (patch)
