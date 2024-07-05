@@ -1,10 +1,18 @@
 {
   "solution": {
     "@sheepdog/svelte": {
-      "impact": "patch",
-      "oldVersion": "0.6.0",
-      "newVersion": "0.6.1",
+      "impact": "minor",
+      "oldVersion": "0.6.1",
+      "newVersion": "0.7.0",
       "constraints": [
+        {
+          "impact": "minor",
+          "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
         {
           "impact": "patch",
           "reason": "Appears in changelog section :house: Internal"
@@ -13,5 +21,5 @@
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2024-06-21)\n\n@sheepdog/svelte 0.6.1 (patch)\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#106](https://github.com/mainmatter/sheepdog/pull/106) chore: delete tgz ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-07-05)\n\n@sheepdog/svelte 0.7.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/svelte`\n  * [#114](https://github.com/mainmatter/sheepdog/pull/114) Add timeout utility function ([@nickschot](https://github.com/nickschot))\n  * [#112](https://github.com/mainmatter/sheepdog/pull/112) Add didCancel util ([@beerinho](https://github.com/beerinho))\n\n#### :bug: Bug Fix\n* `@sheepdog/svelte`\n  * [#108](https://github.com/mainmatter/sheepdog/pull/108) Fix docs site title ([@beerinho](https://github.com/beerinho))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#113](https://github.com/mainmatter/sheepdog/pull/113) Remove `results` array ([@beerinho](https://github.com/beerinho))\n\n#### Committers: 2\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Nick Schot ([@nickschot](https://github.com/nickschot))\n"
 }
