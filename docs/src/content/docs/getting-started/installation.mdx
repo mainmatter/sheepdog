@@ -1,0 +1,45 @@
+---
+title: Installation
+description: How to install `@sheepdog/svelte`.
+---
+
+import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
+
+As the name suggest `@sheepdog/svelte` is meant to be used in a `svelte` project.
+
+To install it run the following command with your preferred package manager.
+
+<Tabs>
+	<TabItem label="npm">```bash npm install @sheepdog/svelte ```</TabItem>
+	<TabItem label="yarn">```bash yarn add @sheepdog/svelte ```</TabItem>
+	<TabItem label="pnpm">```bash pnpm install @sheepdog/svelte ```</TabItem>
+	<TabItem label="bun">```bash bun add @sheepdog/svelte ```</TabItem>
+</Tabs>
+
+## Setup the Async Transform
+
+<Aside>
+	This is an optional part of the configuration, if you want to know more about the Async Transform
+	to decide if you want to include it in your project check out the [the Async Transform
+	guide](/guides/async-transform)
+</Aside>
+
+The Async transform is a Vite plugin so to set it up you need to modify your `vite.config.{js|ts}`
+
+```diff lang="ts" title="vite.config.ts"
+import { sveltekit } from '@sveltejs/kit/vite';
++import { sheepdogTransform } from '@sheepdog/svelte/lib/vite';
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig(({ mode }) => ({
+	plugins: [
+		sveltekit(),
++		sheepdogTransform(),
+	],
+	test: {
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+	},
+}));
+```
+
+And that's it! You can now use async tasks with proper mid-run cancellation!

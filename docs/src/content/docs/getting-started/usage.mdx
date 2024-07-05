@@ -1,0 +1,200 @@
+---
+title: Usage
+description: Basic usage of `@sheepdog/svelte`.
+---
+
+import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
+
+The simplest way to use `@sheepdog/svelte` is the following
+
+<Tabs syncKey="examples">
+	<TabItem label="Dot notation">
+	```svelte
+	<script>
+		import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task(async () => {
+    		// async stuff
+    	});
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff
+    </button>
+    ```
+    </TabItem>
+    <TabItem label="Option notation">
+    ```svelte
+    <script>
+    	import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task(async () => {
+    		// async stuff
+    	}, { kind: "default" });
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff
+    </button>
+    ```
+    </TabItem>
+
+</Tabs>
+this will run your async function when the user press the button. *"But why not use a normal async function?"* i hear you ask.
+
+**Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
+a lot of useful information's about your task!**
+
+## `Task` structure
+
+- `isRunning`: whether the task is currently running or not
+- `last`: the last task instance, regardless of whether it errored, was canceled, or was successful
+- `lastCanceled`: the last canceled task instance
+- `lastErrored`: the last errored task instance
+- `lastRunning`: the last running task instance, as soon as the task stops running, this will be
+  undefined
+- `lastSuccessful`: the last successful task instance
+- `performCount`: the number of times the task has been run,
+
+```ts
+type Task = {
+	/**
+	 * whether the task is currently running or not
+	 */
+	isRunning: boolean;
+	/**
+	 * the last task instance, regardless of whether it errored, was canceled, or was successful
+	 */
+	last?: TaskInstance;
+	/**
+	 * the last canceled task instance
+	 */
+	lastCanceled?: TaskInstance;
+	/**
+	 * the last errored task instance
+	 */
+	lastErrored?: TaskInstance;
+	/**
+	 * the last running task instance, as soon as the task stops running, this will be undefined
+	 */
+	lastRunning?: TaskInstance;
+	/**
+	 * the last successful task instance
+	 */
+	lastSuccessful?: TaskInstance;
+	/**
+	 * number of times the task has been run,
+	 */
+	performCount: number;
+};
+```
+
+## `TaskInstance` structure
+
+- `error`: if an error is thrown inside the task instance, it will be found here
+- `isCanceled`: whether the task instance was canceled
+- `isError`: whether the task instance throw an error before completing
+- `isRunning`: whether the task instance is currently running
+- `isSuccessful`: whether the task instance completed successfully
+- `value`: if the task instance completed successfully, this will be the return value
+
+```ts
+type TaskInstance<TReturn> = {
+	/**
+	 * If an error is thrown inside the task instance, it will be found here.
+	 */
+	error?: undefined;
+
+	/**
+	 * Indicates whether the task instance was canceled.
+	 */
+	isCanceled: boolean;
+
+	/**
+	 * Indicates whether the task instance threw an error before completing.
+	 */
+	isError: boolean;
+
+	/**
+	 * Indicates whether the task instance is currently running.
+	 */
+	isRunning: boolean;
+
+	/**
+	 * Indicates whether the task instance completed successfully.
+	 */
+	isSuccessful: boolean;
+
+	/**
+	 * If the task instance completed successfully, this will be the return value.
+	 */
+	value?: TReturn;
+};
+```
+
+## Task modifiers
+
+`@sheepdog/svelte` allow you to specify a task modifier that changes the behavior of the perform
+function when a certain task is already running. By default when you call `perform` the task will be
+executed immediately regardless if there are other instances of the same task in execution. By using
+the task modifier `enqueue` you could instruct `@sheepdog/svelte` to execute the task instances one
+by one (in a queue, who would've thought)
+
+Here's how you can specify the modifier:
+
+<Tabs syncKey="examples">
+	<TabItem label="Dot notation">
+	```svelte ins=".enqueue" {4}
+	<script>
+		import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task.enqueue(async () => {
+    		// async stuff
+    	});
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff one by one
+    </button>
+    ```
+    </TabItem>
+    <TabItem label="Option notation">
+    ```svelte ins="enqueue" {6}
+    <script>
+    	import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task(async () => {
+    		// async stuff
+    	}, { kind: "enqueue" });
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff one by one
+    </button>
+    ```
+    </TabItem>
+
+</Tabs>
+
+<LinkCard
+	href="/guides/task-modifiers/"
+	title="Task modifiers"
+	description="Read everything about task modifiers in our guide"
+/>
+
+There are currently five task modifiers that you can apply to your task.
+
+- `default`: the default behavior, every task will run immediately
+- `drop`: if other tasks are already running the new instance will be immediately cancelled
+- `enqueue`: every task instance is stored in a queue and executed with a FIFO strategy
+- `keepLatest`: like drop but the last instance will actually be kept around and executed as soon as
+  the current running instance finishes
+- `restart`: the current running instances is cancelled and the new one start running immediately
