@@ -2,10 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   # Trigger the workflow every time you push to the `main` branch
+  # Using a different branch name? Replace `main` with your branch’s name
   push:
-    branches: [main]
-  # Trigger the workflow for pull requests targeting the `main` branch
-  pull_request:
     branches: [main]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
@@ -15,7 +13,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  pull-requests: write
 
 jobs:
   build:
@@ -40,17 +37,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          preview: ${{ github.event_name == 'pull_request' }}
-      - name: Comment PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `✨ Preview deployed to: ${{ steps.deployment.outputs.page_url }}`
-            })
