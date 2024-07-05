@@ -59,10 +59,10 @@ This simply gives you a task wrapper around your function. It will not handle an
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
+		await timeout(2000);
 		return param * 2;
 	});
 </script>
@@ -72,11 +72,11 @@ OR
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ kind: 'default' },
@@ -90,11 +90,11 @@ This will cancel the oldest instance of the task and start a new instance of it.
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task.restart(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ max: 3 },
@@ -106,11 +106,11 @@ OR
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ kind: 'restart', max: 3 },
@@ -126,11 +126,11 @@ This will cancel any new instances of the task. You can also provide a `max` tha
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task.drop(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ max: 3 },
@@ -142,11 +142,11 @@ OR
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ kind: 'drop', max: 3 },
@@ -162,11 +162,11 @@ This will add all task instances to a list and each task will be run in order. Y
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task.enqueue(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ max: 3 },
@@ -178,11 +178,11 @@ OR
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ kind: 'enqueue', max: 3 },
@@ -198,11 +198,11 @@ This will run the initial tasks and then ensure that the very last task instance
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task.keepLatest(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ max: 3 },
@@ -214,11 +214,11 @@ OR
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(
 		async (param: number) => {
-			await new Promise((r) => setTimeout(r, 2000));
+			await timeout(2000);
 			return param * 2;
 		},
 		{ kind: 'keepLatest', max: 3 },
@@ -234,10 +234,10 @@ As the return value from the task wrapper is a store, you can access it just lik
 
 ```svelte
 <script>
-	import { task } from '@sheepdog/svelte';
+	import { task, timeout } from '@sheepdog/svelte';
 
 	const myTask = task(async (param: number) => {
-		await new Promise((r) => setTimeout(r, 2000));
+		await timeout(2000);
 		return param * 2;
 	});
 </script>
@@ -350,6 +350,20 @@ parent_task.perform().catch((e) => {
 ```
 
 In this example, our `fetch` call might throw an error or our task might be canceled. With `didCancel` we can check the error and ignore any cancelation errors, while doing something meaningful with any real errors that come from our task.
+
+### timeout
+
+The `timeout` function provides a convenient way to wait for a certain amount of milliseconds. Its implementation comes down to a promisified `setTimeout` call.
+
+```ts
+import { task, timeout } from '@sheepdog/svelte';
+
+const myTask = task(async () => {
+	await timeout(500);
+	const res = await fetch('...');
+	return res;
+});
+```
 
 ## Contributing
 
