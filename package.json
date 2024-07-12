@@ -34,6 +34,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
+		"docs:dev": "pnpm --filter 'docs' dev",
+		"docs:install": "pnpm --filter 'docs' install",
 		"format": "eslint . --fix && prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"package": "svelte-kit sync && svelte-package && publint",
