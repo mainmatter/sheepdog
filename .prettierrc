@@ -11,6 +11,12 @@
 			"options": {
 				"parser": "svelte"
 			}
+		},
+		{
+			"files": "*.mdx",
+			"options": {
+				"proseWrap": "always"
+			}
 		}
 	]
 }
