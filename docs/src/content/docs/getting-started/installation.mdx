@@ -35,7 +35,7 @@ The Async Transform is a Vite plugin so to set it up you need to modify your `vi
 
 ```diff lang="ts" title="vite.config.ts"
 import { sveltekit } from '@sveltejs/kit/vite';
-+import { asyncTransform } from '@sheepdog/svelte/lib/vite';
++import { asyncTransform } from '@sheepdog/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig(({ mode }) => ({
@@ -47,4 +47,4 @@ export default defineConfig(({ mode }) => ({
 }));
 ```
 
-And that's it! You can now use async tasks with proper mid-run cancellation!
+And that's it! You can now use async tasks with proper mid-run cancelation!
