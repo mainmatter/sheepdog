@@ -166,9 +166,9 @@ function update_body(task: BlockStatement) {
 	}
 }
 
-export function sheepdogTransform() {
+export function asyncTransform() {
 	return {
-		name: 'sheepdog-transform',
+		name: 'sheepdog-async-transform',
 		async transform(code, id) {
 			try {
 				const ast = parse(code, {

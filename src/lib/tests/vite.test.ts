@@ -1,7 +1,7 @@
-import { sheepdogTransform } from '../vite';
+import { asyncTransform } from '../vite';
 import { describe, it, expect } from 'vitest';
 
-const plugin = sheepdogTransform();
+const plugin = asyncTransform();
 
 const expected_entries = Object.entries(
 	import.meta.glob('./expected-transforms/**/*.js', { as: 'raw', eager: true }),
