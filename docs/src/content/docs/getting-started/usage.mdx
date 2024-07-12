@@ -7,44 +7,26 @@ import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/compone
 
 The simplest way to use `@sheepdog/svelte` is the following
 
-<Tabs syncKey="examples">
-	<TabItem label="Dot notation">
-	```svelte
-	<script>
-		import { task, timeout } from '@sheepdog/svelte';
+```svelte
+<script>
+	import { task, timeout } from '@sheepdog/svelte';
 
-    	const myTask = task(async () => {
-    		// async stuff
-    	});
-    </script>
+	const myTask = task(async () => {
+		// async stuff
+	});
+</script>
 
-    <button on:click={()=>{
-    	myTask.perform();
-    }}>
-    	do async stuff
-    </button>
-    ```
-    </TabItem>
-    <TabItem label="Option notation">
-    ```svelte
-    <script>
-    	import { task, timeout } from '@sheepdog/svelte';
+<button
+	on:click={() => {
+		myTask.perform();
+	}}
+>
+	do async stuff
+</button>
+```
 
-    	const myTask = task(async () => {
-    		// async stuff
-    	}, { kind: "default" });
-    </script>
-
-    <button on:click={()=>{
-    	myTask.perform();
-    }}>
-    	do async stuff
-    </button>
-    ```
-    </TabItem>
-
-</Tabs>
-This will run your async function when the user presses the button. *"But why not use a normal async function?"* I hear you ask.
+This will run your async function when the user presses the button. _"But why not use a normal async
+function?"_ I hear you ask.
 
 **Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
 a lot of useful information about your task!**
