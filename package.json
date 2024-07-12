@@ -86,5 +86,9 @@
 	},
 	"peerDependencies": {
 		"svelte": "^4.0.0"
+	},
+	"volta": {
+		"node": "20.15.1",
+		"pnpm": "9.5.0"
 	}
 }
