@@ -47,8 +47,8 @@ export default defineConfig({
 					label: 'Getting started',
 					items: [
 						{
-							label: 'What it is?',
-							link: '/getting-started/what-it-is/',
+							label: 'What is it?',
+							link: '/getting-started/what-is-it/',
 						},
 						{
 							label: 'Installation',

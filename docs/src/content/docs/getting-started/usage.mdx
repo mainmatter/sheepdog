@@ -44,10 +44,10 @@ The simplest way to use `@sheepdog/svelte` is the following
     </TabItem>
 
 </Tabs>
-this will run your async function when the user press the button. *"But why not use a normal async function?"* i hear you ask.
+This will run your async function when the user presses the button. *"But why not use a normal async function?"* I hear you ask.
 
 **Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
-a lot of useful information's about your task!**
+a lot of useful information about your task!**
 
 ## `Task` structure
 
@@ -107,7 +107,7 @@ type TaskInstance<TReturn> = {
 	/**
 	 * If an error is thrown inside the task instance, it will be found here.
 	 */
-	error?: undefined;
+	error?: Error;
 
 	/**
 	 * Indicates whether the task instance was canceled.
@@ -139,8 +139,10 @@ type TaskInstance<TReturn> = {
 ## Task modifiers
 
 `@sheepdog/svelte` allows you to specify a task modifier that changes the behavior of the perform
-function. By default when you call `perform` the task will be
-executed immediately regardless if there are other instances of the same task in execution. For example, you could use the `enqueue` modifier to instruct `@sheepdog/svelte` to execute the task instances one after another (in a queue - who would've thought)
+function. By default when you call `perform` the task will be executed immediately regardless if
+there are other instances of the same task in execution. For example, you could use the `enqueue`
+modifier to instruct `@sheepdog/svelte` to execute the task instances one after another (in a
+queue - who would've thought)
 
 Here's how you can specify the modifier:
 
@@ -191,8 +193,10 @@ Here's how you can specify the modifier:
 There are currently five task modifiers that you can apply to your task.
 
 - `default`: the default behavior, every task will run immediately
-- `drop`: if other tasks are already running the new instance will be immediately cancelled
-- `enqueue`: every task instance is stored in a queue and executed with a FIFO strategy
+- `drop`: if other tasks are already running the new instance will be immediately canceled
+- `enqueue`: every task instance is stored in a queue and executed with a
+  [FIFO](<https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)>) strategy
 - `keepLatest`: like drop but the last instance will actually be kept around and executed as soon as
   the current running instance finishes
-- `restart`: the current running instances is cancelled and the new one start running immediately
+- `restart`: the oldest running task instance is canceled and the new one will start running
+  immediately

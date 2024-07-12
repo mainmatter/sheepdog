@@ -1,19 +1,19 @@
 ---
-title: What it is?
+title: What is it?
 description: What problem does `@sheepdog/svelte` solves.
 ---
 
 import Mainmatter from '@assets/Mainmatter.astro';
 
 `@sheepdog/svelte` is a library that aims to solve a problem that every developer will face at one
-point or another: deal with async and concurrent task.
+point or another: handling async and concurrent tasks.
 
 `@sheepdog/svelte` supplies a simple way to introduce cancellable concurrency into your app. Not
-only we provide the "cancellability" that is missing from normal Promises, `@sheepdog/svelte` also
-provides a public API that allows you to observe the running state of your task without having to
-set a single flag manually.
+only do we provide the "cancellability" that is missing from normal Promises, `@sheepdog/svelte`
+also provides a public API that allows you to observe the running state of your task without having
+to set a single flag manually.
 
-Tasks that live on components are automatically cancelled when their context is destroyed, meaning
+Tasks that live on components are automatically canceled when their context is destroyed, meaning
 you don't need to worry about the clean up - we've got you covered.
 
 Choose whether you want to keep the oldest, keep the newest or keep all instances of your task to
