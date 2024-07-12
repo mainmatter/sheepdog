@@ -138,11 +138,9 @@ type TaskInstance<TReturn> = {
 
 ## Task modifiers
 
-`@sheepdog/svelte` allow you to specify a task modifier that changes the behavior of the perform
-function when a certain task is already running. By default when you call `perform` the task will be
-executed immediately regardless if there are other instances of the same task in execution. By using
-the task modifier `enqueue` you could instruct `@sheepdog/svelte` to execute the task instances one
-by one (in a queue, who would've thought)
+`@sheepdog/svelte` allows you to specify a task modifier that changes the behavior of the perform
+function. By default when you call `perform` the task will be
+executed immediately regardless if there are other instances of the same task in execution. For example, you could use the `enqueue` modifier to instruct `@sheepdog/svelte` to execute the task instances one after another (in a queue - who would've thought)
 
 Here's how you can specify the modifier:
 
