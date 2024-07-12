@@ -11,12 +11,16 @@ export default defineConfig({
 		resolve: {
 			alias: {
 				'@assets': path.resolve(process.cwd(), './src/assets'),
+				'@components': path.resolve(process.cwd(), './src/components'),
 			},
 		},
 	},
 	integrations: [
 		starlight({
 			title: '@sheepdog/svelte',
+			expressiveCode: {
+				themes: ['github-dark-default', 'github-light-default'],
+			},
 			head: [
 				{
 					tag: 'link',
@@ -65,12 +69,16 @@ export default defineConfig({
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{
-							label: 'Async Transform',
-							link: '/guides/async-transform/',
+							label: 'Mid run cancelation',
+							link: '/guides/mid-run-cancelation/',
 						},
 						{
 							label: 'Task modifiers',
 							link: '/guides/task-modifiers/',
+						},
+						{
+							label: 'Async Transform',
+							link: '/guides/async-transform/',
 						},
 					],
 				},

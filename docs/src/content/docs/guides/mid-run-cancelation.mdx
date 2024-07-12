@@ -1,0 +1,299 @@
+---
+title: Mid run cancelation
+description: How to handle the cancelation of a task mid execution
+---
+
+import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
+
+As we hinted in the [What is it?](/getting-started/what-is-it/) explainer one of the advantages of
+`@sheepdog/svelte` is that it allow you to "cancel" a task for real. Let's look at what actually is
+the problem and how to solve it with `@sheepdog/svelte`.
+
+## The problem
+
+Promises are the de facto way to run asynchronous code in Javascript and, especially after the
+introduction of the `async` and `await` keywords they are quite nice to work with.
+
+```ts
+// this automatically returns a promise
+async function myStuff() {
+	//i can await for the execution of async code to happen
+	const response = await fetch('/api/my-endpoint');
+	const myEndpoint = await response.json();
+
+	return myEndpoint.data;
+}
+```
+
+However they have a big problem: once invoked there's no way to stop the execution of the code. This
+can lead to performance problems in the simplest case or even bugs in some other.
+
+```ts
+async function fetchALotOfStuff() {
+	const response = await fetch('/api/very-long-list');
+	const longList = await response.json();
+
+	// what if the user canceled the request before this step?
+	for (const element of longList) {
+		expensiveCalculation(element);
+	}
+}
+```
+
+This is especially true if we are invoking those functions within a UI framework because we tend to
+assign values outside of the scope of the function to reactively show them in the ui.
+
+```svelte
+<script>
+	let list;
+
+	function fetchList(){
+		const response = await fetch('/api/very-long-list');
+		list = await response.json();
+	}
+</script>
+
+<button on:click={fetchList}>fetch</button>
+
+<ul>
+	{#each list as element}
+		<li>{element}</li>
+	{/each}
+</ul>
+```
+
+The simplest way to solve this problem is setup a variable and checking after the fetch.
+
+```svelte
+<script>
+	let list;
+
+	let canceled = false;
+
+	function fetchList(){
+		canceled = false;
+		const response = await fetch('/api/very-long-list');
+		if(canceled) return;
+		list = await response.json();
+	}
+</script>
+
+<button on:click={fetchList}>fetch</button>
+<button
+	on:click={() => {
+		cancel = true;
+	}}>cancel</button
+>
+
+<ul>
+	{#each list as element}
+		<li>{element}</li>
+	{/each}
+</ul>
+```
+
+This works fine but it get's tedious pretty fast, especially if you need to do it multiple times.
+There's where `@sheepdog/svelte` comes into play.
+
+## The solution(s)
+
+`@sheepdog/svelte` provide you multiple tools to solve this problem (hence the parenthesized plural
+in the title of this section) let's go over them one by one
+
+<LinkCard
+	href="/reference/task/"
+	title="Task"
+	description="If you need more info on the task function please visit the reference page about it"
+/>
+
+### `AbortSignal` solution
+
+The simplest but more verbose solution to this problem is the `AbortSignal` solution:
+`@sheepdog/svelte` invoke your task with a series of utils, one of which is the `AbortSignal`. Every
+task has it's own `AbortController` and you can cancel the instance accessing the method `cancel` on
+it or cancel **every** instance accessing the `cancelAll` method on the task.
+
+```svelte
+<script>
+	import { task } from "@sheepdog/svelte";
+
+	let list;
+
+	const fetchTask = task((_, { signal })=>{
+		// we can pass the signal to fetch to eventually abort the in flight request
+		const response = await fetch('/api/very-long-list', { signal });
+		// and we can check if signal is aborted and return to avoid side effects
+		if(signal.aborted) return;
+		list = await response.json();
+	});
+</script>
+
+<button
+	on:click={() => {
+		task.perform();
+	}}>fetch</button
+>
+<button
+	on:click={() => {
+		fetchTask.last.cancel();
+	}}>cancel</button
+>
+<button
+	on:click={() => {
+		fetchTask.cancelAll();
+	}}>cancel all</button
+>
+
+<ul>
+	{#each list as element}
+		<li>{element}</li>
+	{/each}
+</ul>
+```
+
+We've gained the ability to stop in flight fetches with the AbortSignal and we don't have to create
+a separate `canceled` variable. That's a win. But we can do better.
+
+### Async generators
+
+Those who doesn't know about <BlankLink
+	href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators"
+	body="generators"
+/> might be a bit confused right know and those who know about them might be already running to
+close this tab but please bear with us for a second and we will show you that generators are not
+really that scary.
+
+A generator is a particular function in Javascript that is able to `yield` back the execution to the
+caller, the syntax to create one looks like this
+
+```ts
+function* ping() {
+	console.log('in the generator');
+	const value = yield 'pong';
+	console.log(`after yield: ${value}`);
+}
+
+const generator = ping();
+const yielded = generator.next(); // only log in the generator
+console.log(yielded); // logs { done: false, value: "pong" }
+generator.next('ping'); // logs: after yield: ping
+```
+
+I know, i told you this would've not be scary and for the moment i did not maintain the promise (pun
+intended). But the main takeaway from this snippet of code is that generators functions have a way
+to stop executing, return something to the caller and the caller has a way to communicate something
+back.
+
+`@sheepdog/svelte` has been built to be able to accept an async generator function and, most
+importantly, has been built to make the generator function work basically like a normal async
+function if you change `async` with `yield`. Let's take a look
+
+<Tabs>
+
+<TabItem label="Generator">
+
+```ts
+let value;
+const myTask = task(async function* (_, { signal }) {
+	const response = yield fetch('/api/my-endpoint', { signal });
+	value = yield response.json();
+});
+```
+
+</TabItem>
+<TabItem label="Async">
+
+```ts
+let value;
+const myTask = task(async (_, { signal }) => {
+	const response = await fetch('/api/my-endpoint', { signal });
+	value = await response.json();
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+As you can see if you switch the tabs the code changes very little but with generators
+`@sheepdog/svelte` has the ability to never call `next` if the task was cancelled. This means that
+the if you cancel the task while fetch is still in flight the second line of the function will
+**never** be called!
+
+There's one small detail we kinda hid for you however: `yield` doesn't work very well with
+Typescript especially if there's multiple of them. If you try to paste that code in a `.ts` file (or
+in a svelte component with `<script lang='ts'>`) you will see all sort of errors. This is because
+Typescript doesn't know which kind of data `@sheepdog/svelte` will pass back to the generator.
+
+To fix this problem you can use `yield` as a sort of `if+return`
+
+```ts
+let value;
+const myTask = task(async function* (_, { signal }) {
+	// use normal await here to get proper typing
+	const response = await fetch('/api/my-endpoint', { signal });
+	// yield after every await to allow `@sheepdog/svelte` to cancel the function
+	yield;
+	// pay attention to never assign directly to an await if you want to still have proper cancelation
+	const tempValue = await response.json();
+	yield;
+	value = tempValue;
+});
+```
+
+Can we do better than this? Yes we can!
+
+### Async Transform
+
+`@sheepdog/svelte` really cares about the DX of their users and that's why we built a vite plugin
+that you can use to get the best of both words: the dynamic cancelation of generators and the
+expressivity and shortness of async functions.
+
+<Aside type="tip">
+	You can read about how to setup the Async Transform in our [installation
+	guide](/getting-started/installation/#setup-the-async-transform) or read more about how it works
+	in our [Async Transform guide](/guides/async-transform)
+</Aside>
+
+In short what the vite plugin does is transform every async function that you pass to our `task`
+function in an async generator and it substitute every `await` with a `yield`. This fixes all our
+problems because the Typescript language server will resolve the types based on your actual code
+while at runtime `@sheepdog/svelte` will be able to cancel every task even in the middle of an
+execution!
+
+```svelte
+<script>
+	import { task } from "@sheepdog/svelte";
+
+	let list;
+
+	const fetchTask = task((_, { signal })=>{
+		const response = await fetch('/api/very-long-list', { signal });
+		// this line will never be executed if the task is canceled before fetch ends
+		list = await response.json();
+	});
+</script>
+
+<button
+	on:click={() => {
+		task.perform();
+	}}>fetch</button
+>
+<button
+	on:click={() => {
+		fetchTask.last.cancel();
+	}}>cancel</button
+>
+<button
+	on:click={() => {
+		fetchTask.cancelAll();
+	}}>cancel all</button
+>
+
+<ul>
+	{#each list as element}
+		<li>{element}</li>
+	{/each}
+</ul>
+```
