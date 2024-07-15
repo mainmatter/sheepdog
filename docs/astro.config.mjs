@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import path from 'node:path';
-
 import svelte from '@astrojs/svelte';
+
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -92,4 +93,8 @@ export default defineConfig({
 		}),
 		svelte(),
 	],
+	output: 'server',
+	adapter: netlify({
+		edgeMiddleware: true,
+	}),
 });
