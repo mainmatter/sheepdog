@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.7.0",
+		"@astrojs/netlify": "^5.4.0",
 		"@astrojs/starlight": "^0.24.0",
 		"@astrojs/svelte": "^5.4.0",
 		"astro": "^4.3.5",
