@@ -70,8 +70,8 @@ export default defineConfig({
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{
-							label: 'Mid run cancelation',
-							link: '/explainers/mid-run-cancelation/',
+							label: 'Mid run cancellation',
+							link: '/explainers/mid-run-cancellation/',
 						},
 						{
 							label: 'Task modifiers',
