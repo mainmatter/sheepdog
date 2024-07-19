@@ -127,16 +127,18 @@ it or cancel **every** instance accessing the `cancelAll` method on the task.
 		if(signal.aborted) return;
 		list = await response.json();
 	});
+	
+	let lastInstance;
 </script>
 
 <button
 	on:click={() => {
-		task.perform();
+		lastInstance = task.perform();
 	}}>fetch</button
 >
 <button
 	on:click={() => {
-		fetchTask.last.cancel();
+		lastInstance.cancel();
 	}}>cancel</button
 >
 <button
@@ -273,16 +275,18 @@ execution!
 		// this line will never be executed if the task is canceled before fetch ends
 		list = await response.json();
 	});
+
+	let lastInstance;
 </script>
 
 <button
 	on:click={() => {
-		task.perform();
+		lastInstance = task.perform();
 	}}>fetch</button
 >
 <button
 	on:click={() => {
-		fetchTask.last.cancel();
+		lastInstance.cancel();
 	}}>cancel</button
 >
 <button
