@@ -4,7 +4,7 @@
 import { render } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
-import { type SheepdogUtils, type Task, timeout } from '../index';
+import { type SheepdogUtils, type Task, type TaskInstance, timeout } from '../index';
 import Default from './components/default.svelte';
 import Drop from './components/drop.svelte';
 import Enqueue from './components/enqueue.svelte';
@@ -12,6 +12,7 @@ import KeepLatest from './components/keep_latest.svelte';
 import Link from './components/link/parent.svelte';
 import Restart from './components/restart.svelte';
 import WrongKind from './components/wrong-kind.svelte';
+import type { ReadableWithGet } from './../internal/helpers';
 
 function all_options(fn: (selector: string) => void) {
 	describe.each(['default', 'options'])('version with %s', fn);
@@ -291,17 +292,21 @@ describe.each([
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 			expect(get(store).last).toStrictEqual({
+				hasStarted: true,
+				isCanceled: false,
+				isError: false,
+				isFinished: false,
 				isRunning: true,
 				isSuccessful: false,
-				isError: false,
-				isCanceled: false,
 			});
 			await vi.waitFor(() => expect(finished).toBeTruthy());
 			expect(get(store).last).toStrictEqual({
+				hasStarted: true,
+				isCanceled: false,
+				isError: false,
+				isFinished: true,
 				isRunning: false,
 				isSuccessful: true,
-				isError: false,
-				isCanceled: false,
 				value: 42,
 			});
 		});
@@ -322,10 +327,12 @@ describe.each([
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
 			expect(get(store).lastRunning).toStrictEqual({
+				hasStarted: true,
+				isCanceled: false,
+				isError: false,
+				isFinished: false,
 				isRunning: true,
 				isSuccessful: false,
-				isError: false,
-				isCanceled: false,
 			});
 			await vi.waitFor(() => expect(finished).toBeTruthy());
 			expect(get(store).lastRunning).toBeUndefined();
@@ -355,10 +362,12 @@ describe.each([
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			cancel.click();
 			expect(get(store).lastCanceled).toStrictEqual({
+				hasStarted: true,
+				isCanceled: true,
+				isError: false,
+				isFinished: true,
 				isRunning: false,
 				isSuccessful: false,
-				isError: false,
-				isCanceled: true,
 			});
 		});
 	});
@@ -394,10 +403,12 @@ describe.each([
 		await vi.waitFor(() => expect(returned_value).toBeDefined());
 		expect(get(store).lastErrored).toStrictEqual({
 			error,
+			hasStarted: true,
+			isCanceled: false,
+			isError: true,
+			isFinished: true,
 			isRunning: false,
 			isSuccessful: false,
-			isError: true,
-			isCanceled: false,
 		});
 	});
 
@@ -432,10 +443,12 @@ describe.each([
 		await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 		await vi.waitFor(() => expect(finished).toBeTruthy());
 		expect(get(store).lastSuccessful).toStrictEqual({
+			hasStarted: true,
+			isCanceled: false,
+			isError: false,
+			isFinished: true,
 			isRunning: false,
 			isSuccessful: true,
-			isError: false,
-			isCanceled: false,
 			value: 42,
 		});
 	});
@@ -962,6 +975,27 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 			});
 			expect(cancelled[0]).toBeFalsy();
 			expect(cancelled[1]).toBeTruthy();
+		});
+	});
+
+	describe('task instance derived state', () => {
+		all_options((selector) => {
+			it('shows "hasStarted" correctly', async () => {
+				const fn = vi.fn(async () => {
+					await timeout(50);
+				});
+				const { getByTestId, component: instance } = render(Enqueue, {
+					fn,
+					max: 1,
+				});
+				const store = instance[
+					`get_latest_${selector}_task_instance`
+				] as () => ReadableWithGet<TaskInstance>;
+				const perform = getByTestId(`perform-${selector}`);
+				perform.click();
+				perform.click();
+				expect(get(store()).hasStarted).toBeFalsy();
+			});
 		});
 	});
 });

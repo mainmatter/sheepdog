@@ -13,6 +13,9 @@
 	export const default_task = task.enqueue(fn, { max });
 	export const options_task = task(fn, { kind: 'enqueue', max });
 
+	export const get_latest_default_task_instance = () => latest_task_instance;
+	export const get_latest_options_task_instance = () => latest_options_task_instance;
+
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
 	let latest_options_task_instance: ReturnType<typeof options_task.perform>;
 </script>
