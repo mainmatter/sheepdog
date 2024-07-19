@@ -66,20 +66,20 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Guides',
+					label: 'Explainers',
 					items: [
 						// Each item here is one entry in the navigation menu.
 						{
 							label: 'Mid run cancelation',
-							link: '/guides/mid-run-cancelation/',
+							link: '/explainers/mid-run-cancelation/',
 						},
 						{
 							label: 'Task modifiers',
-							link: '/guides/task-modifiers/',
+							link: '/explainers/task-modifiers/',
 						},
 						{
 							label: 'Async Transform',
-							link: '/guides/async-transform/',
+							link: '/explainers/async-transform/',
 						},
 					],
 				},
