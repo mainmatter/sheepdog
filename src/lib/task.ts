@@ -1,7 +1,9 @@
 import { onDestroy } from 'svelte';
-import { createTask, handlers, CancelationError } from './core';
 import { writable } from 'svelte/store';
-import type { SheepdogUtils, TaskOptions, HandlerType, HandlersMap } from './core';
+import type { HandlerType, HandlersMap, SheepdogUtils, TaskOptions } from './core';
+import { CancelationError, createTask, handlers } from './core';
+import type { ReadableWithGet, WritableWithGet } from './internal/helpers';
+import { writable_with_get } from './internal/helpers';
 export type { SheepdogUtils, TaskOptions };
 
 export { CancelationError };
@@ -34,14 +36,8 @@ function _task<TArgs = unknown, TReturn = undefined>(
 		performCount: 0,
 	});
 
-	const updateResult = (
-		instance: TaskInstance<TReturn> | undefined,
-		new_instance: boolean = false,
-	) => {
+	const updateResult = (instance: TaskInstance<TReturn>, new_instance: boolean = false) => {
 		return result.update((old) => {
-			if (!instance) {
-				return old;
-			}
 			if (new_instance) {
 				old.performCount++;
 			}
@@ -61,14 +57,14 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				old.lastRunning = undefined;
 			}
 			old.last = instance;
-			old.isRunning = [...instances.values()].some((val) => val.isRunning);
+			old.isRunning = [...instances.values()].some((val) => val.get().isRunning);
 			return old;
 		});
 	};
 
-	const instances = new Map<string, TaskInstance<TReturn>>();
+	const instances = new Map<string, WritableWithGet<TaskInstance<TReturn>>>();
 
-	const actual_task = createTask<TArgs, TReturn>(
+	const actual_task = createTask<TArgs, TReturn, ReadableWithGet<TaskInstance<TReturn>>>(
 		{
 			onDestroy(fn) {
 				onDestroy(fn);
@@ -76,38 +72,67 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			onError(instance_id, error) {
 				const instance = instances.get(instance_id);
 				if (instance) {
-					instance.error = error;
-					instance.isRunning = false;
-					instance.isError = true;
+					instance.update((instance) => {
+						instance.error = error;
+						instance.isRunning = false;
+						instance.isError = true;
+						return instance;
+					});
+					updateResult(instance.get());
 				}
-				updateResult(instance);
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
 				if (instance) {
-					instance.isRunning = false;
-					instance.isCanceled = true;
+					instance.update((instance) => {
+						instance.isRunning = false;
+						instance.isCanceled = true;
+						return instance;
+					});
+					updateResult(instance.get());
 				}
-				updateResult(instance);
 			},
-			onInstanceStart(instance_id) {
-				const instance = {
-					isRunning: true,
+			onInstanceCreate(instance_id) {
+				const instance_value = {
+					isRunning: false,
 					isCanceled: false,
 					isError: false,
 					isSuccessful: false,
 				};
+				const instance = writable_with_get(instance_value);
 				instances.set(instance_id, instance);
-				updateResult(instance, true);
+				updateResult(instance_value);
+			},
+			onInstanceStart(instance_id) {
+				const instance = instances.get(instance_id);
+				if (instance) {
+					instance.update((instance) => {
+						instance.isRunning = true;
+						return instance;
+					});
+					updateResult(instance.get(), true);
+				}
 			},
 			onInstanceComplete(instance_id, last_result) {
 				const instance = instances.get(instance_id);
 				if (instance) {
-					instance.isRunning = false;
-					instance.isSuccessful = true;
-					instance.value = last_result;
+					instance.update((instance) => {
+						instance.isRunning = false;
+						instance.isSuccessful = true;
+						instance.value = last_result;
+						return instance;
+					});
+					updateResult(instance.get());
 				}
-				updateResult(instance);
+			},
+			returnModifier(instance_id, returned_value) {
+				const instance = instances.get(instance_id);
+				if (!instance)
+					throw new Error('Return modifier has been called before the instance was created');
+				return Object.assign(returned_value, {
+					subscribe: instance.subscribe,
+					get: instance.get,
+				});
 			},
 		},
 		gen_or_fun,
