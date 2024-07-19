@@ -4,6 +4,7 @@ description: Basic usage of `@sheepdog/svelte`.
 ---
 
 import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
 
 The simplest way to use `@sheepdog/svelte` is the following
 
@@ -167,7 +168,7 @@ Here's how you can specify the modifier:
 </Tabs>
 
 <LinkCard
-	href="/guides/task-modifiers/"
+	href="/explainers/task-modifiers/"
 	title="Task modifiers"
 	description="Read everything about task modifiers in our guide"
 />
@@ -177,9 +178,7 @@ There are currently five task modifiers that you can apply to your task.
 - `default`: the default behavior, every task will run immediately
 - `drop`: if other tasks are already running the new instance will be immediately canceled
 - `enqueue`: every task instance is stored in a queue and executed with a
-  <a href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)" target="_blank">
-  	FIFO
-  </a>
+  <BlankLink href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)" body="FIFO" />
   strategy
 - `keepLatest`: like drop but the last instance will actually be kept around and executed as soon as
   the current running instance finishes

@@ -9,9 +9,9 @@ import Mainmatter from '@assets/Mainmatter.astro';
 point or another: handling async and concurrent tasks.
 
 `@sheepdog/svelte` supplies a simple way to introduce cancellable concurrency into your app. Not
-only do we provide the "cancellability" that is missing from normal Promises, `@sheepdog/svelte`
-also provides a public API that allows you to observe the running state of your task without having
-to set a single flag manually.
+only do we provide the "cancelability" that is missing from normal Promises, `@sheepdog/svelte` also
+provides a public API that allows you to observe the running state of your task without having to
+set a single flag manually.
 
 Tasks that live on components are automatically canceled when their context is destroyed, meaning
 you don't need to worry about the clean up - we've got you covered.
