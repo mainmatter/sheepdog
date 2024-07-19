@@ -107,7 +107,7 @@ in the title of this section); let's go over them one by one
 	description="If you need more info on the task function please visit the relevant reference page"
 />
 
-### `AbortSignal` solution
+### Solution 1: `AbortSignal`
 
 The simplest but more verbose solution to this problem is to use `AbortSignal` solution:
 `@sheepdog/svelte` invokes your task with a series of utils, one of which is the `AbortSignal`.
@@ -121,7 +121,7 @@ Every task has its own `AbortController` and you can cancel a single task instan
 	let list;
 
 	const fetchTask = task((_, { signal })=>{
-		// we can pass the signal to fetch to eventually abort the in flight request
+		// we can pass the signal to fetch to eventually abort the in-flight request
 		const response = await fetch('/api/very-long-list', { signal });
 		// and we can check if the signal is aborted and return to avoid side effects
 		if(signal.aborted) return;
@@ -133,7 +133,7 @@ Every task has its own `AbortController` and you can cancel a single task instan
 
 <button
 	on:click={() => {
-		lastInstance = task.perform();
+		lastInstance = fetchTask.perform();
 	}}>fetch</button
 >
 <button
@@ -157,14 +157,14 @@ Every task has its own `AbortController` and you can cancel a single task instan
 We've gained the ability to stop in-flight fetches with the `AbortSignal` without having to create a
 separate `canceled` variable. That's a win. But we can do better.
 
-### Async generators
+### Solution 2: Async generators
 
 Those who doesn't know about <BlankLink
 	href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators"
 	body="generators"
-/> might be a bit confused right know and those who know about them might be already running to
-close this tab but please bear with us for a second and we will show you that generators are not
-really that scary.
+/> might be a bit confused right know and those who know about them might be already running away in
+fear but please bear with us for a second and we will show you that generators are not really that
+scary.
 
 A generator is a particular function in Javascript that is able to `yield` back the execution to the
 caller, the syntax to create one looks like this
@@ -250,7 +250,7 @@ const myTask = task(async function* (_, { signal }) {
 
 Can we do better than this? Yes we can!
 
-### Async Transform
+### Solution 3: Async Transform
 
 `@sheepdog/svelte` really cares about your DX and that's why we have built a vite plugin that you
 can use to get the best of both words: the dynamic cancellation of generators and the expressivity
@@ -284,7 +284,7 @@ Typescript language server will resolve the types based on your actual code whil
 
 <button
 	on:click={() => {
-		lastInstance = task.perform();
+		lastInstance = fetchTask.perform();
 	}}>fetch</button
 >
 <button
