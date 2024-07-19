@@ -203,7 +203,12 @@ export function asyncTransform() {
 						},
 						CallExpression(node, { state, next }) {
 							state.task_fn_name.then((name) => {
-								if (node.callee.type === 'Identifier' && node.callee.name === name) {
+								if (
+									(node.callee.type === 'Identifier' && node.callee.name === name) ||
+									(node.callee.type === 'MemberExpression' &&
+										node.callee.object.type === 'Identifier' &&
+										node.callee.object.name === name)
+								) {
 									const task_arg = node.arguments[0];
 									if (task_arg && task_arg.type === 'ArrowFunctionExpression' && task_arg.async) {
 										const to_change = task_arg as unknown as FunctionExpression;

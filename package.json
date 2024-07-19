@@ -42,6 +42,7 @@
 		"prepublishOnly": "npm run package",
 		"preview": "vite preview",
 		"generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
+		"generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f",
 		"test": "npm run test:unit",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
