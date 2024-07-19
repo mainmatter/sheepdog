@@ -1,5 +1,32 @@
 # Changelog
 
+## Release (2024-07-19)
+
+@sheepdog/svelte 0.8.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/svelte`
+  * [#116](https://github.com/mainmatter/sheepdog/pull/116) feat: add installation, usage and start docs ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#114](https://github.com/mainmatter/sheepdog/pull/114) Add timeout utility function ([@nickschot](https://github.com/nickschot))
+  * [#112](https://github.com/mainmatter/sheepdog/pull/112) Add didCancel util ([@beerinho](https://github.com/beerinho))
+
+#### :bug: Bug Fix
+* `@sheepdog/svelte`
+  * [#108](https://github.com/mainmatter/sheepdog/pull/108) Fix docs site title ([@beerinho](https://github.com/beerinho))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#129](https://github.com/mainmatter/sheepdog/pull/129) chore: setup netlify deploy ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#122](https://github.com/mainmatter/sheepdog/pull/122) Quality-of-life additions ([@beerinho](https://github.com/beerinho))
+  * [#109](https://github.com/mainmatter/sheepdog/pull/109) Prepare Release ([@github-actions[bot]](https://github.com/apps/github-actions))
+  * [#113](https://github.com/mainmatter/sheepdog/pull/113) Remove `results` array ([@beerinho](https://github.com/beerinho))
+
+#### Committers: 4
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+- [@github-actions[bot]](https://github.com/apps/github-actions)
+
 ## Release (2024-07-05)
 
 @sheepdog/svelte 0.7.0 (minor)
