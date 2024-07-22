@@ -17,6 +17,7 @@ describe('Util - didCancel', () => {
 
 describe('Util - timeout', () => {
 	it('correctly resolves timeout 0', async () => {
+		vi.useRealTimers();
 		let result = false;
 		timeout(0).then(() => (result = true));
 		expect(result).toBe(false);

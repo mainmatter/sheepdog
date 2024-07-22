@@ -121,7 +121,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
-			await timeout(20);
+			await vi.advanceTimersByTimeAsync(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -149,7 +149,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			perform.click();
-			await timeout(20);
+			await vi.advanceTimersByTimeAsync(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -177,7 +177,7 @@ describe.each([
 			const perform = getByTestId(`perform-${selector}`);
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
-			await timeout(20);
+			await vi.advanceTimersByTimeAsync(20);
 			cancel.click();
 			await vi.waitFor(() => {
 				expect(task_signal.aborted).toBeTruthy();
@@ -252,13 +252,13 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			await timeout(10);
+			await vi.advanceTimersByTimeAsync(10);
 			perform.click();
-			await timeout(10);
+			await vi.advanceTimersByTimeAsync(10);
 			perform.click();
-			await timeout(10);
+			await vi.advanceTimersByTimeAsync(10);
 			perform.click();
-			await timeout(10);
+			await vi.advanceTimersByTimeAsync(10);
 			perform.click();
 			await vi.waitFor(
 				() => {
@@ -531,7 +531,7 @@ describe("task - specific functionality 'default'", () => {
 			await vi.waitFor(() => {
 				expect(task_signals[2].aborted).toBeTruthy();
 			});
-			await timeout(wait_time);
+			await vi.advanceTimersByTimeAsync(wait_time);
 			expect(count).toBe(2);
 		});
 	});
@@ -612,7 +612,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			await vi.waitFor(() => {
 				expect(task_signals[2].aborted).toBeTruthy();
 			});
-			await timeout(wait_time);
+			await vi.advanceTimersByTimeAsync(wait_time);
 			expect(count).toBe(2);
 		});
 	});
