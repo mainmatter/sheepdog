@@ -13,6 +13,9 @@
 	export const default_task = task.drop(fn, { max });
 	export const options_task = task(fn, { kind: 'drop', max });
 
+	export const default_instances: Array<ReturnType<typeof default_task.perform>> = [];
+	export const options_instances: Array<ReturnType<typeof options_task.perform>> = [];
+
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
 	let latest_options_task_instance: ReturnType<typeof options_task.perform>;
 </script>
@@ -22,6 +25,7 @@
 	on:click={async () => {
 		try {
 			latest_task_instance = default_task.perform(argument);
+			default_instances.push(latest_task_instance);
 			return_value(await latest_task_instance);
 		} catch {
 			/**empty*/
@@ -34,6 +38,7 @@
 	on:click={async () => {
 		try {
 			latest_options_task_instance = options_task.perform(argument);
+			options_instances.push(latest_options_task_instance);
 			return_value(await latest_options_task_instance);
 		} catch {
 			/**empty*/
