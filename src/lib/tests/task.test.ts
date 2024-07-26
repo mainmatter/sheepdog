@@ -4,7 +4,7 @@
 import { render } from '@testing-library/svelte';
 import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
-import { type SheepdogUtils, type Task, type TaskInstance, timeout } from '../index';
+import { type SheepdogUtils, type Task, timeout } from '../index';
 import Default from './components/default.svelte';
 import Drop from './components/drop.svelte';
 import Enqueue from './components/enqueue.svelte';
@@ -12,7 +12,6 @@ import KeepLatest from './components/keep_latest.svelte';
 import Link from './components/link/parent.svelte';
 import Restart from './components/restart.svelte';
 import WrongKind from './components/wrong-kind.svelte';
-import type { ReadableWithGet } from './../internal/helpers';
 
 function all_options(fn: (selector: string) => void) {
 	describe.each(['default', 'options'])('version with %s', fn);
@@ -369,6 +368,28 @@ describe.each([
 				isRunning: false,
 				isSuccessful: false,
 			});
+		});
+
+		it("after an instance has completed calling cancelAll doesn't change it's `isCancelled` status", async () => {
+			const fn = vi.fn(async () => {
+				await timeout(50);
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const instances = instance[`${selector}_instances`] as Array<ReturnType<Task['perform']>>;
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
+			await vi.waitFor(() => expect(instances[0].get().isSuccessful).toBeTruthy());
+			perform.click();
+			await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
+			cancel.click();
+			expect(instances[0].get().isSuccessful).toBeTruthy();
+			expect(instances[0].get().isCanceled).toBeFalsy();
+			expect(instances[1].get().isSuccessful).toBeFalsy();
+			expect(instances[1].get().isCanceled).toBeTruthy();
 		});
 	});
 
@@ -988,13 +1009,11 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 					fn,
 					max: 1,
 				});
-				const store = instance[
-					`get_latest_${selector}_task_instance`
-				] as () => ReadableWithGet<TaskInstance>;
+				const instances = instance[`${selector}_instances`] as Array<ReturnType<Task['perform']>>;
 				const perform = getByTestId(`perform-${selector}`);
 				perform.click();
 				perform.click();
-				expect(get(store()).hasStarted).toBeFalsy();
+				expect(instances.at(-1)?.get().hasStarted).toBeFalsy();
 			});
 		});
 	});
