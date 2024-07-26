@@ -11,6 +11,11 @@
 	--sl-color-gray-5: #3b3734;
 	--sl-color-gray-6: #2a2623;
 	--sl-color-black: #1a1816;
+	--color-running: #6200ee;
+	--color-finished: #00b279;
+	--color-waiting: #ff8800;
+	--color-canceled: #ff1500;
+	--color-dropped: #727272;
 }
 
 /* Light mode colors. */
