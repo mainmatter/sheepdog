@@ -11,12 +11,14 @@ export { CancelationError };
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
 export type TaskInstance<TReturn = undefined> = {
-	error?: undefined | unknown;
+	error?: unknown;
+	hasStarted: boolean;
 	isCanceled: boolean;
 	isError: boolean;
+	isFinished: boolean;
 	isRunning: boolean;
 	isSuccessful: boolean;
-	value?: undefined | TReturn;
+	value?: TReturn;
 };
 
 function _task<TArgs = unknown, TReturn = undefined>(
@@ -74,8 +76,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				if (instance) {
 					instance.update((instance) => {
 						instance.error = error;
-						instance.isRunning = false;
 						instance.isError = true;
+						instance.isFinished = true;
+						instance.isRunning = false;
 						return instance;
 					});
 					// we delete after a microtask to avoid returnModifier
@@ -91,8 +94,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				const instance = instances.get(instance_id);
 				if (instance) {
 					instance.update((instance) => {
-						instance.isRunning = false;
 						instance.isCanceled = true;
+						instance.isFinished = true;
+						instance.isRunning = false;
 						return instance;
 					});
 					// we delete after a microtask to avoid returnModifier
@@ -106,9 +110,11 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			},
 			onInstanceCreate(instance_id) {
 				const instance_value = {
-					isRunning: false,
+					hasStarted: false,
 					isCanceled: false,
 					isError: false,
+					isFinished: false,
+					isRunning: false,
 					isSuccessful: false,
 				};
 				const instance = writable_with_get(instance_value);
@@ -119,6 +125,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				const instance = instances.get(instance_id);
 				if (instance) {
 					instance.update((instance) => {
+						instance.hasStarted = true;
 						instance.isRunning = true;
 						return instance;
 					});
@@ -129,6 +136,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				const instance = instances.get(instance_id);
 				if (instance) {
 					instance.update((instance) => {
+						instance.isFinished = true;
 						instance.isRunning = false;
 						instance.isSuccessful = true;
 						instance.value = last_result;
