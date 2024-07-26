@@ -32,12 +32,41 @@ export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<
 	typeof createTask<TArgs, TReturn>
 >;
 
-type TaskAdapter<TReturn = unknown> = {
+type TaskAdapter<TReturn = unknown, TModifier = object> = {
+	/**
+	 * Callback called to register an onDestroy callback
+	 */
 	onDestroy: (fn: () => void) => void;
+	/**
+	 * Callback called when the instance is manually canceled
+	 */
 	onInstanceCancel: (instance_id: string) => void;
+	/**
+	 * Callback called when `perform` is called regardless if the handler is
+	 * immediately executed or not
+	 */
+	onInstanceCreate: (instance_id: string) => void;
+	/**
+	 * Callback called when the instance is actually executed by the handler
+	 */
 	onInstanceStart: (instance_id: string) => void;
+	/**
+	 * Callback called if the instance completes successfully
+	 */
 	onInstanceComplete: (instance_id: string, new_value: TReturn) => void;
+	/**
+	 * Callback called when the instance errors out
+	 */
 	onError: (instance_id: string, error: unknown | undefined) => void;
+	/**
+	 * Callback called with the promise-like returned from perform. It allows you to
+	 * modify the value (like appending a subscribe or create a signal out of it)
+	 * before finally being returned to the user
+	 */
+	returnModifier?: (
+		instance_id: string,
+		returned_value: Promise<TReturn> & { cancel(): void },
+	) => Promise<TReturn> & { cancel(): void } & TModifier;
 };
 
 export class CancelationError extends Error {
@@ -47,8 +76,8 @@ export class CancelationError extends Error {
 	}
 }
 
-export function createTask<TArgs = unknown, TReturn = unknown>(
-	adapter: TaskAdapter<TReturn>,
+export function createTask<TArgs = unknown, TReturn = unknown, TModifier = object>(
+	adapter: TaskAdapter<TReturn, TModifier>,
 	gen_or_fun: (
 		args: TArgs,
 		utils: SheepdogUtils,
@@ -113,6 +142,8 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 					},
 				};
 			}
+			// we always create the instance because it's also used by the returnModifier
+			adapter.onInstanceCreate(instance_id);
 			handler(
 				() => {
 					adapter.onInstanceStart(instance_id);
@@ -154,11 +185,19 @@ export function createTask<TArgs = unknown, TReturn = unknown>(
 				{ promise, abort_controller },
 			);
 
-			return Object.assign(promise, {
-				cancel() {
-					abort_controller.abort();
-				},
-			});
+			// we default to just return the same value if returnModifier is null
+			const modifier =
+				adapter.returnModifier ??
+				(((_: string, ret: any) => ret) as NonNullable<typeof adapter.returnModifier>);
+
+			return modifier(
+				instance_id,
+				Object.assign(promise, {
+					cancel() {
+						abort_controller.abort();
+					},
+				}),
+			);
 		},
 	};
 }
