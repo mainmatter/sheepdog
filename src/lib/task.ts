@@ -78,6 +78,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.isError = true;
 						return instance;
 					});
+					queueMicrotask(() => {
+						instances.delete(instance_id);
+					});
 					updateResult(instance.get());
 				}
 			},
@@ -88,6 +91,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.isRunning = false;
 						instance.isCanceled = true;
 						return instance;
+					});
+					queueMicrotask(() => {
+						instances.delete(instance_id);
 					});
 					updateResult(instance.get());
 				}
@@ -121,6 +127,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.isSuccessful = true;
 						instance.value = last_result;
 						return instance;
+					});
+					queueMicrotask(() => {
+						instances.delete(instance_id);
 					});
 					updateResult(instance.get());
 				}
