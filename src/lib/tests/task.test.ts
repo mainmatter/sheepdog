@@ -370,7 +370,7 @@ describe.each([
 			});
 		});
 
-		it("after an instance has completed calling cancelAll doesn't change it's `isCancelled` status", async () => {
+		it("after an instance has completed calling `cancelAll` doesn't change its `isCancelled` status", async () => {
 			const fn = vi.fn(async () => {
 				await timeout(50);
 			});
@@ -390,6 +390,24 @@ describe.each([
 			expect(instances[0].get().isCanceled).toBeFalsy();
 			expect(instances[1].get().isSuccessful).toBeFalsy();
 			expect(instances[1].get().isCanceled).toBeTruthy();
+		});
+
+		it("after an instance has completed calling `cancel` doesn't change its `isCancelled` status", async () => {
+			const fn = vi.fn(async () => {
+				await timeout(50);
+			});
+			const { getByTestId, component: instance } = render(component, {
+				fn,
+			});
+			const instances = instance[`${selector}_instances`] as Array<ReturnType<Task['perform']>>;
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}-last`);
+			perform.click();
+			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
+			await vi.waitFor(() => expect(instances[0].get().isSuccessful).toBeTruthy());
+			cancel.click();
+			expect(instances[0].get().isSuccessful).toBeTruthy();
+			expect(instances[0].get().isCanceled).toBeFalsy();
 		});
 	});
 
