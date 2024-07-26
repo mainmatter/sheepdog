@@ -78,6 +78,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.isError = true;
 						return instance;
 					});
+					// we delete after a microtask to avoid returnModifier
+					// not founding the instance in case of a syncronous
+					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
 					});
@@ -92,6 +95,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.isCanceled = true;
 						return instance;
 					});
+					// we delete after a microtask to avoid returnModifier
+					// not founding the instance in case of a syncronous
+					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
 					});
@@ -128,6 +134,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instance.value = last_result;
 						return instance;
 					});
+					// we delete after a microtask to avoid returnModifier
+					// not founding the instance in case of a synchronous
+					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
 					});
