@@ -54,8 +54,8 @@ jobs:
         with:
           version: 9
       - run: pnpm install --frozen-lockfile
-      - name: cd packages/svelte && npm publish
-        run: pnpm release-plan publish
+      - name: npm publish
+        run: cd packages/svelte && pnpm release-plan publish
 
         env:
           GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
