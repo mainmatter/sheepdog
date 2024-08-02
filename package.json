@@ -1,95 +1,17 @@
 {
-	"name": "@sheepdog/svelte",
-	"version": "0.9.0",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:mainmatter/sheepdog.git"
-	},
-	"type": "module",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"svelte": "./dist/index.js"
-		},
-		"./task": {
-			"types": "./dist/task.d.ts",
-			"import": "./dist/task.js",
-			"svelte": "./dist/task.js"
-		},
-		"./vite": {
-			"types": "./dist/vite.d.ts",
-			"import": "./dist/vite.js"
-		}
-	},
-	"svelte": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"files": [
-		"dist",
-		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
-	],
-	"scripts": {
-		"build": "vite build && npm run package",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"dev": "vite dev",
-		"docs:dev": "pnpm --filter 'docs' dev",
-		"docs:install": "pnpm --filter 'docs' install",
-		"format": "eslint . --fix && prettier --write .",
-		"lint": "prettier --check . && eslint .",
-		"package": "svelte-kit sync && svelte-package && publint",
-		"prepublishOnly": "npm run package",
-		"preview": "vite preview",
-		"generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
-		"generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f",
-		"test": "npm run test:unit",
-		"test:integration": "playwright test",
-		"test:unit": "vitest",
-		"test:unit:ui": "vitest --ui"
-	},
-	"dependencies": {
-		"acorn": "^8.11.3",
-		"esrap": "^1.2.2",
-		"zimmerframe": "^1.1.2"
-	},
-	"devDependencies": {
-		"@playwright/test": "^1.44.0",
-		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/kit": "^2.5.8",
-		"@sveltejs/package": "^2.3.1",
-		"@sveltejs/vite-plugin-svelte": "^3.1.0",
-		"@testing-library/jest-dom": "^6.4.5",
-		"@testing-library/svelte": "^5.1.0",
-		"@types/eslint": "9.6.0",
-		"@types/eslint-config-prettier": "^6.11.3",
-		"@types/eslint__js": "^8.42.3",
-		"@vitest/coverage-v8": "^2.0.0",
-		"@vitest/ui": "^2.0.0",
-		"eslint": "^9.2.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-playwright": "^1.6.1",
-		"eslint-plugin-svelte": "2.43.0",
-		"globals": "^15.2.0",
-		"happy-dom": "^14.11.0",
-		"prettier": "^3.2.5",
-		"prettier-plugin-svelte": "^3.2.3",
-		"publint": "^0.2.7",
-		"release-plan": "^0.9.0",
-		"svelte": "^4.2.17",
-		"svelte-check": "^3.7.1",
-		"tslib": "^2.6.2",
-		"tsm": "^2.3.0",
-		"typescript": "^5.4.5",
-		"typescript-eslint": "^8.0.0",
-		"vite": "^5.2.11",
-		"vitest": "^2.0.0"
-	},
-	"peerDependencies": {
-		"svelte": "^4.0.0"
-	},
-	"volta": {
-		"node": "20.16.0",
-		"pnpm": "9.6.0"
-	}
+  "name": "@sheepdog/root",
+  "version": "0.0.1",
+  "description": "monorepo for @sheepdog code and docs",
+  "private": true,
+  "scripts": {
+    "dev:docs": "pnpm --dir apps/docs dev",
+    "dev": "pnpm --dir packages/svelte dev",
+    "test": "pnpm run --dir packages/svelte test",
+    "format": "pnpm -r format",
+    "lint": "pnpm -r lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
 }
