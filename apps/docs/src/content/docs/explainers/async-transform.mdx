@@ -3,7 +3,13 @@ title: Async Transform
 description: How the Async transform works
 ---
 
-import { LinkCard, Tabs, TabItem, Aside, Code } from '@astrojs/starlight/components';
+import {
+	LinkCard,
+	Tabs,
+	TabItem,
+	Aside,
+	Code,
+} from '@astrojs/starlight/components';
 import BlankLink from '@components/BlankLink.astro';
 
 This explainer is meant to show you how the `Async Transform` Vite plugin works so that you can be
@@ -18,8 +24,8 @@ link.
 
 ## What's a Vite plugin
 
-For those who doesn't know anything about what a Vite plugin even is and want to know more here's a
-little explainer in the explainer. If you just want to know about what the `Async Transform` does
+If you don't know anything about what a Vite plugin even is and want to know more here's a
+little explainer in the explainer. If you just want to know about what the `Async Transform` does,
 feel free to skip to the next paragraph.
 
 <details>
@@ -30,7 +36,7 @@ feel free to skip to the next paragraph.
 
     Every function is called in a specific moment of the build and can affect it in different ways.
 
-    Here's an example of a very simple Vite plugin very similar to one in <BlankLink href="https://vitejs.dev/guide/api-plugin" body="their documentation" />
+    Here's an example of a simple Vite plugin very similar to one in <BlankLink href="https://vitejs.dev/guide/api-plugin" body="their documentation" />
 
     <Code lang="ts" code={`
 
@@ -44,7 +50,7 @@ export const simpleTransform = {
 				// we transform the text in our file
 				// to JS
 				code: myExtToJs(src),
-				// if possible return a sourcemap to allow for better debugging
+				// if possible, return a sourcemap to allow for better debugging
 				map: null,
 			}
 		}
@@ -72,8 +78,9 @@ export const simpleTransform = {
 This super simple plugin eliminate every instance of `console.log()` from your code.
 
 <Aside type="caution">
-	Don't use this anywhere it's just a silly example and you should probably be a bit more nuanced
-	than `replaceAll` if you want to remove logs from your code.
+	Don't use this anywhere. It's just a silly example and you should probably
+	be a bit more nuanced than `replaceAll` if you want to remove logs from your
+	code.
 </Aside>
 
 The gist of it is: you can do a lot of cool things with a Vite plugin and we decided to build the
@@ -83,19 +90,19 @@ Async Transform to make your life (hopefully) easier!
 
 ## How the `Async Transform` changes my code?
 
-The reason why we are writing this explainer is because we firmly believe that if you allow you code
-to be changes by some script you should fully understand how it changes it and what the final result
+The reason why we are writing this explainer is because we firmly believe that if you allow your code
+to be changed by some script you should fully understand how it changes it and what the final result
 will look like.
 
-As shown in our [Mid run cancellation](/explainers/mid-run-cancellation) explainer this Vite plugin
-aim to solve a couple of problems with async code in Typescript:
+As shown in our [Mid run cancellation](/explainers/mid-run-cancellation) explainer, this Vite plugin
+aims to solve a couple of problems with async code in Typescript:
 
-- Promises are non cancellable: once you start them there's no way to stop the code in the middle of
-  the function from executing
-- Generators can be "stopped" mid execution but Typescript doesn't play very well with the `yield`
-  keyword
+-   Promises are non cancellable: once you start them there's no way to stop the code in the middle of
+    the function from executing.
+-   Generators can be "stopped" mid execution but Typescript doesn't play very well with the `yield`
+    keyword.
 
-To fix this problems we let you write the simple and familiar async code and we provide a Vite
+To fix these problems, we let you write the simple and familiar async code, and we provide a Vite
 plugin to transform your async functions into generators!
 
 <Tabs>
@@ -149,14 +156,14 @@ plugin to transform your async functions into generators!
 </Tabs>
 
 As you can see we aim to touch your code the bare minimum. But I can still see the worry on your
-face so let's dive a bit more and let's make a couple of clarifications
+face, so let's dive a bit more and let's make a couple of clarifications
 
 ### What about my other async functions?
 
-You don't want to see all of your beloved async functions be turned into generators right? Well,
-worry not because we specifically target only the async functions that are arguments of our own
+If you don't want to see all of your beloved async functions be turned into generators, worry not,
+because we specifically target only the async functions that are arguments of our own
 `task` or `task.modifier` functions. And we were really careful with this so even if you have other
-functions that are named task or if you rename your import everything outside the argument of that
+functions that are named `task` or if you rename your import everything outside the argument of that
 function will be left untouched.
 
 <Tabs>
