@@ -2,7 +2,6 @@
   "name": "@sheepdog/root",
   "version": "0.0.1",
   "description": "monorepo for @sheepdog code and docs",
-  "main": "index.js",
   "private": true,
   "scripts": {
     "dev:docs": "pnpm --dir apps/docs dev",
