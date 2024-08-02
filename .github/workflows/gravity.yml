@@ -1,0 +1,22 @@
+name: Gravity
+on:
+  push:
+    branches:
+      - main
+  pull_request: {}
+
+jobs:
+  build:
+    name: Run Gravity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - run: pnpm i --frozen-lockfile
+      - run: cd packages/svelte && pnpm run build
+      - run: pnpm gravityci "packages/svelte/dist/"
+        env:
+          GRAVITY_TOKEN: ${{ secrets.GRAVITY_TOKEN }}
+          GRAVITY_HOST: https://gravity.ci
