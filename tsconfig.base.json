@@ -8,6 +8,6 @@
 		"noUnusedLocals": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
-		"moduleResolution": "node"
+		"moduleResolution": "Bundler"
 	}
 }
