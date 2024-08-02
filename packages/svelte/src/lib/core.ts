@@ -103,6 +103,7 @@ export function createTask<TArgs = unknown, TReturn = unknown, TModifier = objec
 		cancelAll() {
 			abort_controllers.forEach((abort_controller) => {
 				abort_controller.controller.abort();
+				abort_controller.controller.signal.removeEventListener('abort', abort_controller.listener);
 			});
 		},
 		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
@@ -125,10 +126,11 @@ export function createTask<TArgs = unknown, TReturn = unknown, TModifier = objec
 			});
 			const abort_controller = new AbortController();
 			abort_controller.signal.addEventListener('abort', cancel_linked_and_update_store);
-			abort_controllers.add({
+			const set_element = {
 				controller: abort_controller,
 				listener: cancel_linked_and_update_store,
-			});
+			};
+			abort_controllers.add(set_element);
 			function link<TLinkArgs, TLinkReturn>(
 				task: Task<TLinkArgs, TLinkReturn>,
 			): Task<TLinkArgs, TLinkReturn> {
@@ -167,10 +169,14 @@ export function createTask<TArgs = unknown, TReturn = unknown, TModifier = objec
 								}
 								if (next_val.done) {
 									const last_result = next_val.value;
+									set_element.controller.signal.removeEventListener('abort', set_element.listener);
+									abort_controllers.delete(set_element);
 									adapter.onInstanceComplete(instance_id, last_result);
 									resolve(next_val.value);
 								}
 							} else if (!abort_controller.signal.aborted) {
+								set_element.controller.signal.removeEventListener('abort', set_element.listener);
+								abort_controllers.delete(set_element);
 								adapter.onInstanceComplete(instance_id, gen_or_value);
 								resolve(gen_or_value);
 							}

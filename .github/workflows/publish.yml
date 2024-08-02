@@ -54,7 +54,7 @@ jobs:
         with:
           version: 9
       - run: pnpm install --frozen-lockfile
-      - name: npm publish
+      - name: cd packages/svelte && npm publish
         run: pnpm release-plan publish
 
         env:

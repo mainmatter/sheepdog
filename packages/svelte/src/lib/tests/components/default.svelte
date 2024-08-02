@@ -8,13 +8,12 @@
 
 	export let return_value: (value: unknown) => void = () => {};
 	export let argument = 0;
-	export let max = 1;
 
-	export const default_task = task.enqueue(fn, { max });
-	export const options_task = task(fn, { kind: 'enqueue', max });
+	export const default_task = task.default(fn);
+	export const options_task = task(fn, { kind: 'default' });
 
-	export const get_latest_default_task_instance = () => latest_task_instance;
-	export const get_latest_options_task_instance = () => latest_options_task_instance;
+	export const default_instances: Array<ReturnType<typeof default_task.perform>> = [];
+	export const options_instances: Array<ReturnType<typeof options_task.perform>> = [];
 
 	let latest_task_instance: ReturnType<typeof default_task.perform>;
 	let latest_options_task_instance: ReturnType<typeof options_task.perform>;
@@ -25,6 +24,7 @@
 	on:click={async () => {
 		try {
 			latest_task_instance = default_task.perform(argument);
+			default_instances.push(latest_task_instance);
 			return_value(await latest_task_instance);
 		} catch {
 			/**empty*/
@@ -37,6 +37,7 @@
 	on:click={async () => {
 		try {
 			latest_options_task_instance = options_task.perform(argument);
+			options_instances.push(latest_options_task_instance);
 			return_value(await latest_options_task_instance);
 		} catch {
 			/**empty*/

@@ -1,5 +1,27 @@
 # Changelog
 
+## Release (2024-07-26)
+
+@sheepdog/svelte 0.9.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/svelte`
+  * [#134](https://github.com/mainmatter/sheepdog/pull/134) Extend the TaskInstance derived state ([@beerinho](https://github.com/beerinho))
+  * [#132](https://github.com/mainmatter/sheepdog/pull/132) feat: return derived state to `perform` return value ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :bug: Bug Fix
+* `@sheepdog/svelte`
+  * [#141](https://github.com/mainmatter/sheepdog/pull/141) fix: avoid changing state of successful task to cancelled ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#137](https://github.com/mainmatter/sheepdog/pull/137) fix: make async transform with dot notation too ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#124](https://github.com/mainmatter/sheepdog/pull/124) feat: add Mid run cancellation guide ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 2
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-07-19)
 
 @sheepdog/svelte 0.8.0 (minor)
