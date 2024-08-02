@@ -67,6 +67,7 @@
 		overflow: hidden;
 		background: transparent;
 		color: var(--sl-color-black);
+		border-left: 2px solid var(--sl-color-black);
 	}
 
 	.completed {
@@ -74,6 +75,7 @@
 	}
 
 	.canceled {
+		border-left: none;
 		background-color: var(--color-canceled);
 	}
 
