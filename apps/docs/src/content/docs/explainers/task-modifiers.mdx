@@ -3,4 +3,158 @@ title: Task modifiers
 description: How task modifiers work
 ---
 
-This is a guide about how to set up the Async Transform!
+import Timeline from '../TimelineExplainer.svelte';
+
+In our [Getting started](/getting-started/usage#task-modifiers) you've seen that you can specify a
+modifier on the task, either with the dot notation or the options notation. The reason you have this
+ability is so that you can specify what should happen when multiple, concurrent, task instance are
+running.
+
+In this explainer we will guide you through how each of our modifier work with examples about how
+they behave and possibly make it clearer for you when to use one or the other.
+
+## Default
+
+By default every task simply run whenever you perform it. This is basically like a function call
+with the added benefit of having derived state and cancellability. You might've seen in our home
+page this simple demonstration but if you didn't allow me to introduce to you the friend that will
+guide us through discovering the task modifiers: the Timeline demo!
+
+Take your time to familiarize with it: you can perform a new task clicking on the `perform` button
+and reset the demo with the `clear timeline` button, the moment you perform some task the timeline
+will start and it will show you the state of the task. Each task will run for two seconds and you
+can either click on it to cancel it or click on the `cancelAll` button to nuke them all!
+
+<Timeline show_max={false} client:load />
+
+## Enqueue
+
+The `enqueue` task as the name suggests create a queue of all the tasks after the max concurrency
+has been reached. This means that up until the moment max concurrency is achieved every task will be
+executed immediately. But if you try to perform a new task and the number of running instances is at
+the `max` level that new task will be stored in a queue and executed as soon as the first task
+finishes it's execution.
+
+This is the right kind of task that you should use when you want to be sure that every perform is
+executed sooner or later (unless the user leave the page) but you also don't want to run them
+concurrently. A good use case for this could be uploading a list of files to the server. You want to
+upload all of your files but you don't want to send them all together because that would be too
+resource intensive. You can use `enqueue` to allow only `max` file upload at a time.
+
+```svelte
+<script lamng="ts">
+	import { task, timeout } from '@sheepdogs/svelte';
+	import upload from './file-upload';
+
+	let files = [];
+
+	const uploadFile = task.enqueue(
+		async (file: File) => {
+			await upload(file);
+		},
+		{ max: 3 },
+	);
+</script>
+
+<input
+	type="file"
+	multiple
+	on:change={(e) => {
+		files = [...e.target.files];
+	}}
+/>
+<button
+	on:click={() => {
+		for (let file of files) {
+			uploadFile.perform(file);
+		}
+	}}>start upload</button
+>
+```
+
+You can play around with it in our Timeline and you may notice a new parameter available for you:
+initially set at 1 you can update the `max` parameter to allow for more task to run at the same
+time.
+
+<Timeline selected_task_type="enqueue" client:load />
+
+## Drop
+
+The `drop` task will simply ignore (and thus drop) every `perform` that is executed when the `max`
+amount of concurrent tasks is reached. In our example with a max concurrency of 1 for two seconds
+after the first perform no other task will be accepted.
+
+You can think of this kind of tasks as a sort of throttle and since the function will be just tossed
+away you should use this modifier only when you don't care about the "execution loss". A good
+example could be sending your mouse position to a websocket to be broadcasted to all the other
+users. You don't want to update it too often to avoid clogging your server and you don't care about
+the middle positions being lost.
+
+```svelte
+<script lamng="ts">
+	import { task, timeout } from '@sheepdogs/svelte';
+	import ws from './websocket';
+
+	const updatePosition = task.drop(async (coords: { x: number; y: number }) => {
+		await timeout(200);
+		ws.send('coords', coords);
+	});
+</script>
+
+<svelte:window
+	on:mousemove={(e) => {
+		updatePosition.perform({
+			x: e.clientX,
+			y: e.clientY,
+		});
+	}}
+/>
+```
+
+I know you are waiting for it so here's your `drop` Timeline playground:
+
+<Timeline selected_task_type="drop" client:load />
+
+## Restart
+
+The `restart` task will cancel the oldest task instance once the `max` is reached. With `max` of one
+this basically means that every time you perform again you will cancel the last task.
+
+You can think of this kind of tasks as a the good 'ol debounce: if you await for, let's say, 200ms
+before doing any action in a `restart` task you can call `perform` repeatedly and the actual task
+will be executed only once the `perform` as not been called for 200ms. This is very useful to
+perform fetch requests while the user is typing without inundating your server of requests. Once the
+user stop typing the last request will not be canceled and the request will go through.
+
+```svelte
+<script lamng="ts">
+	import { task, timeout } from '@sheepdogs/svelte';
+
+	const search = task.restart(async (query: string) => {
+		await timeout(200);
+		const res = await fetch(`/api/search?q=${query}`);
+	});
+</script>
+
+<input
+	on:input={(e) => {
+		search.perform(e.target.value);
+	}}
+/>
+```
+
+And as usual here's your `restart` Timeline playground:
+
+<Timeline selected_task_type="restart" client:load />
+
+## Keep Latest
+
+Finally `keepLatest` (we kept this latest _ba-dun-tss_) it's a mix of `drop` with a sprinkle of
+`enqueue`: once the max concurrency is reached it will drop every new `perform` but it will also
+keep the very last in queue to execute it when the max concurrency drop below the max.
+
+```ts
+// TODO: add keepLatest example 😅
+```
+
+<Timeline selected_task_type="keepLatest" client:load />
