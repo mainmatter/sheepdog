@@ -67,7 +67,7 @@
 			top={(i % lines) * ((wrapper_height - 2 * gap) / lines) + gap}
 			height={(wrapper_height - 2 * gap) / lines - gap / 2}
 			width={((element.end ?? elapsed - element.added) / total) * wrapper_width}
-			left={(element.added / total) * wrapper_width}
+			left={(element.added / total) * wrapper_width + 4}
 			idle={(element.start / total) * wrapper_width}
 		/>
 	{/each}
@@ -77,18 +77,18 @@
 	.wrapper {
 		height: 400px;
 		position: relative;
-		background: white;
+		background: transparent;
 		overflow: hidden;
 	}
 	.line {
 		position: absolute;
 		top: 0;
 		bottom: 0;
-		left: 0;
+		left: 4px;
 		transform: translateX(calc(var(--left) * 1px));
 		width: 100px;
-		border-left: 2px solid black;
-		background-color: white;
+		border-left: 2px solid var(--sl-color-text);
+		background: transparent;
 		z-index: 1;
 	}
 </style>

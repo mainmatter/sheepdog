@@ -66,8 +66,8 @@
 		cursor: pointer;
 		overflow: hidden;
 		background: transparent;
-		color: var(--sl-color-black);
-		border-left: 2px solid var(--sl-color-black);
+		color: white;
+		box-shadow: -2px 0 3px 0 rgba(0, 0, 0, 0.5);
 	}
 
 	.completed {
