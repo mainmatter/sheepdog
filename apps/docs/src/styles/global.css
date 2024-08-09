@@ -1,5 +1,7 @@
 /* Dark mode colors. */
 :root {
+	--sheepdog-primary: #6200EE;
+
 	--sl-color-accent-low: #262320;
 	--sl-color-accent: #70685d;
 	--sl-color-accent-high: #cbc8c4;
@@ -20,6 +22,8 @@
 
 /* Light mode colors. */
 :root[data-theme='light'] {
+	--sheepdog-primary: #6200EE;
+
 	--sl-color-accent-low: #d9d6d3;
 	--sl-color-accent: #726a5f;
 	--sl-color-accent-high: #35322d;
@@ -35,25 +39,10 @@
 }
 
 [data-has-hero] {
-	& body {
-		background-image: url(../assets/bg.svg);
-		background-size: cover;
-	}
-
 	& header {
 		background-color: transparent;
 		border-bottom: 1px solid rgb(255 255 255 / 0.1);
 		backdrop-filter: blur(5px);
-	}
-}
-
-.hero {
-	grid-template-columns: 1fr;
-	place-items: center;
-
-	& :where(.copy, .actions) {
-		justify-content: center;
-		align-items: center;
 	}
 }
 
