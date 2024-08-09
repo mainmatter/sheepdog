@@ -1,0 +1,280 @@
+---
+title: KeepLatest task
+description: the KeepLatest task function
+---
+
+import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+This is the way to create a keepLatest task.
+
+This will run the initial tasks and then ensure that the very last task instance is also run. You
+can also provide a `max` that will dictate the number of task instances that will run initially.
+
+<Aside type="note">`keepLatest` will only preserve the final _one_ task instance.</Aside>
+
+## Usage
+
+To specify a task as keepLatest, you can either use the dot notation or the options notation.
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task.keepLatest(async () => {
+		// your code
+	});
+</script>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'keepLatest' },
+	);
+</script>
+```
+
+</TabItem>
+
+</Tabs>
+
+### Max concurrency
+
+This is how you can specify the maximum number of concurrent instances. The default is 1, here we're
+setting it to 5.
+
+<Aside type="note">
+	`max` here denotes the number of task instances that will run initially, it will always keep the
+	lastest _one_ instance when the `max` threshold is exceeded.
+</Aside>
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task.keepLatest(
+		async () => {
+			// your code
+		},
+		{ max: 5 },
+	);
+</script>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'keepLatest', max: 5 },
+	);
+</script>
+```
+
+</TabItem>
+
+</Tabs>
+
+### The task store
+
+The return value of the task function will be a svelte store where you can access state from all the
+instances running and eventually cancel them with `cancelAll`
+
+<LinkCard
+	href="/getting-started/usage/#task-structure"
+	title="Task structure"
+	description="Take a look at the Task structure documentation in our Getting started"
+/>
+
+### Passing props
+
+While defining a task if the function that you pass in has some arguments those will be required by
+the `perform` function (and it will be strongly typed too).
+
+<Aside type="caution">
+	If you need to pass multiple props you should use an object because the second parameter will
+	always be the [SheepdogOptions](#)
+</Aside>
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task.keepLatest(async (id: string) => {
+		// your code
+	});
+</script>
+
+<button
+	on:click={() => {
+		latestTask.perform('42');
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task(
+		async (id: string) => {
+			// your code
+		},
+		{ kind: 'keepLatest' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		latestTask.perform('42');
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>
+
+### Getting the return value
+
+If you return something from your task you can access the return value by awaiting the `perform`
+function
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task.keepLatest(async () => {
+		return 42;
+	});
+</script>
+
+<button
+	on:click={() => {
+		const number = await latestTask.perform();
+		console.log(number); // 42
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task(
+		async () => {
+			return 42;
+		},
+		{ kind: 'keepLatest' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		const number = await latestTask.perform();
+		console.log(number); // 42
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>
+
+### Getting the `TaskInstance`
+
+If you don't await the `perform` function then you'll get back the
+[task instance](/reference/task-instance) that you can use either to cancel it or to get its current
+state. The `TaskInstance` is also a svelte store and you can access the current value with
+`instance.get()`
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task.keepLatest(async () => {
+		// your code
+	});
+</script>
+
+<button
+	on:click={() => {
+		const lastRun = latestTask.perform();
+		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		lastRun.cancel();
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const latestTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'keepLatest' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		lastRun = latestTask.perform();
+		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		lastRun.cancel();
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>
