@@ -5,6 +5,7 @@
 		"type": "git",
 		"url": "git@github.com:mainmatter/sheepdog.git"
 	},
+	"main": "./dist/index.js",
 	"type": "module",
 	"exports": {
 		".": {

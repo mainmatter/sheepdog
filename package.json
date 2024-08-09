@@ -8,6 +8,7 @@
 	"description": "monorepo for @sheepdog code and docs",
 	"private": true,
 	"scripts": {
+		"build:docs": "pnpm --dir packages/svelte build && pnpm --dir apps/docs build",
 		"dev:docs": "pnpm --dir apps/docs dev",
 		"dev": "pnpm --dir packages/svelte dev",
 		"test": "pnpm run --dir packages/svelte test",
