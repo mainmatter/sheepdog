@@ -15,6 +15,8 @@
 		"@astrojs/netlify": "^5.4.0",
 		"@astrojs/starlight": "^0.26.0",
 		"@astrojs/svelte": "^5.4.0",
+		"@fontsource/calistoga": "^5.0.21",
+		"@fontsource/pt-sans": "^5.0.13",
 		"@sheepdog/svelte": "workspace:*",
 		"astro": "^4.3.5",
 		"sharp": "^0.33.0",
