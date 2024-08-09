@@ -15,7 +15,7 @@
 		"@astrojs/netlify": "^5.4.0",
 		"@astrojs/starlight": "^0.25.0",
 		"@astrojs/svelte": "^5.4.0",
-		"@sheepdog/svelte": "workspace:^",
+		"@sheepdog/svelte": "workspace:*",
 		"astro": "^4.3.5",
 		"sharp": "^0.33.0",
 		"svelte": "^4.2.17",
