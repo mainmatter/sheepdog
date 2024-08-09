@@ -18,6 +18,9 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
+			components: {
+				Hero: './src/components/Hero.astro',
+			},
 			title: '@sheepdog/svelte',
 			expressiveCode: {
 				themes: ['github-dark-default', 'github-light-default'],
