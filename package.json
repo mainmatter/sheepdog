@@ -30,7 +30,7 @@
 		"typescript-eslint": "^8.0.0"
 	},
 	"volta": {
-		"node": "20.16.0",
-		"pnpm": "9.7.0"
+		"node": "20.17.0",
+		"pnpm": "9.8.0"
 	}
 }
