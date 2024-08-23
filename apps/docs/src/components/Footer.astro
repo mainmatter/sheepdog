@@ -21,12 +21,13 @@ const isHomepage = Astro.props.slug === '';
 <style>
 	footer {
 			text-align: center;
-			padding: 100px 50px 0 50px;
+			padding: 100px 0 0 0;
 			color: var(--sl-color-white);
 	}
 
 	footer > :global(svg) {
 			height: 50px;
 			width: auto;
+			max-width: 50vw;
 	}
 </style>
