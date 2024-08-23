@@ -3,6 +3,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import Demo from '../components/demo.svelte';
 import logoDark from '@assets/1c-plus.svg';
 import logoLight from '@assets/full-color.svg';
+import Example from '../content/docs/Example.svelte';
 
 import '@fontsource/calistoga';
 import '@fontsource/pt-sans';
@@ -60,7 +61,8 @@ const frontmatter = {
 		<p>
 			Specify what your task should do if there's another instance already running.
 		</p>
-		<Demo client:load/>
+
+		<Example client:load />
 	</section>
 </StarlightPage>
 
