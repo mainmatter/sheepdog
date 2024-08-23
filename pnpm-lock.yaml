@@ -95,7 +95,7 @@ importers:
         version: 6.4.8
       '@testing-library/svelte':
         specifier: ^5.1.0
-        version: 5.2.1(svelte@4.2.18)(vite@5.4.2)(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3))
+        version: 5.2.1(svelte@4.2.18)(vite@5.4.2)(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0))
       '@types/eslint':
         specifier: 9.6.0
         version: 9.6.0
@@ -107,7 +107,7 @@ importers:
         version: 8.42.3
       '@vitest/coverage-v8':
         specifier: ^2.0.0
-        version: 2.0.5(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3))
+        version: 2.0.5(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0))
       '@vitest/ui':
         specifier: ^2.0.0
         version: 2.0.5(vitest@2.0.5)
@@ -127,8 +127,8 @@ importers:
         specifier: ^15.2.0
         version: 15.9.0
       happy-dom:
-        specifier: ^14.11.0
-        version: 14.12.3
+        specifier: ^15.0.0
+        version: 15.0.0
       prettier:
         specifier: ^3.2.5
         version: 3.3.3
@@ -161,7 +161,7 @@ importers:
         version: 5.4.2
       vitest:
         specifier: ^2.0.0
-        version: 2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3)
+        version: 2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0)
 
 packages:
 
@@ -2373,9 +2373,9 @@ packages:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
     engines: {node: '>=6.0'}
 
-  happy-dom@14.12.3:
-    resolution: {integrity: sha512-vsYlEs3E9gLwA1Hp+w3qzu+RUDFf4VTT8cyKqVICoZ2k7WM++Qyd2LwzyTi5bqMJFiIC/vNpTDYuxdreENRK/g==}
-    engines: {node: '>=16.0.0'}
+  happy-dom@15.0.0:
+    resolution: {integrity: sha512-DsvANUcxxY20iCo3Yllm7dqwzPVPduGfVFxa7mONwMBLczFeQgkN0LpDir1kIY322JMh+hrcPV3aGLyHCESDlA==}
+    engines: {node: '>=18.0.0'}
 
   has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
@@ -5555,13 +5555,13 @@ snapshots:
       lodash: 4.17.21
       redent: 3.0.0
 
-  '@testing-library/svelte@5.2.1(svelte@4.2.18)(vite@5.4.2)(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3))':
+  '@testing-library/svelte@5.2.1(svelte@4.2.18)(vite@5.4.2)(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0))':
     dependencies:
       '@testing-library/dom': 10.4.0
       svelte: 4.2.18
     optionalDependencies:
       vite: 5.4.2
-      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3)
+      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0)
 
   '@tootallnate/once@1.1.2': {}
 
@@ -5750,7 +5750,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3))':
+  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -5764,7 +5764,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3)
+      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -5803,7 +5803,7 @@ snapshots:
       pathe: 1.1.2
       sirv: 2.0.4
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3)
+      vitest: 2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0)
 
   '@vitest/utils@2.0.5':
     dependencies:
@@ -6965,7 +6965,7 @@ snapshots:
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
 
-  happy-dom@14.12.3:
+  happy-dom@15.0.0:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -9223,7 +9223,7 @@ snapshots:
     optionalDependencies:
       vite: 5.4.2
 
-  vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@14.12.3):
+  vitest@2.0.5(@vitest/ui@2.0.5)(happy-dom@15.0.0):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -9246,7 +9246,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@vitest/ui': 2.0.5(vitest@2.0.5)
-      happy-dom: 14.12.3
+      happy-dom: 15.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
