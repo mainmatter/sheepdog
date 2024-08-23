@@ -96,14 +96,14 @@ if (image) {
     }
 
     h1 {
-        font-size: var(--sl-text-6xl);
+        font-size: var(--sl-text-4xl);
         line-height: var(--sl-line-height-headings);
         font-weight: 600;
         color: var(--sl-color-white);
     }
 
     .tagline {
-        font-size: var(--sl-text-4xl);
+        font-size: var(--sl-text-2xl);
 				line-height: var(--sl-line-height-headings);
         color: var(--sl-color-gray-2);
     }
@@ -127,8 +127,12 @@ if (image) {
 
     @media (min-width: 50rem) {
         h1 {
-            font-size: 100px;
+            font-size: calc(var(--sl-text-6xl) * 1.2);
         }
+
+				.tagline {
+            font-size: var(--sl-text-4xl);
+				}
 
         .hero {
             grid-template-columns: 7fr 4fr;
