@@ -19,6 +19,7 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			components: {
+				SiteTitle: './src/components/SiteTitle.astro',
 				Hero: './src/components/Hero.astro',
 				Footer: './src/components/Footer.astro',
 			},
