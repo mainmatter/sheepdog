@@ -1,11 +1,20 @@
 <script>
 	import { task, didCancel } from '@sheepdog/svelte';
 	import Timeline from './Timeline.svelte';
+	import Tabs from '../../components/Tabs.svelte';
 
 	let elements = [];
 	let start;
 
 	let selectedTaskType = 'enqueue';
+
+	const modifierTypes = [
+		{ label: 'Enqueue', value: 'enqueue' },
+		{ label: 'Drop', value: 'drop' },
+		{ label: 'Restart', value: 'restart' },
+		{ label: 'Keep Latest', value: 'keepLatest' },
+		{ label: 'Default', value: 'default' },
+	];
 
 	async function* fn({ to_add, now }) {
 		to_add.start = Date.now() - now;
@@ -25,13 +34,13 @@
 	};
 </script>
 
-<div>
-	<button on:click={() => setTaskType('enqueue')}>Enqueue</button>
-	<button on:click={() => setTaskType('drop')}>Drop</button>
-	<button on:click={() => setTaskType('restart')}>Restart</button>
-	<button on:click={() => setTaskType('keepLatest')}>Keep Latest</button>
-	<button on:click={() => setTaskType('default')}>Default</button>
-</div>
+<Tabs>
+	{#each modifierTypes as type}
+		<button on:click={() => setTaskType(type.value)} class:active={selectedTaskType === type.value}
+			>{type.label}</button
+		>
+	{/each}
+</Tabs>
 <p>You can click an individual task instance to cancel it</p>
 
 <button
