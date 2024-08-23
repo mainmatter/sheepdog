@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import CallToAction from '@astrojs/starlight/components/CallToAction.astro';
-import { ImageMetadata } from 'astro';
+import { LinkButton } from '@astrojs/starlight/components';
+import type { ImageMetadata } from 'astro';
 
 const PAGE_TITLE_ID = '_top';
 
@@ -51,8 +51,11 @@ if (image) {
 		{
 			actions.length > 0 && (
 				<div class="sl-flex actions">
-					{actions.map(({ text, ...attrs }) => (
-						<CallToAction {...attrs} set:html={text} />
+					{actions.map(({ attrs, icon, link: href, text, variant }: any) => (
+						<LinkButton {href} {variant} icon={icon?.name} {...attrs}>
+							{text}
+							{icon?.html && <Fragment set:html={icon.html} />}
+						</LinkButton>
 					))}
 				</div>
 			)
@@ -111,7 +114,7 @@ if (image) {
         justify-content: center;
     }
 
-		.actions > :global(.action.primary) {
+		.actions > :global(.primary) {
         background: var(--sheepdog-primary);
 				text-transform: uppercase;
 				font-weight: 700;

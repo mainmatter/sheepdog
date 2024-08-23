@@ -1,5 +1,5 @@
 ---
-import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import StarlightPage, { type StarlightPageProps } from '@astrojs/starlight/components/StarlightPage.astro';
 import Demo from '../components/demo.svelte';
 import logoDark from '@assets/1c-plus.svg';
 import logoLight from '@assets/full-color.svg';
@@ -8,7 +8,7 @@ import Example from '../content/docs/Example.svelte';
 import '@fontsource/calistoga';
 import '@fontsource/pt-sans';
 
-const frontmatter = {
+const frontmatter: StarlightPageProps['frontmatter'] = {
 	title: 'Home',
 	template: 'splash',
 	editUrl: false,
@@ -29,6 +29,7 @@ const frontmatter = {
 			text: 'GitHub',
 			link: 'https://github.com/mainmatter/sheepdog',
 				icon: 'external',
+			variant: 'minimal',
 			attrs: {
 				rel: 'me',
 			}
