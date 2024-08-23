@@ -5,6 +5,10 @@ editUrl: false
 hero:
   title: '@sheepdog/svelte'
   tagline: Asynchronous work made easy!
+  image:
+    alt: A stylized sheepdog
+    dark: ../../assets/1c-plus.svg
+    light: ../../assets/full-color.svg
   actions:
     - text: Get started
       link: /getting-started/what-is-it
@@ -13,10 +17,12 @@ hero:
     - text: GitHub
       link: https://github.com/mainmatter/sheepdog
       icon: external
+      variant: minimal
       attrs:
         rel: me
 ---
 
-import Example from './Example.svelte';
+import Landing from '../../components/landing.astro';
 
-<Example client:load />
+<Landing />
+
