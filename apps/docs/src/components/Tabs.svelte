@@ -9,8 +9,8 @@
 	.wrapper {
 		display: inline-flex;
 		align-items: center;
-		border-radius: calc(1rem + 5px);
-		border: 4px var(--sheepdog-primary) solid;
+		border-radius: 2rem;
+		border: 2px var(--sheepdog-primary) solid;
 	}
 
 	.wrapper > :global(button) {
@@ -18,10 +18,10 @@
 		background-color: transparent;
 		border: none;
 		outline: none;
-		min-width: 5rem;
+		min-width: 6rem;
 		cursor: pointer;
 		padding: 0.25rem 1rem;
-		border-radius: 1rem;
+		border-radius: calc(1rem + 1px);
 		color: var(--sheepdog-primary);
 	}
 
@@ -31,7 +31,7 @@
 	}
 
 	:global([data-theme='dark']) .wrapper {
-		border: 4px var(--sl-color-white) solid;
+		border-color: var(--sl-color-white);
 	}
 
 	:global([data-theme='dark']) .wrapper > :global(.active) {
