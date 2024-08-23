@@ -1,0 +1,32 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Footer.astro';
+import MainmatterLogo from '../assets/Mainmatter.astro';
+
+const isHomepage = Astro.props.slug === '';
+---
+
+{
+	isHomepage ? (
+		<footer>
+			<MainmatterLogo />
+		</footer>
+	) : (
+		<Default {...Astro.props}>
+			<slot />
+		</Default>
+	)
+}
+
+<style>
+	footer {
+			text-align: center;
+			padding: 100px 50px 0 50px;
+			color: var(--sl-color-white);
+	}
+
+	footer > :global(svg) {
+			height: 50px;
+			width: auto;
+	}
+</style>

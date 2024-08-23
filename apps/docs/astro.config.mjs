@@ -20,6 +20,7 @@ export default defineConfig({
 		starlight({
 			components: {
 				Hero: './src/components/Hero.astro',
+				Footer: './src/components/Footer.astro',
 			},
 			title: '@sheepdog/svelte',
 			expressiveCode: {
