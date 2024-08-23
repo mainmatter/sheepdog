@@ -85,5 +85,8 @@
 	},
 	"peerDependencies": {
 		"svelte": "^4.0.0"
+	},
+	"volta": {
+		"extends": "../../package.json"
 	}
 }
