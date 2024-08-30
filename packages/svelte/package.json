@@ -60,7 +60,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/svelte": "^5.1.0",
-		"@types/eslint": "9.6.0",
+		"@types/eslint": "9.6.1",
 		"@types/eslint-config-prettier": "^6.11.3",
 		"@types/eslint__js": "^8.42.3",
 		"@vitest/coverage-v8": "^2.0.0",
