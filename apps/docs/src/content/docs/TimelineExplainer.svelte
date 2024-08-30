@@ -65,7 +65,7 @@
 			on:click={() => {
 				if (!$example_task.isRunning) return;
 				example_task.cancelAll();
-			}}>cancelAll</button
+			}}>cancel all</button
 		>
 	{/if}
 	{#if show_max}
