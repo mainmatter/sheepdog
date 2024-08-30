@@ -60,7 +60,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/svelte": "^5.1.0",
-		"@types/eslint": "9.6.0",
+		"@types/eslint": "9.6.1",
 		"@types/eslint-config-prettier": "^6.11.3",
 		"@types/eslint__js": "^8.42.3",
 		"@vitest/coverage-v8": "^2.0.0",
@@ -70,7 +70,7 @@
 		"eslint-plugin-playwright": "^1.6.1",
 		"eslint-plugin-svelte": "2.43.0",
 		"globals": "^15.2.0",
-		"happy-dom": "^14.11.0",
+		"happy-dom": "^15.0.0",
 		"prettier": "^3.2.5",
 		"prettier-plugin-svelte": "^3.2.3",
 		"publint": "^0.2.7",
@@ -87,7 +87,6 @@
 		"svelte": "^4.0.0"
 	},
 	"volta": {
-		"node": "20.16.0",
-		"pnpm": "9.7.0"
+		"extends": "../../package.json"
 	}
 }
