@@ -7,8 +7,9 @@ import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 
 This is the way to create a keepLatest task.
 
-This will run the initial tasks and then ensure that the very last task instance is also run. You
-can also provide a `max` that will dictate the number of task instances that will run initially.
+This will run the initial tasks and then, if over the `max` concurrency will keep the very last
+instance in a que. You can also provide a `max` that will dictate the number of task instances that
+will run initially.
 
 <Aside type="note">`keepLatest` will only preserve the final _one_ task instance.</Aside>
 
