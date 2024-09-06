@@ -155,8 +155,47 @@ Finally, we arrive at `keepLatest`. It's a mix of `drop` with a sprinkle of `enq
 concurrency is reached it will drop every new `perform` but it will also keep the very last in the
 queue to execute it when the max concurrency drop below the `max`.
 
-```ts
-// TODO: add keepLatest example 😅
+You might need this when you are performing after some very frequent event but you don't really care
+about intermediate state because the last one is the important one. Let's say for example that you
+are building a collaborative document app. When someone else save the document you want to receive a
+notification that allow you to reload the document data with the newest additions. If there are two
+or more saves while you are fetching the data you:
+
+1. don't want to restart the current fetch because you want to show it to the user immediately
+2. don't want to drop the new task because you actually want the latest data
+3. don't case about the in-between data because the last one is the actual content of the file
+
+That's where `keepLatest` will come in handy!
+
+```svelte
+<script lang="ts">
+	import Document from '$lib/Document.svelte';
+	import { ws } from '$lib/websocket';
+	import { task } from '@sheepdogs/svelte';
+	import { onMount } from 'svelte';
+
+	let document;
+
+	const loadDocument = task.keepLatest(async () => {
+		const res = await fetch(`/api/get-document`);
+		document = await res.json();
+	});
+
+	onMount(() => {
+		loadDocument.perform();
+		return ws.on('new-save', () => {
+			loadDocument.perform();
+		});
+	});
+</script>
+
+<Document {document} />
 ```
 
 <Timeline selected_task_type="keepLatest" client:load />
+
+## Conclusion
+
+Task modifiers are very powerful and one of the core features of `@sheepdog/svelte`, this explainer
+aim to give you all the tools to use them at their best...and some playful time with the timeline
+example!
