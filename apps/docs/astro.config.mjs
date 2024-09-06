@@ -18,6 +18,11 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
+			components: {
+				SiteTitle: './src/components/SiteTitle.astro',
+				Hero: './src/components/Hero.astro',
+				Footer: './src/components/Footer.astro',
+			},
 			title: '@sheepdog/svelte',
 			expressiveCode: {
 				themes: ['github-dark-default', 'github-light-default'],
@@ -85,9 +90,28 @@ export default defineConfig({
 				},
 				{
 					label: 'Reference',
-					autogenerate: {
-						directory: 'reference',
-					},
+					items: [
+						{
+							label: 'Default task',
+							link: '/reference/default',
+						},
+						{
+							label: 'Drop task',
+							link: '/reference/drop',
+						},
+						{
+							label: 'Enqueue task',
+							link: '/reference/enqueue',
+						},
+						{
+							label: 'KeepLatest task',
+							link: '/reference/keep-latest',
+						},
+						{
+							label: 'Restart task',
+							link: '/reference/restart',
+						},
+					],
 				},
 			],
 		}),

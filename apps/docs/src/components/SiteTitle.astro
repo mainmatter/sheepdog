@@ -1,0 +1,28 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/SiteTitle.astro';
+import BuiltBy from '../assets/BuiltBy.astro';
+
+const isHomepage = Astro.props.slug === '';
+---
+
+{
+	isHomepage ? (
+		<div class="built-by">
+			<BuiltBy />
+			<span class="sr-only">built by Mainmatter</span>
+		</div>
+	) : (
+		<Default {...Astro.props}>
+			<slot />
+		</Default>
+	)
+}
+
+<style>
+	.built-by > :global(svg) {
+			height: 2.5rem;
+			width: auto;
+			display: block;
+	}
+</style>
