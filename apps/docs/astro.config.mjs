@@ -90,9 +90,28 @@ export default defineConfig({
 				},
 				{
 					label: 'Reference',
-					autogenerate: {
-						directory: 'reference',
-					},
+					items: [
+						{
+							label: 'Default task',
+							link: '/reference/default',
+						},
+						{
+							label: 'Drop task',
+							link: '/reference/drop',
+						},
+						{
+							label: 'Enqueue task',
+							link: '/reference/enqueue',
+						},
+						{
+							label: 'KeepLatest task',
+							link: '/reference/keep-latest',
+						},
+						{
+							label: 'Restart task',
+							link: '/reference/restart',
+						},
+					],
 				},
 			],
 		}),
