@@ -33,10 +33,15 @@
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"!dist/**/*.spec.*",
+		"!dist/bundle/**"
 	],
 	"scripts": {
-		"build": "vite build && pnpm package",
+		"build": "vite build && pnpm package && pnpm bundle",
+		"bundle": "pnpm bundle:index && pnpm bundle:task && pnpm bundle:vite",
+		"bundle:index": "esbuild './dist/index.js' --bundle --outfile='./dist/bundle/index.js' --minify",
+		"bundle:task": "esbuild './dist/task.js' --bundle --outfile='./dist/bundle/task.js' --minify",
+		"bundle:vite": "esbuild './dist/vite.js' --bundle --outfile='./dist/bundle/vite.js' --minify",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
