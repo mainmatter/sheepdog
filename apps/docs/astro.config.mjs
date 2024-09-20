@@ -112,6 +112,10 @@ export default defineConfig({
 							link: '/reference/restart',
 						},
 						{
+							label: 'Sheepdog Utils',
+							link: '/reference/sheepdog-utils',
+						},
+						{
 							label: 'Task Instance',
 							link: '/reference/task-instance',
 						},
