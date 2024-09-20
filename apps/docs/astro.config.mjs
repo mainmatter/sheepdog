@@ -83,6 +83,10 @@ export default defineConfig({
 							link: '/explainers/task-modifiers/',
 						},
 						{
+							label: 'Linking tasks',
+							link: '/explainers/linking-tasks/',
+						},
+						{
 							label: 'Async Transform',
 							link: '/explainers/async-transform/',
 						},
