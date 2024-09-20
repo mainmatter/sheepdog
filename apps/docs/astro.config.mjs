@@ -111,6 +111,10 @@ export default defineConfig({
 							label: 'Restart task',
 							link: '/reference/restart',
 						},
+						{
+							label: 'Task Instance',
+							link: '/reference/task-instance',
+						},
 					],
 				},
 			],
