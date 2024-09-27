@@ -278,7 +278,7 @@ To set this up, you simply need to important the vite plugin and add it to your 
 
 import { sveltekit } from '@sveltejs/kit/vite';
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
-+ import { asyncTransform } from '@sheepdog/svelte/lib/vite';
++ import { asyncTransform } from '@sheepdog/svelte/vite';
 
 export default defineConfig(({ mode }) => ({
 -	plugins: [sveltekit()],
