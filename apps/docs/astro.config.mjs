@@ -117,8 +117,6 @@ export default defineConfig({
 		}),
 		svelte(),
 	],
-	output: 'server',
-	adapter: netlify({
-		edgeMiddleware: true,
-	}),
+	output: 'static',
+	adapter: netlify({}),
 });
