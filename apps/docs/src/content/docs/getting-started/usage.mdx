@@ -78,46 +78,7 @@ type Task = {
 
 ## `TaskInstance` structure
 
-- `error`: if an error is thrown inside the task instance, it will be found here
-- `isCanceled`: whether the task instance was canceled
-- `isError`: whether the task instance throw an error before completing
-- `isRunning`: whether the task instance is currently running
-- `isSuccessful`: whether the task instance completed successfully
-- `value`: if the task instance completed successfully, this will be the return value
-
-```ts
-type TaskInstance<TReturn> = {
-	/**
-	 * If an error is thrown inside the task instance, it will be found here.
-	 */
-	error?: Error;
-
-	/**
-	 * Indicates whether the task instance was canceled.
-	 */
-	isCanceled: boolean;
-
-	/**
-	 * Indicates whether the task instance threw an error before completing.
-	 */
-	isError: boolean;
-
-	/**
-	 * Indicates whether the task instance is currently running.
-	 */
-	isRunning: boolean;
-
-	/**
-	 * Indicates whether the task instance completed successfully.
-	 */
-	isSuccessful: boolean;
-
-	/**
-	 * If the task instance completed successfully, this will be the return value.
-	 */
-	value?: TReturn;
-};
-```
+To make it easier to reason about, every type of task modifier utilizes the same underlying structure. You can find more detail about the structure of the `TaskInstance` in the [reference docs](/reference/task-instance).
 
 ## Task modifiers
 
