@@ -83,6 +83,10 @@ export default defineConfig({
 							link: '/explainers/task-modifiers/',
 						},
 						{
+							label: 'Linking tasks',
+							link: '/explainers/linking-tasks/',
+						},
+						{
 							label: 'Async Transform',
 							link: '/explainers/async-transform/',
 						},
@@ -110,6 +114,10 @@ export default defineConfig({
 						{
 							label: 'Restart task',
 							link: '/reference/restart',
+						},
+						{
+							label: 'Sheepdog Utils',
+							link: '/reference/sheepdog-utils',
 						},
 						{
 							label: 'Task Instance',

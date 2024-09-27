@@ -1,0 +1,30 @@
+---
+title: Sheepdog Utils
+description: the utilities object that is available in every task
+---
+
+When creating a task (of any type) there are 2 possible arguments that can be accessed, the first is any argument that is passed in when calling `.perform()`, and the second is an object that can be used to optionally enhance your task - `SheepdogUtils`.
+
+`SheepdogUtils` offers two properties to extend your task with:
+- `signal` - the `AbortSignal` is available so that you can do any further manipulation you need based on the state of the `AbortSignal`. We won't go into too much detail about this as it is the standard `AbortSignal` interface that is simply passed back from `Sheepdog`.
+- `link` - this is a `Sheepdog` specific function that allows you to bind tasks together. For more information, check out the [Linking Tasks explainer](/explainer/linking-tasks).
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const myTask = task(async (myArgument, {signal, link}) => {
+		// your code
+	});
+</script>
+```
+
+```ts
+type SheepdogUtils = {
+	signal: AbortSignal;
+	link: <TArgs, TReturn>(task: Task<TArgs, TReturn>) => Task<TArgs, TReturn>;
+};
+```
+
+
+

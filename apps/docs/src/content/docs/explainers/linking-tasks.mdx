@@ -1,0 +1,78 @@
+---
+title: Linking Tasks
+description: How to bind tasks together for simpler cancellation
+---
+
+### Motivation
+
+Breaking up asynchronous calls into bitesize chunks makes a lot of sense: it's easier to reason about, it allows us to show different states depending on what stage of the call we are in, and it helps us organize our code better.
+
+But the biggest issue this exposes that it is very difficult to cancel all children if the parent is cancelled.
+
+Imagine this scenario: we're creating a blog feed widget that will get all of the user's posts and comments and show them in a small box somewhere on the page. We might have something like this to load all of those posts and comments:
+
+```js 
+async function fetch(){
+  // make first call
+  const user = await fetchUser()
+  // make second call based on first response
+  const posts = await fetchUserPosts(user)
+  // make third call based on first and second responses
+  return await fetchPostComments({user, posts})
+}
+
+async function fetchUser(){
+  // returns user stuff
+}
+
+async function fetchUserPosts(user){
+  // returns user's posts
+}
+
+async function fetchPostComments({user, posts}){
+  // returns posts' comments
+}
+```
+
+Now this is great, it's been neatly enclosed in a component so that the rest of the page doesn't need to be blocked while waiting for this widget to load. We could also include some logic to enable us to show which call is currently being run.
+
+But what would happen if the user navigated away or destroyed between the initial call and the final result? Our API would still receive those requests and go and do all of the work to get the data and return it but we are no longer using the returned data or even have a reference to it in our app. This kind of scenario can very easily cause data leaks that can gradually bring our app down.
+
+_If only there was a way to link these calls together._
+
+### Solution
+
+Well, we heard your cries and created the `link` function.
+
+`Link` is one of two [SheepdogUtils](/reference/sheepdog-utils) and it enables us to link a child task to its parent so that the lifecycle of the child task is directly bound to the lifecycle of its parent. That means that if the parent is canceled, the child is automatically aborted.
+
+Turning our above scenario into tasks would look like this:
+
+```js 
+import { task } from "@sheepdog/svelte"
+
+fetch = task(async (_, { link }) => {
+  // make first call
+  const user = await link(fetchUser).perform();
+  // make second call based on first response
+  const posts = await link(fetchUserPosts).perform(user)
+  // make third call based on first and second responses
+  return await link(fetchPostComments).perform({user, posts})
+})
+
+fetchUser = task(async () => {
+  // returns user stuff
+})
+
+fetchUserPosts = task(async (user) => {
+  // returns user's posts
+})
+
+fetchPostComments = task(async ({user, posts}) => {
+  // returns posts' comments
+})
+```
+
+And now all of our child tasks are bound to the parent context, meaning if the context that the parent task lives on is destroyed, all of the other tasks will be cancelled.
+
+Another added benefit of this is that we already have the different loading states out of the box, we could simply see which task is running and be able to show each loading state individually.
