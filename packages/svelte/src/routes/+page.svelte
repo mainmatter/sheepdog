@@ -3,6 +3,11 @@
 	import { timeout } from '$lib/utils.js';
 	import Child from './Child.svelte';
 
+	// NOTE: the tasks don't work exactly as we would expect them to here
+	// because asyncTransform looks for the `@sheepdog/svelte` import which
+	// we don't have here for obvious reasons, to play around with the AsyncTransform
+	// working correctly, use this SvelteLab - https://www.sveltelab.dev/nbyg7vep9ock4y0
+
 	const parent = task(async function* (param: number) {
 		await timeout(5000);
 		yield;
