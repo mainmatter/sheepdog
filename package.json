@@ -20,9 +20,9 @@
 	"license": "ISC",
 	"type": "module",
 	"devDependencies": {
-		"@gravityci/cli": "^0.0.2",
+		"@gravityci/cli": "^0.0.4",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "2.43.0",
+		"eslint-plugin-svelte": "2.44.1",
 		"globals": "^15.2.0",
 		"prettier-plugin-svelte": "^3.2.3",
 		"release-plan": "^0.9.0",
@@ -31,6 +31,6 @@
 	},
 	"volta": {
 		"node": "20.17.0",
-		"pnpm": "9.9.0"
+		"pnpm": "9.11.0"
 	}
 }
