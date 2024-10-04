@@ -4,6 +4,71 @@ import '@fontsource/pt-sans';
 
 import Example from '../content/docs/Example.svelte';
 import Demo from '../components/demo.svelte';
+
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+const sheepdogDemoCode = `
+<script>
+	import { task, timeout } from '@sheepdog/svelte';
+	
+	let searchTask = task.restart(async function(value) {
+		await timeout(500);
+		let response = await fetch('/my-favourite-sheep?search=' + value);
+		return await response.json();
+	});
+</script>
+
+<label for="search">Search</label>
+<input
+	name="search"
+	type="text"
+	on:input={
+		(event) => searchTask.perform(event.target.value)
+	}
+/>
+
+{#if $searchTask.isRunning}
+	Loading...
+{:else if $searchTask.lastSuccessful}
+	Value: {$searchTask.lastSuccessful.value}
+{/if}
+`;
+
+
+const nativeDemoCode = `
+<script>
+	let _currentValue;
+	let timeout;
+	let search = (value) => {
+		if (timeout) {
+			clearTimeout(timeout);
+		}
+	
+		timeout = setTimeout(() => {
+			currentValue = value;
+			timeout = undefined;
+		}, 500);
+	};
+
+	$: isRunning = Boolean(timeout);
+	$: currentValue = _currentValue;
+</script>
+
+<label for="search">Search</label>
+<input
+ 	name="search"
+  type="text"
+  on:input={
+		(event) => search(event.target.value)
+	}
+/>
+
+{#if timeout}
+	Loading...
+{:else if currentValue}
+	Value: {currentValue}
+{/if}
+`;
 ---
 
 <section class="description">
@@ -15,12 +80,23 @@ import Demo from '../components/demo.svelte';
 
 <section class="demo">
 	<div>
-		<h3>Description</h3>
-		<Demo client:load />
+		<h3>Code</h3>
+		<div class="tabbed-code-wrapper">
+			<Tabs>
+				<TabItem label="Sheepdog">
+					<Code lang="svelte" code={sheepdogDemoCode} />
+				</TabItem>
+				<TabItem label="Native">
+					<Code lang="javascript" code={nativeDemoCode} />
+				</TabItem>
+			</Tabs>
+		</div>
 	</div>
 	<div>
 		<h3>Demo</h3>
-		<Demo client:load />
+		<div>
+			<Demo client:load />
+		</div>
 	</div>
 </section>
 
@@ -61,16 +137,68 @@ import Demo from '../components/demo.svelte';
     }
 
     .demo {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
         width: 100%;
-        gap: 2rem;
         margin-bottom: 100px;
     }
 
-    .demo > div {
-        margin-top: 0!important;
+		@media(min-width: 768px) {
+			.demo {
+				display: grid;
+				grid-template-columns: 65% 35%;
+				gap: 2rem;
+			}
+
+			.demo > div {
+				margin-top: 0!important;
+			}
+		}
+
+    .tabbed-code-wrapper {
+			border: 2px solid var(--sl-color-white);
+			border-radius: 1.25rem;
     }
+
+    .tabbed-code-wrapper :global(.tablist-wrapper) {
+				display: flex;
+				justify-content: end;
+        margin-top: -2px;
+        margin-right: -2px;
+		}
+
+    .tabbed-code-wrapper :global(section[role="tabpanel"]) {
+        margin-top: 0;
+    }
+
+    .tabbed-code-wrapper :global(.tablist-wrapper ul) {
+				border: 2px solid var(--sl-color-white);
+				border-radius: 1.5rem;
+		}
+
+    .tabbed-code-wrapper :global(.tablist-wrapper li) {
+        margin: 0;
+    }
+
+    .tabbed-code-wrapper :global(.tablist-wrapper a[role="tab"]) {
+        border: none;
+				padding: 0.25rem 1.5rem;
+        border-radius: 1.5rem;
+				color: var(--sl-color-text);
+				font-weight: bold;
+    }
+
+    .tabbed-code-wrapper :global(.tablist-wrapper a[role="tab"][aria-selected=true]) {
+				background: var(--sl-color-white);
+				color: var(--sl-color-text-invert);
+		}
+
+		.tabbed-code-wrapper :global(.expressive-code .frame) {
+				box-shadow: none;
+		}
+
+    .tabbed-code-wrapper :global(.expressive-code .frame pre) {
+        border: none;
+				background: none;
+		}
 
     .task-modifiers {
         max-width: 600px;
