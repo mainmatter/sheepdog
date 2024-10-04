@@ -10,7 +10,9 @@
 		display: inline-flex;
 		align-items: center;
 		border-radius: 2rem;
-		border: 2px var(--sheepdog-primary) solid;
+		border: 2px var(--sl-color-white) solid;
+		max-width: calc(100vw - 2rem);
+		overflow-x: auto;
 	}
 
 	.wrapper > :global(button) {
@@ -21,12 +23,14 @@
 		min-width: 6rem;
 		cursor: pointer;
 		padding: 0.25rem 1rem;
-		border-radius: calc(1rem + 1px);
-		color: var(--sheepdog-primary);
+		border-radius: 3rem;
+		color: var(--sl-color-white);
+		font-weight: bold;
+		white-space: nowrap;
 	}
 
 	.wrapper > :global(.active) {
-		background-color: var(--sheepdog-primary);
+		background-color: var(--sl-color-white);
 		color: var(--sl-color-black);
 	}
 
