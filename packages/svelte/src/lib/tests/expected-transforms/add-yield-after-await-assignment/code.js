@@ -8,6 +8,11 @@ function fn(val) {
 }
 
 /**
+ * @type {Record<string,()=>void>}
+ */
+const fns = {};
+
+/**
  * 
  * @param {TemplateStringsArray} quasi 
  * @param {string} strings 
@@ -21,6 +26,8 @@ task(async () => {
 	const array = [await Promise.resolve()];
 	const sum = await Promise.resolve(1) + 2;
 	const sum2 = 2 + await Promise.resolve(1);
+	fns[await Promise.resolve(0)]();
+	const [array_destructure = await Promise.resolve()] = [undefined]
 	const function_call = fn(await Promise.resolve(2));
 	const conditional1 = await Promise.resolve(true) ? 1 : 2;
 	const conditional2 = true ? await Promise.resolve(1) : 2;

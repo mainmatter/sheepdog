@@ -73,7 +73,7 @@ task(async function* () {
 	}
 
 	{
-		console.log(await Promise.resolve(false));
+		console.log(yield Promise.resolve(false));
 	}
 
 	if (yield Promise.resolve(true)) console.log(yield Promise.resolve(true));

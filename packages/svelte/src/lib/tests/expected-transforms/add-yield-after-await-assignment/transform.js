@@ -4,6 +4,8 @@ function fn(val) {
 	return val;
 }
 
+const fns = {};
+
 function str(quasi, strings) {}
 
 task(async function* () {
@@ -15,6 +17,13 @@ task(async function* () {
 	const array = [yield Promise.resolve()];
 	const sum = (yield Promise.resolve(1)) + 2;
 	const sum2 = 2 + (yield Promise.resolve(1));
+
+	fns[yield Promise.resolve(0)]();
+
+	const [
+		array_destructure = yield Promise.resolve()
+	] = [undefined];
+
 	const function_call = fn(yield Promise.resolve(2));
 	const conditional1 = (yield Promise.resolve(true)) ? 1 : 2;
 	const conditional2 = true ? yield Promise.resolve(1) : 2;
