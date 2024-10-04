@@ -3,4 +3,194 @@ title: Task modifiers
 description: How task modifiers work
 ---
 
-This is a guide about how to set up the Async Transform!
+import Timeline from '../TimelineExplainer.svelte';
+
+In [Getting started](/getting-started/usage#task-modifiers), you've seen that you can specify a
+modifier on the task, either with the dot notation or the options notation. The reason you have this
+ability is so that you can specify what should happen when multiple, concurrent task instances are
+running.
+
+In this explainer we will guide you through how each of our modifiers work, with examples of how
+they behave and hopefully make it clearer to understand when to use one or the other.
+
+## Default
+
+By default, every task simply runs as soon as you perform it. This is basically like a function call
+with the added benefit of having derived state and cancellability. You might've seen
+this simple demonstration on our homepage; but if you didn't, allow me to introduce you to the friend that will
+guide us through discovering the task modifiers: the Timeline demo!
+
+Take your time to familiarize yourself with it: you can perform a new task by clicking on the
+`perform` button and reset the demo with the `clear timeline` button. The moment you perform a task,
+the timeline will start and it will show you the state of the task. Each task will run for two
+seconds and you can either click on it individually to cancel it or click on the `cancelAll` button
+to nuke them all!
+
+<Timeline show_max={false} client:load />
+
+## Enqueue
+
+The `enqueue` task, as the name suggests, creates a queue of all the task instances after the max
+concurrency has been reached. This means that up until the moment max concurrency is exceeded every
+task instance will be executed immediately. But if you try to perform a new task instance and the
+number of running instances is above the `max` level, that new task instance will be stored in a queue
+and executed as soon as the number of concurrent instances drops below the `max` again.
+
+This is the right kind of task to use when you want to be sure that every task instance is executed
+at some point (unless the user leaves the page) but you also don't want to run them concurrently. A
+good use case for this could be uploading a list of files to the server. You want to upload all of
+your files but you don't want to send them all together because that would be too resource intensive
+and also makes it harder to handle in case of an error. You can use `enqueue` to allow only `max`
+file uploads at a time.
+
+```svelte
+<script lang="ts">
+	import { task, timeout } from '@sheepdog/svelte';
+	import upload from './file-upload';
+
+	let files = [];
+
+	const uploadFile = task.enqueue(
+		async (file: File) => {
+			await upload(file);
+		},
+		{ max: 3 },
+	);
+</script>
+
+<input
+	type="file"
+	multiple
+	on:change={(e) => {
+		files = [...e.target.files];
+	}}
+/>
+<button
+	on:click={() => {
+		for (let file of files) {
+			uploadFile.perform(file);
+		}
+	}}>start upload</button
+>
+```
+
+You can play around with it in our Timeline and you may notice a new parameter available for you:
+initially set at 1, you can update the `max` parameter to allow for more task instances to run at
+the same time.
+
+<Timeline selected_task_type="enqueue" client:load />
+
+## Drop
+
+The `drop` task will simply ignore (and thus drop) every `perform` that is executed when the `max`
+amount of concurrent task instances is exceeded. With a max concurrency of 1, our example will drop any other tasks that are performed while our initial task is running.
+
+You can think of this kind of task as a sort of throttle; and since the function will be just tossed
+away you should use this modifier only when you don't care about the "execution loss". A good
+example could be triggering a very expensive task that you want to make sure is only triggered once.
+
+```svelte
+<script lang="ts">
+	import { task, timeout } from '@sheepdogs/svelte';
+
+	const expensiveTask = task.drop(async () => {
+		await timeout(200);
+		// do very costly calculations that should only be triggered once at a time.
+	});
+</script>
+
+<button
+	on:click={() => {
+		expensiveTask.perform();
+	}}
+>
+	Do something expensive
+</button>
+```
+
+I know you are waiting for it so here's your `drop` Timeline playground:
+
+<Timeline selected_task_type="drop" client:load />
+
+## Restart
+
+The `restart` task will cancel the oldest task instance once the `max` is exceeded. With `max` of 1,
+this basically means that every time you perform again you will cancel the last task instance.
+
+You can think of this kind of task as a the good ol' debounce: if you await for, let's say, 200ms
+before doing any action in a `restart` task you can call `perform` repeatedly and the actual task
+will be executed only once the `perform` as not been called for 200ms. This is very useful to
+perform fetch requests while the user is typing without inundating your server with requests. Once
+the user stops typing the last request will go through without being canceled.
+
+```svelte
+<script lang="ts">
+	import { task, timeout } from '@sheepdogs/svelte';
+
+	const search = task.restart(async (query: string) => {
+		await timeout(200);
+		const res = await fetch(`/api/search?q=${query}`);
+	});
+</script>
+
+<input
+	on:input={(e) => {
+		search.perform(e.target.value);
+	}}
+/>
+```
+
+And as per usual, here's your `restart` Timeline playground:
+
+<Timeline selected_task_type="restart" client:load />
+
+## Keep Latest
+
+Finally, we arrive at `keepLatest`. It's a mix of `drop` with a sprinkle of `enqueue`: once the max
+concurrency is exceeded it will drop every new `perform` but it will also keep the very last in the
+queue to execute it when the max concurrency drop below the `max`.
+
+You might need this when you are performing after some very frequent event but you don't really care
+about intermediate state because the last one is the important one. Let's say for example that you
+are building a collaborative document app. When someone else save the document you want to receive a
+notification that allow you to reload the document data with the newest additions. If there are two
+or more saves while you are fetching the data you:
+
+1. don't want to restart the current fetch because you want to show it to the user immediately
+2. don't want to drop the new task because you actually want the latest data
+3. don't case about the in-between data because the last one is the actual content of the file
+
+That's where `keepLatest` will come in handy!
+
+```svelte
+<script lang="ts">
+	import Document from '$lib/Document.svelte';
+	import { ws } from '$lib/websocket';
+	import { task } from '@sheepdogs/svelte';
+	import { onMount } from 'svelte';
+
+	let document;
+
+	const loadDocument = task.keepLatest(async () => {
+		const res = await fetch(`/api/get-document`);
+		document = await res.json();
+	});
+
+	onMount(() => {
+		loadDocument.perform();
+		return ws.on('new-save', () => {
+			loadDocument.perform();
+		});
+	});
+</script>
+
+<Document {document} />
+```
+
+<Timeline selected_task_type="keepLatest" client:load />
+
+## Conclusion
+
+Task modifiers are very powerful and one of the core features of `@sheepdog/svelte`, this explainer
+aims to give you all the tools to use them at their best...and some playful time with the timeline
+example!
