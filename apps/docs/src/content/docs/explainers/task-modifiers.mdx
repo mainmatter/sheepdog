@@ -87,29 +87,25 @@ amount of concurrent task instances is exceeded. With a max concurrency of 1, ou
 
 You can think of this kind of task as a sort of throttle; and since the function will be just tossed
 away you should use this modifier only when you don't care about the "execution loss". A good
-example could be sending your mouse position to a websocket to be broadcasted to all the other
-users. You don't want to update it too often to avoid clogging your server, you don't care about the
-middle positions being lost, and the final mouse position is the most important.
+example could be triggering a very expensive task that you want to make sure is only triggered once.
 
 ```svelte
 <script lang="ts">
 	import { task, timeout } from '@sheepdogs/svelte';
-	import ws from './websocket';
 
-	const updatePosition = task.drop(async (coords: { x: number; y: number }) => {
+	const expensiveTask = task.drop(async () => {
 		await timeout(200);
-		ws.send('coords', coords);
+		// do very costly calculations that should only be triggered once at a time.
 	});
 </script>
 
-<svelte:window
-	on:mousemove={(e) => {
-		updatePosition.perform({
-			x: e.clientX,
-			y: e.clientY,
-		});
+<button
+	on:click={() => {
+		expensiveTask.perform();
 	}}
-/>
+>
+	Do something expensive
+</button>
 ```
 
 I know you are waiting for it so here's your `drop` Timeline playground:
