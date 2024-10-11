@@ -50,3 +50,17 @@
 .expressive-code {
 	tab-size: 4;
 }
+
+.button {
+	margin: 0;
+	margin-top: 0;
+	background-color: var(--sl-color-white);
+	color: var(--sl-color-black);
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 0.25rem 1rem;
+	border-radius: 3rem;
+	font-weight: bold;
+	white-space: nowrap;
+}

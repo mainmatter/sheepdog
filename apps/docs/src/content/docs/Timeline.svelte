@@ -1,17 +1,19 @@
 <script>
 	import { onDestroy } from 'svelte';
 	import TimelineItem from './TimelineItem.svelte';
+
 	export let elements = [];
 	export let lines = 6;
 	export let gap = 15;
 	export let total_time = 10000;
+	export let stopped;
 
 	let wrapper_width;
 	let wrapper_height;
 
 	function resize(node) {
 		const resize_observer = new ResizeObserver(([div]) => {
-			// 2px width for the line
+			// make sure the line stays visible
 			wrapper_width = div.contentRect.width - 2;
 			wrapper_height = div.contentRect.height;
 		});
@@ -33,6 +35,7 @@
 
 	function loop(time) {
 		if (finished) return;
+		if (stopped) return;
 		if (!started) {
 			started = true;
 		}
@@ -67,15 +70,22 @@
 			top={(i % lines) * ((wrapper_height - 2 * gap) / lines) + gap}
 			height={(wrapper_height - 2 * gap) / lines - gap / 2}
 			width={((element.end ?? elapsed - element.added) / total) * wrapper_width}
-			left={(element.added / total) * wrapper_width + 4}
+			left={(element.added / total) * wrapper_width}
 			idle={(element.start / total) * wrapper_width}
 		/>
 	{/each}
 </div>
 
+{#if stopped}
+	<p>
+		For the sake of the example, the timeline gets stopped after 3 seconds without a running task.
+		To restart the example, click "Clear timeline".
+	</p>
+{/if}
+
 <style>
 	.wrapper {
-		height: 400px;
+		height: 300px;
 		position: relative;
 		background: transparent;
 		overflow: hidden;
@@ -84,9 +94,7 @@
 		position: absolute;
 		top: 0;
 		bottom: 0;
-		left: 4px;
 		transform: translateX(calc(var(--left) * 1px));
-		width: 100px;
 		border-left: 2px solid var(--sl-color-text);
 		background: transparent;
 		z-index: 1;
