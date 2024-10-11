@@ -10,13 +10,18 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"svelte": "./dist/index.js"
+			"svelte": "./dist/index.js",
+			"import": "./dist/index.js"
 		},
 		"./task": {
 			"types": "./dist/task.d.ts",
-			"import": "./dist/task.js",
-			"svelte": "./dist/task.js"
+			"svelte": "./dist/task.js",
+			"import": "./dist/task.js"
+		},
+		"./utils": {
+			"types": "./dist/utils.d.ts",
+			"svelte": "./dist/utils.js",
+			"import": "./dist/utils.js"
 		},
 		"./vite": {
 			"types": "./dist/vite.d.ts",
