@@ -32,5 +32,10 @@
 	"volta": {
 		"node": "20.18.0",
 		"pnpm": "9.12.1"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"fixturify-project": "patches/fixturify-project.patch"
+		}
 	}
 }
