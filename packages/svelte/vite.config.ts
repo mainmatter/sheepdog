@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => ({
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 		setupFiles: './src/vitest-setup.ts',
 		retry: 1,
+		exclude: ['src/lib/tests/threeshake/*'],
 		coverage: {
 			exclude: [
 				'src/routes/**/*',

@@ -1,0 +1,15 @@
+diff --git a/dist/index.js b/dist/index.js
+index 8383eb02ae716166f01a1f40f84866e0d4e47365..160f0ed5f9615212232921e77479ccb51cce5df9 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -11,7 +11,9 @@ import deepmerge from "deepmerge";
+ import { findWorkspaceDir } from "@pnpm/find-workspace-dir";
+ import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
+ import { packlist } from "@pnpm/fs.packlist";
+-import { PackageCache } from "@embroider/shared-internals";
++import EmbroiderSharedInternals from "@embroider/shared-internals";
++
++const { PackageCache } = EmbroiderSharedInternals;
+ tmp.setGracefulCleanup();
+ var defaultFiles = {
+   "index.js": `

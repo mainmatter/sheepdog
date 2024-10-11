@@ -3,7 +3,7 @@
 	"version": "0.9.0",
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:mainmatter/sheepdog.git"
+		"url": "git+https://github.com/mainmatter/sheepdog.git"
 	},
 	"main": "./dist/index.js",
 	"type": "module",
@@ -43,9 +43,10 @@
 		"preview": "vite preview",
 		"generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
 		"generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f",
-		"test": "npm run test:unit",
+		"test": "pnpm run test:unit && pnpm run test:treeshake",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
+		"test:treeshake": "pnpm package && vitest --config treeshake.vite.config.ts",
 		"test:unit:ui": "vitest --ui"
 	},
 	"dependencies": {
@@ -70,6 +71,8 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-playwright": "^1.6.1",
 		"eslint-plugin-svelte": "2.44.1",
+		"execa": "^9.4.0",
+		"fixturify-project": "^7.1.2",
 		"globals": "^15.2.0",
 		"happy-dom": "^15.0.0",
 		"prettier": "^3.2.5",
@@ -82,10 +85,11 @@
 		"typescript": "^5.4.5",
 		"typescript-eslint": "^8.0.0",
 		"vite": "^5.2.11",
-		"vitest": "^2.0.0"
+		"vitest": "^2.1.2",
+		"@sheepdog/svelte": "link:."
 	},
 	"peerDependencies": {
-		"svelte": "^4.0.0"
+		"svelte": "^4.0.0 || ^5.0.0 || ^5.0.0-next.1"
 	},
 	"volta": {
 		"extends": "../../package.json"

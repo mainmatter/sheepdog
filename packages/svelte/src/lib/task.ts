@@ -176,10 +176,10 @@ type HandlersShorthands = {
 			utils: SheepdogUtils,
 		) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
 		options?: Parameters<HandlersMap[K]> extends [] ? object : Parameters<HandlersMap[K]>[0],
-	) => ReturnType<typeof _task<TArgs, TReturn>>;
+	) => ReturnType<typeof task<TArgs, TReturn>>;
 };
 
-const to_assign: HandlersShorthands = {} as HandlersShorthands;
+const task: typeof _task & HandlersShorthands = _task as typeof _task & HandlersShorthands;
 
 function is_key(handler: string): handler is HandlerType {
 	return handler in handlers;
@@ -187,7 +187,7 @@ function is_key(handler: string): handler is HandlerType {
 
 for (const handler in handlers) {
 	if (is_key(handler)) {
-		to_assign[handler] = (gen_or_fun, options) => {
+		task[handler] = (gen_or_fun, options) => {
 			if (!is_key(handler)) {
 				throw new Error('Impossible');
 			}
@@ -196,4 +196,4 @@ for (const handler in handlers) {
 	}
 }
 
-export const task = Object.assign(_task, to_assign);
+export { task };
