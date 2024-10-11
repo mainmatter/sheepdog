@@ -2,28 +2,16 @@
   "solution": {
     "@sheepdog/svelte": {
       "impact": "minor",
-      "oldVersion": "0.9.0",
-      "newVersion": "0.10.0",
+      "oldVersion": "0.10.0",
+      "newVersion": "0.11.0",
       "constraints": [
         {
           "impact": "minor",
           "reason": "Appears in changelog section :rocket: Enhancement"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :memo: Documentation"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2024-10-11)\n\n@sheepdog/svelte 0.10.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/svelte`\n  * [#185](https://github.com/mainmatter/sheepdog/pull/185) fix: way better async transform ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :bug: Bug Fix\n* `@sheepdog/docs`, `@sheepdog/svelte`\n  * [#192](https://github.com/mainmatter/sheepdog/pull/192) fix: properly threeshake the library ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* `@sheepdog/docs`\n  * [#194](https://github.com/mainmatter/sheepdog/pull/194) Update timeline ([@beerinho](https://github.com/beerinho))\n  * [#191](https://github.com/mainmatter/sheepdog/pull/191) Turn mainmatter footer logo into a link to the svelte consulting page ([@nickschot](https://github.com/nickschot))\n  * [#184](https://github.com/mainmatter/sheepdog/pull/184) Landing page demo integration ([@nickschot](https://github.com/nickschot))\n  * [#158](https://github.com/mainmatter/sheepdog/pull/158) docs: add task modifier explainer ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#179](https://github.com/mainmatter/sheepdog/pull/179) Add SheepdogUtils & Linked task docs ([@beerinho](https://github.com/beerinho))\n  * [#178](https://github.com/mainmatter/sheepdog/pull/178) Move Task Instance to reference ([@beerinho](https://github.com/beerinho))\n  * [#156](https://github.com/mainmatter/sheepdog/pull/156) docs: start building the reference docs ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#165](https://github.com/mainmatter/sheepdog/pull/165) Add \"built by Mainmatter\" logo to the header ([@nickschot](https://github.com/nickschot))\n  * [#164](https://github.com/mainmatter/sheepdog/pull/164) Add Tabs component ([@beerinho](https://github.com/beerinho))\n  * [#154](https://github.com/mainmatter/sheepdog/pull/154) Add landing page ([@nickschot](https://github.com/nickschot))\n  * [#142](https://github.com/mainmatter/sheepdog/pull/142) docs: async transform explainer ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/svelte`\n  * [#181](https://github.com/mainmatter/sheepdog/pull/181) Add asyncTransform note ([@beerinho](https://github.com/beerinho))\n* `@sheepdog/docs`, `@sheepdog/svelte`\n  * [#143](https://github.com/mainmatter/sheepdog/pull/143) Add timeline for docs site ([@beerinho](https://github.com/beerinho))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#181](https://github.com/mainmatter/sheepdog/pull/181) Add asyncTransform note ([@beerinho](https://github.com/beerinho))\n  * [#171](https://github.com/mainmatter/sheepdog/pull/171) chore: prepare script + renovate config ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#152](https://github.com/mainmatter/sheepdog/pull/152) Add GravityCI ([@beerinho](https://github.com/beerinho))\n  * [#151](https://github.com/mainmatter/sheepdog/pull/151) fix: monorepo settings ([@paoloricciuti](https://github.com/paoloricciuti))\n* Other\n  * [#167](https://github.com/mainmatter/sheepdog/pull/167) update gravity cli to v0.0.2 ([@oscard0m](https://github.com/oscard0m))\n  * [#147](https://github.com/mainmatter/sheepdog/pull/147) chore: upgrade `typescript-eslint` ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/docs`, `@sheepdog/svelte`\n  * [#163](https://github.com/mainmatter/sheepdog/pull/163) Add volta config to subpackages' package.json ([@nickschot](https://github.com/nickschot))\n  * [#150](https://github.com/mainmatter/sheepdog/pull/150) Move to monorepo ([@beerinho](https://github.com/beerinho))\n\n#### Committers: 4\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Nick Schot ([@nickschot](https://github.com/nickschot))\n- Oscar Dominguez ([@oscard0m](https://github.com/oscard0m))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-10-11)\n\n@sheepdog/svelte 0.11.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/svelte`\n  * [#195](https://github.com/mainmatter/sheepdog/pull/195) feat: add utils export ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

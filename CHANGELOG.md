@@ -2,6 +2,17 @@
 
 ## Release (2024-10-11)
 
+@sheepdog/svelte 0.11.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/svelte`
+  * [#195](https://github.com/mainmatter/sheepdog/pull/195) feat: add utils export ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
+## Release (2024-10-11)
+
 @sheepdog/svelte 0.10.0 (minor)
 
 #### :rocket: Enhancement
