@@ -7,9 +7,9 @@ index 8383eb02ae716166f01a1f40f84866e0d4e47365..160f0ed5f9615212232921e77479ccb5
  import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
  import { packlist } from "@pnpm/fs.packlist";
 -import { PackageCache } from "@embroider/shared-internals";
-+import Cache from "@embroider/shared-internals";
++import EmbroiderSharedInternals from "@embroider/shared-internals";
 +
-+const { PackageCache } = Cache;
++const { PackageCache } = EmbroiderSharedInternals;
  tmp.setGracefulCleanup();
  var defaultFiles = {
    "index.js": `
