@@ -34,7 +34,6 @@ const sheepdogDemoCode = `
 {/if}
 `;
 
-
 const nativeDemoCode = `
 <script>
 	let _currentValue;
@@ -74,7 +73,10 @@ const nativeDemoCode = `
 <section class="description">
 	<h2>Simplify your code</h2>
 	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis laoreet tortor. Sed facilisis diam a nibh blandit, ut tempor turpis pretium. Morbi sed turpis eu nisi tincidunt imperdiet in id quam. Maecenas vitae iaculis est, in feugiat enim. Etiam sagittis porta magna, et consequat est ultricies in.
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis laoreet tortor. Sed
+		facilisis diam a nibh blandit, ut tempor turpis pretium. Morbi sed turpis eu nisi tincidunt
+		imperdiet in id quam. Maecenas vitae iaculis est, in feugiat enim. Etiam sagittis porta magna,
+		et consequat est ultricies in.
 	</p>
 </section>
 
@@ -102,106 +104,104 @@ const nativeDemoCode = `
 
 <section class="task-modifiers">
 	<h2>Task modifiers</h2>
-	<p>
-		Specify what your task should do if there's another instance already running.
-	</p>
+	<p>Specify what your task should do if there's another instance already running.</p>
 
-	<Example client:load />
+	<Example show_tabs={true} client:load />
 </section>
 
 <style>
-    :root {
-        --sl-color-white: #F9F0E3;
-        --sl-color-black: #3C3835;
-        --sl-color-text-accent: var(--sl-color-white);
-    }
-    :root[data-theme='light'] {
-        --sl-color-black: #F9F0E3;
-        --sl-color-text-accent: var(--sl-color-white);
-    }
+	:root {
+		--sl-color-white: #f9f0e3;
+		--sl-color-black: #3c3835;
+		--sl-color-text-accent: var(--sl-color-white);
+	}
+	:root[data-theme='light'] {
+		--sl-color-black: #f9f0e3;
+		--sl-color-text-accent: var(--sl-color-white);
+	}
 
-    :global(body) {
-        font-family: "PT Sans", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-    }
+	:global(body) {
+		font-family: 'PT Sans', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+	}
 
-    :global(h1, h2, h3, h4, h5, h6) {
-        font-family: "Calistoga", serif!important;
-        font-weight: 400;
-        font-style: normal;
-    }
+	:global(h1, h2, h3, h4, h5, h6) {
+		font-family: 'Calistoga', serif !important;
+		font-weight: 400;
+		font-style: normal;
+	}
 
-    .description {
-        margin-bottom: 4rem;
-    }
+	.description {
+		margin-bottom: 4rem;
+	}
 
-    .demo {
-        width: 100%;
-        margin-bottom: 100px;
-    }
+	.demo {
+		width: 100%;
+		margin-bottom: 100px;
+	}
 
-		@media(min-width: 768px) {
-			.demo {
-				display: grid;
-				grid-template-columns: 65% 35%;
-				gap: 2rem;
-			}
-
-			.demo > div {
-				margin-top: 0!important;
-			}
+	@media (min-width: 768px) {
+		.demo {
+			display: grid;
+			grid-template-columns: 65% 35%;
+			gap: 2rem;
 		}
 
-    .tabbed-code-wrapper {
-			border: 2px solid var(--sl-color-white);
-			border-radius: 1.25rem;
-    }
-
-    .tabbed-code-wrapper :global(.tablist-wrapper) {
-				display: flex;
-				justify-content: end;
-        margin-top: -2px;
-        margin-right: -2px;
+		.demo > div {
+			margin-top: 0 !important;
 		}
+	}
 
-    .tabbed-code-wrapper :global(section[role="tabpanel"]) {
-        margin-top: 0;
-    }
+	.tabbed-code-wrapper {
+		border: 2px solid var(--sl-color-white);
+		border-radius: 1.25rem;
+	}
 
-    .tabbed-code-wrapper :global(.tablist-wrapper ul) {
-				border: 2px solid var(--sl-color-white);
-				border-radius: 1.5rem;
-		}
+	.tabbed-code-wrapper :global(.tablist-wrapper) {
+		display: flex;
+		justify-content: end;
+		margin-top: -2px;
+		margin-right: -2px;
+	}
 
-    .tabbed-code-wrapper :global(.tablist-wrapper li) {
-        margin: 0;
-    }
+	.tabbed-code-wrapper :global(section[role='tabpanel']) {
+		margin-top: 0;
+	}
 
-    .tabbed-code-wrapper :global(.tablist-wrapper a[role="tab"]) {
-        border: none;
-				padding: 0.25rem 1.5rem;
-        border-radius: 1.5rem;
-				color: var(--sl-color-text);
-				font-weight: bold;
-    }
+	.tabbed-code-wrapper :global(.tablist-wrapper ul) {
+		border: 2px solid var(--sl-color-white);
+		border-radius: 1.5rem;
+	}
 
-    .tabbed-code-wrapper :global(.tablist-wrapper a[role="tab"][aria-selected=true]) {
-				background: var(--sl-color-white);
-				color: var(--sl-color-text-invert);
-		}
+	.tabbed-code-wrapper :global(.tablist-wrapper li) {
+		margin: 0;
+	}
 
-		.tabbed-code-wrapper :global(.expressive-code .frame) {
-				box-shadow: none;
-		}
+	.tabbed-code-wrapper :global(.tablist-wrapper a[role='tab']) {
+		border: none;
+		padding: 0.25rem 1.5rem;
+		border-radius: 1.5rem;
+		color: var(--sl-color-text);
+		font-weight: bold;
+	}
 
-    .tabbed-code-wrapper :global(.expressive-code .frame pre) {
-        border: none;
-				background: none;
-		}
+	.tabbed-code-wrapper :global(.tablist-wrapper a[role='tab'][aria-selected='true']) {
+		background: var(--sl-color-white);
+		color: var(--sl-color-text-invert);
+	}
 
-    .task-modifiers {
-        max-width: 600px;
-        margin: 0 auto;
-    }
+	.tabbed-code-wrapper :global(.expressive-code .frame) {
+		box-shadow: none;
+	}
+
+	.tabbed-code-wrapper :global(.expressive-code .frame pre) {
+		border: none;
+		background: none;
+	}
+
+	.task-modifiers {
+		max-width: 600px;
+		margin: 0 auto;
+	}
 </style>

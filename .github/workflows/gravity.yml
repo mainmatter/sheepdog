@@ -2,8 +2,10 @@ name: Gravity
 on:
   push:
     branches:
-      - main
-  pull_request: {}
+      - ignorefornow
+      # uncomment this when gravity is working again
+      # - main
+  # pull_request: {}
 
 jobs:
   build:

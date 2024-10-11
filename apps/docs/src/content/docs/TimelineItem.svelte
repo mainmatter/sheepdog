@@ -58,7 +58,8 @@
 		height: calc(var(--height) * 1px);
 		width: calc(var(--width) * 1px);
 		box-sizing: border-box;
-		border-radius: 25px 0 0 25px;
+		padding: 0;
+		border-radius: 20px 0 0 20px;
 		display: flex;
 		align-items: center;
 		justify-content: start;
@@ -67,11 +68,11 @@
 		overflow: hidden;
 		background: transparent;
 		color: white;
-		box-shadow: -2px 0 3px 0 rgba(0, 0, 0, 0.5);
+		transition: border-radius 40ms linear;
 	}
 
 	.completed {
-		border-radius: 25px;
+		border-radius: 20px;
 	}
 
 	.canceled {
@@ -82,7 +83,7 @@
 	.dropped {
 		padding: 0;
 		overflow: visible;
-		width: 3px;
+		width: 2px;
 		color: var(--color-canceled);
 	}
 
@@ -91,12 +92,12 @@
 	}
 
 	.queued {
-		border: 5px var(--color-waiting) solid;
+		border: 2px var(--color-waiting) solid;
 		background-color: var(--sl-color-black);
 		border-right: none;
 		position: absolute;
 		inset: 0;
-		border-radius: 25px 0 0 25px;
+		border-radius: 20px 0 0 20px;
 		display: flex;
 		align-items: center;
 		z-index: 0;
@@ -109,7 +110,7 @@
 		display: flex;
 		align-items: center;
 		inset: 0;
-		border-radius: 25px 0 0 25px;
+		border-radius: 20px 0 0 20px;
 		z-index: 0;
 		left: calc(var(--idle) * 1px);
 	}
