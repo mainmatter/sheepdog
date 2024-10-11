@@ -29,25 +29,20 @@
 	}
 
 	const stop_after = 3000;
-	const now = readable(Date.now(), (set) => {
-		const interval = setInterval(() => {
-			set(Date.now());
-		}, 100);
-
-		return () => clearInterval(interval);
-	});
-
+	let timeout;
 	let stopped = false;
-	$: stop_time = elements.at(-1)?.end ? Date.now() + stop_after : null;
-
-	$: if (!stopped && stop_time && $now > stop_time) {
-		stopped = true;
-	}
 
 	$: example_task = task(fn, { max, kind: selected_task_type });
 
+	const set_stop_time = () => {
+		clearTimeout(timeout);
+		timeout = setTimeout(() => (stopped = true), stop_after);
+	};
+
 	const setTaskType = (type) => {
+		example_task.cancelAll();
 		start = undefined;
+		setTimeout(() => clearTimeout(timeout), 0);
 		elements = [];
 		stopped = false;
 		selected_task_type = type;
@@ -82,12 +77,17 @@
 				const task = example_task.perform({ to_add, now });
 				to_add.task = task;
 
-				task.catch((e) => {
-					if (didCancel(e)) {
-						to_add.end = Date.now() - now;
-						elements = elements;
-					}
-				});
+				task
+					.then(() => {
+						set_stop_time();
+					})
+					.catch((e) => {
+						if (didCancel(e)) {
+							to_add.end = Date.now() - now;
+							elements = elements;
+							set_stop_time();
+						}
+					});
 				elements.push(to_add);
 				elements = elements;
 			}}>Add</button
