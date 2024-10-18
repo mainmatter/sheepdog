@@ -43,8 +43,7 @@ type Nodes = (
 
 /**
  * Acorn doesn't add comments to the AST by itself. This factory returns the capabilities
- * to add them after the fact. They are needed in order to support `svelte-ignore` comments
- * in JS code and so that `prettier-plugin-svelte` doesn't remove all comments when formatting.
+ * to add them after the fact.
  *
  * Stolen from the svelte codebase with love 🧡
  */
