@@ -1,11 +1,22 @@
 import { task } from "@sheepdog/svelte";
 
+/**
+ * @param {number} val 
+ */
 function fn(val) {
 	return val;
 }
 
+/**
+ * @type {Record<string,()=>void>}
+ */
 const fns = {};
 
+/**
+ * 
+ * @param {TemplateStringsArray} quasi 
+ * @param {string} strings 
+ */
 function str(quasi, strings) {}
 
 task(async function* () {

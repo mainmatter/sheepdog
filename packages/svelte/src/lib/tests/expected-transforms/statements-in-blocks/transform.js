@@ -82,6 +82,7 @@ task(async function* () {
 		console.log(yield Promise.resolve());
 	} else console.log(yield Promise.resolve());
 
+	// nested test
 	for (const x of yield Promise.resolve([])) {
 		console.log(yield Promise.resolve("for of"));
 
