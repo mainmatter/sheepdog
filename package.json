@@ -22,21 +22,21 @@
 	"devDependencies": {
 		"@gravityci/cli": "^0.0.4",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "2.44.1",
+		"eslint-plugin-svelte": "2.45.1",
 		"globals": "^15.2.0",
 		"prettier-plugin-svelte": "^3.2.3",
-		"release-plan": "^0.9.0",
+		"release-plan": "^0.10.0",
 		"typescript": "^5.4.5",
 		"typescript-eslint": "^8.0.0"
 	},
 	"volta": {
 		"node": "20.18.0",
-		"pnpm": "9.12.1"
+		"pnpm": "9.12.2"
 	},
 	"pnpm": {
 		"patchedDependencies": {
 			"fixturify-project": "patches/fixturify-project.patch"
 		}
 	},
-	"packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
+	"packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
 }
