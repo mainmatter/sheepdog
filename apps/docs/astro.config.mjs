@@ -32,7 +32,7 @@ export default defineConfig({
 					tag: 'link',
 					attrs: {
 						rel: 'shortcut icon',
-						href: '/logo-light.svg',
+						href: '/full-color.svg',
 						media: '(prefers-color-scheme: light)',
 					},
 				},
@@ -40,7 +40,7 @@ export default defineConfig({
 					tag: 'link',
 					attrs: {
 						rel: 'shortcut icon',
-						href: '/logo-dark.svg',
+						href: '/1c-plus.svg',
 						media: '(prefers-color-scheme: dark)',
 					},
 				},
