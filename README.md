@@ -2,6 +2,13 @@
 
 Handle async tasks in your svelte application with ease thanks to `@sheepdog/svelte`.
 
+![Sheepdog logo](./apps/docs/src/assets/1c-plus.svg#gh-dark-mode-only)
+![Sheepdog logo](./apps/docs/src/assets/full-color.svg#gh-light-mode-only)
+
+> [!NOTE]
+> Sheepdog was written and is maintained by [Mainmatter](https://mainmatter.com) and contributors.
+> We offer consulting, training, and team augmentation for Svelte – check out our [website](https://mainmatter.com/svelte-consulting/) to learn more!
+
 ## What is it?
 
 `@sheepdog/svelte` supplies a simple way to introduce cancellable concurrency into your app. Not only do they provide the cancellability that is missing from normal Promises, `@sheepdog/svelte` also provides a public API that allows you to observe the running state of your task without having to set a single flag manually.
