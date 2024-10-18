@@ -1,5 +1,31 @@
 # Changelog
 
+## Release (2024-10-18)
+
+
+
+#### :memo: Documentation
+* `@sheepdog/docs`
+  * [#206](https://github.com/mainmatter/sheepdog/pull/206) Fix logo size issue ([@nickschot](https://github.com/nickschot))
+  * [#200](https://github.com/mainmatter/sheepdog/pull/200) Update example code snippets to be closer to actual demo ([@nickschot](https://github.com/nickschot))
+  * [#205](https://github.com/mainmatter/sheepdog/pull/205) Various style fixes to the timeline ([@nickschot](https://github.com/nickschot))
+  * [#203](https://github.com/mainmatter/sheepdog/pull/203) Add copyright to footer ([@nickschot](https://github.com/nickschot))
+  * [#201](https://github.com/mainmatter/sheepdog/pull/201) Fix dark mode get started button appearing with the wrong colors ([@nickschot](https://github.com/nickschot))
+* Other
+  * [#204](https://github.com/mainmatter/sheepdog/pull/204) Improve readme ([@marcoow](https://github.com/marcoow))
+
+#### :house: Internal
+* Other
+  * [#207](https://github.com/mainmatter/sheepdog/pull/207) Move netlify.toml to root folder ([@beerinho](https://github.com/beerinho))
+  * [#208](https://github.com/mainmatter/sheepdog/pull/208) add LICENSE ([@marcoow](https://github.com/marcoow))
+* `@sheepdog/docs`
+  * [#202](https://github.com/mainmatter/sheepdog/pull/202) Add netlify redirects ([@beerinho](https://github.com/beerinho))
+
+#### Committers: 3
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Marco Otte-Witte ([@marcoow](https://github.com/marcoow))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+
 ## Release (2024-10-11)
 
 @sheepdog/svelte 0.11.0 (minor)
