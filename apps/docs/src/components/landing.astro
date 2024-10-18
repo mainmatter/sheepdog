@@ -22,15 +22,19 @@ const sheepdogDemoCode = `
 <input
 	name="search"
 	type="text"
-	on:input={
-		(event) => searchTask.perform(event.target.value)
-	}
+	on:input={(event) => searchTask.perform(event.target.value)}
 />
 
 {#if $searchTask.isRunning}
 	Loading...
-{:else if $searchTask.lastSuccessful}
-	Value: {$searchTask.lastSuccessful.value}
+{:else if $searchTask.lastSuccessful?.value.length}
+	<ul>
+		{#each $searchTask.lastSuccesful.value as name}
+			<li>{name}</li>
+		{/each}
+	</ul>
+{:else}
+	No sheep found
 {/if}
 `;
 
@@ -43,10 +47,16 @@ const nativeDemoCode = `
 			clearTimeout(timeout);
 		}
 	
-		timeout = setTimeout(() => {
-			currentValue = value;
-			timeout = undefined;
+		let _timeout = setTimeout(async () => {
+			let response = await fetch('/my-favourite-sheep?search=' + value);
+			let results = await response.json();
+			// only set results if this is the last started search
+			if (timeout === _timeout) {
+				currentValue = results;
+				timeout = undefined;
+			}
 		}, 500);
+		timeout = _timeout;
 	};
 
 	$: isRunning = Boolean(timeout);
@@ -55,17 +65,21 @@ const nativeDemoCode = `
 
 <label for="search">Search</label>
 <input
- 	name="search"
-  type="text"
-  on:input={
-		(event) => search(event.target.value)
-	}
+	name="search"
+	type="text"
+	on:input={(event) => search(event.target.value)}
 />
 
 {#if timeout}
 	Loading...
-{:else if currentValue}
-	Value: {currentValue}
+{:else if currentValue?.length}
+	<ul>
+		{#each currentValue as name}
+			<li>{name}</li>
+		{/each}
+	</ul>
+{:else}
+	No sheep found
 {/if}
 `;
 ---
