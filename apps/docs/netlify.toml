@@ -1,0 +1,5 @@
+[[redirects]]
+from = "https://sheepdogjs.com/"
+to = "https://sheepdog.run/"
+status = 301
+force = true

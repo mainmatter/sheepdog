@@ -7,7 +7,7 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://sheepdogjs.com',
+	site: 'https://sheepdog.run',
 	vite: {
 		resolve: {
 			alias: {
