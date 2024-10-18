@@ -1,5 +1,5 @@
 [[redirects]]
-from = "https://sheepdogjs.com/"
-to = "https://sheepdog.run/"
+from = "https://sheepdogjs.com/*"
+to = "https://sheepdog.run/:splat"
 status = 301
 force = true
