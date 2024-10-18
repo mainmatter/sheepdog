@@ -96,7 +96,8 @@
 		bottom: 0;
 		transform: translateX(calc(var(--left) * 1px));
 		border-left: 2px solid var(--sl-color-text);
-		background: transparent;
+		width: 100%;
+		background: var(--sl-color-black);
 		z-index: 1;
 	}
 </style>

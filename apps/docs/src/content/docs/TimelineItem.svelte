@@ -56,7 +56,8 @@
 		left: 0;
 		transform: translateX(calc(var(--left) * 1px));
 		height: calc(var(--height) * 1px);
-		width: calc(var(--width) * 1px);
+		width: max(calc(var(--width) * 1px), 40px);
+		min-width: 40px;
 		box-sizing: border-box;
 		padding: 0;
 		border-radius: 20px 0 0 20px;
@@ -84,6 +85,7 @@
 		padding: 0;
 		overflow: visible;
 		width: 2px;
+		min-width: 2px;
 		color: var(--color-canceled);
 	}
 
@@ -113,6 +115,7 @@
 		border-radius: 20px 0 0 20px;
 		z-index: 0;
 		left: calc(var(--idle) * 1px);
+		min-width: 40px;
 	}
 
 	.canceled .queued,
@@ -122,7 +125,7 @@
 
 	.status {
 		display: inline-block;
-		padding-inline: min(22px, 10%);
+		padding-inline: 10px;
 		z-index: 1;
 		font-weight: 600;
 	}
