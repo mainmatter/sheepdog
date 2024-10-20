@@ -3,9 +3,8 @@ on:
   push:
     branches:
       - ignorefornow
-      # uncomment this when gravity is working again
-      # - main
-  # pull_request: {}
+      - main
+  pull_request: {}
 
 jobs:
   build:
