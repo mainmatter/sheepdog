@@ -85,13 +85,12 @@ const nativeDemoCode = `
 ---
 
 <section class="description">
-	<h2>Simplify your code</h2>
+	<h2>Task management made simple</h2>
 	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis laoreet tortor. Sed
-		facilisis diam a nibh blandit, ut tempor turpis pretium. Morbi sed turpis eu nisi tincidunt
-		imperdiet in id quam. Maecenas vitae iaculis est, in feugiat enim. Etiam sagittis porta magna,
-		et consequat est ultricies in.
+		Sheepdog helps you maintain your async tasks and gives you useful derived state in your Svelte
+		app.
 	</p>
+	<p><i>Because managing tasks shouldn't feel like chasing sheep.</i></p>
 </section>
 
 <section class="demo">
@@ -148,6 +147,10 @@ const nativeDemoCode = `
 
 	.description {
 		margin-bottom: 4rem;
+	}
+
+	.description p + p {
+		margin-top: 0.5rem;
 	}
 
 	.demo {
