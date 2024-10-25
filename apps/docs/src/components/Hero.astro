@@ -29,6 +29,45 @@ if (image) {
 }
 ---
 
+<script>
+	// Store original text content of nodes
+	const originalContent = new WeakMap();
+	let isWoofed = false;
+
+	function toggleWoof(element: any) {
+		const skipTags = ['SCRIPT', 'STYLE', 'INPUT', 'TEXTAREA'];
+
+		if (skipTags.includes(element.tagName)) {
+			return;
+		}
+
+		if (element.nodeType === Node.TEXT_NODE && element.textContent) {
+			if (!isWoofed) {
+				// Save original content before first woof
+				originalContent.set(element, element.textContent);
+
+				// Replace words with 'woof'
+				const words = element.textContent!.split(/\b/);
+				element.textContent = words
+					.map((word: string) => (word.match(/[a-zA-Z]+/) ? 'woof' : word))
+					.join('');
+			} else {
+				// Restore original content
+				element.textContent = originalContent.get(element);
+			}
+		} else {
+			Array.from(element.childNodes).forEach((child) => toggleWoof(child));
+		}
+	}
+
+	document.querySelectorAll('[data-woof]')?.forEach((element) =>
+		element.addEventListener('click', () => {
+			toggleWoof(document.body);
+			isWoofed = !isWoofed;
+		}),
+	);
+</script>
+
 <div class="hero">
 	{
 		darkImage && (
@@ -36,10 +75,11 @@ if (image) {
 				src={darkImage}
 				{...imageAttrs}
 				class:list={{ 'light:sl-hidden': Boolean(lightImage) }}
+				data-woof
 			/>
 		)
 	}
-	{lightImage && <Image src={lightImage} {...imageAttrs} class="dark:sl-hidden" />}
+	{lightImage && <Image src={lightImage} {...imageAttrs} class="dark:sl-hidden" data-woof />}
 	{rawHtml && <div class="hero-html sl-flex" set:html={rawHtml} />}
 	<div class="sl-flex stack">
 		<div class="sl-flex copy">
