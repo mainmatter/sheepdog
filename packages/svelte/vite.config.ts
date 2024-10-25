@@ -1,11 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
+import { svelteTesting } from '@testing-library/svelte/vite';
 
-export default defineConfig(({ mode }) => ({
-	plugins: [sveltekit()],
-	resolve: {
-		conditions: mode === 'test' ? ['browser'] : [],
-	},
+export default defineConfig({
+	plugins: [sveltekit(), svelteTesting()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 		setupFiles: './src/vitest-setup.ts',
@@ -21,4 +19,4 @@ export default defineConfig(({ mode }) => ({
 			],
 		},
 	},
-}));
+});
