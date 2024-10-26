@@ -1,4 +1,3 @@
-import '@testing-library/svelte/vitest';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, beforeEach, vi } from 'vitest';
 
@@ -9,3 +8,5 @@ beforeEach(() => {
 afterEach(() => {
 	vi.useRealTimers();
 });
+
+vi.stubGlobal('requestAnimationFrame', () => {});
