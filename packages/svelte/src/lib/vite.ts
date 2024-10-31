@@ -31,7 +31,7 @@ export async function asyncTransform() {
 					sourceType: 'module',
 				});
 				let task_fn_name: string;
-				let transform_fn_name: string;
+				const transform_fn_names = new Set<string>();
 				// let's walk once to find the name (we were using a promise before but that's just messy)
 				walk(
 					ast as unknown as ImportDeclaration,
@@ -40,7 +40,8 @@ export async function asyncTransform() {
 						ImportDeclaration(node) {
 							if (
 								node.source.value === '@sheepdog/svelte' ||
-								node.source.value === '@sheepdog/svelte/task'
+								node.source.value === '@sheepdog/svelte/task' ||
+								node.source.value === '@sheepdog/svelte/utils'
 							) {
 								const task_fn = node.specifiers.find((specifier) => {
 									return (
@@ -49,10 +50,6 @@ export async function asyncTransform() {
 										specifier.imported.name === 'task'
 									);
 								});
-								if (task_fn && task_fn.type === 'ImportSpecifier') {
-									task_fn_name = task_fn.local.name;
-								}
-							} else if (node.source.value === '@sheepdog/svelte/utils') {
 								const transform_fn = node.specifiers.find((specifier) => {
 									return (
 										specifier.type === 'ImportSpecifier' &&
@@ -61,7 +58,10 @@ export async function asyncTransform() {
 									);
 								});
 								if (transform_fn && transform_fn.type === 'ImportSpecifier') {
-									transform_fn_name = transform_fn.local.name;
+									transform_fn_names.add(transform_fn.local.name);
+								}
+								if (task_fn && task_fn.type === 'ImportSpecifier') {
+									task_fn_name = task_fn.local.name;
 								}
 							}
 						},
@@ -85,7 +85,8 @@ export async function asyncTransform() {
 							let task_arg: (typeof node)['arguments'][number] | undefined;
 							if (
 								(node.callee.type === 'Identifier' &&
-									(node.callee.name === task_fn_name || node.callee.name === transform_fn_name)) ||
+									(node.callee.name === task_fn_name ||
+										transform_fn_names.has(node.callee.name))) ||
 								(node.callee.type === 'MemberExpression' &&
 									node.callee.object.type === 'Identifier' &&
 									node.callee.object.name === task_fn_name)
@@ -117,7 +118,7 @@ export async function asyncTransform() {
 							if (
 								task_arg &&
 								node.callee.type === 'Identifier' &&
-								node.callee.name === transform_fn_name
+								transform_fn_names.has(node.callee.name)
 							) {
 								return task_arg as never;
 							}
