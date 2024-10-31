@@ -23,4 +23,4 @@ jobs:
       - name: Build
         run: pnpm --filter "./packages/*"  package
 
-      - run: pnpx pkg-pr-new publish './packages/svelte' --compact --no-template
+      - run: pnpx pkg-pr-new publish --compact --no-template './packages/svelte'
