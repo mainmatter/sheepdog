@@ -22,6 +22,7 @@ async function does_it_shake(file: string) {
 	});
 	project.linkDevDependency('@sheepdog/svelte', {
 		baseDir: process.cwd(),
+		resolveName: '.',
 	});
 	project.linkDevDependency('svelte', {
 		baseDir: process.cwd(),

@@ -51,7 +51,7 @@
 		"test": "pnpm run test:unit && pnpm run test:treeshake",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"test:treeshake": "node ./scripts/toggle-sheepdog-package-selfref.js && package && vitest --config treeshake.vite.config.ts && node ./scripts/toggle-sheepdog-package-selfref.js",
+		"test:treeshake": "pnpm package && vitest --config treeshake.vite.config.ts",
 		"test:unit:ui": "vitest --ui"
 	},
 	"dependencies": {
