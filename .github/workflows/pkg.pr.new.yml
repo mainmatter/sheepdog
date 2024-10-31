@@ -21,6 +21,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm build
+        run: pnpm --filter "./packages/*"  package
 
       - run: pnpx pkg-pr-new publish --compact --no-template './packages/svelte'
