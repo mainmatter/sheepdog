@@ -6,4 +6,4 @@ if (!package_json.devDependencies['@sheepdog/svelte']) {
 } else {
 	delete package_json.devDependencies['@sheepdog/svelte'];
 }
-fs.writeFileSync('./package.json', JSON.stringify(package_json, null, '\t'));
+fs.writeFileSync('./package.json', JSON.stringify(package_json, null, '\t') + '\n');
