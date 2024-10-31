@@ -1,6 +1,6 @@
 import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
-import type { HandlerType, HandlersMap, SheepdogUtils, TaskOptions } from './core';
+import type { HandlerType, HandlersMap, SheepdogUtils, TaskOptions, TaskFunction } from './core';
 import { CancelationError, createTask, handlers } from './core';
 import type { ReadableWithGet, WritableWithGet } from './internal/helpers';
 import { writable_with_get } from './internal/helpers';
@@ -22,10 +22,7 @@ export type TaskInstance<TReturn = undefined> = {
 };
 
 function _task<TArgs = unknown, TReturn = undefined>(
-	gen_or_fun: (
-		args: TArgs,
-		utils: SheepdogUtils,
-	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
+	gen_or_fun: TaskFunction<TArgs, TReturn>,
 	options?: TaskOptions,
 ) {
 	const { subscribe, ...result } = writable({
