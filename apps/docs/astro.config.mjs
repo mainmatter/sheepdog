@@ -29,6 +29,14 @@ export default defineConfig({
 			},
 			head: [
 				{
+					tag: 'script',
+					attrs: {
+						defer: '',
+						'data-domain': 'sheepdog.run',
+						src: 'https://plausible.io/js/script.js',
+					},
+				},
+				{
 					tag: 'link',
 					attrs: {
 						rel: 'shortcut icon',
