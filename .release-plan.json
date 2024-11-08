@@ -2,16 +2,24 @@
   "solution": {
     "@sheepdog/svelte": {
       "impact": "minor",
-      "oldVersion": "0.10.0",
-      "newVersion": "0.11.0",
+      "oldVersion": "0.11.0",
+      "newVersion": "0.12.0",
       "constraints": [
         {
           "impact": "minor",
           "reason": "Appears in changelog section :rocket: Enhancement"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :memo: Documentation"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2024-10-11)\n\n@sheepdog/svelte 0.11.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/svelte`\n  * [#195](https://github.com/mainmatter/sheepdog/pull/195) feat: add utils export ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2024-11-08)\n\n@sheepdog/svelte 0.12.0 (minor)\n\n#### :rocket: Enhancement\n* `@sheepdog/docs`, `@sheepdog/svelte`\n  * [#222](https://github.com/mainmatter/sheepdog/pull/222) feat: add `transform` function to annotate a function to be transformed by the vite plugin ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* `@sheepdog/docs`, `@sheepdog/svelte`\n  * [#222](https://github.com/mainmatter/sheepdog/pull/222) feat: add `transform` function to annotate a function to be transformed by the vite plugin ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/docs`\n  * [#223](https://github.com/mainmatter/sheepdog/pull/223) chore: add plausible analytics ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#219](https://github.com/mainmatter/sheepdog/pull/219) woof ([@beerinho](https://github.com/beerinho))\n  * [#218](https://github.com/mainmatter/sheepdog/pull/218) Update homepage copy ([@beerinho](https://github.com/beerinho))\n  * [#206](https://github.com/mainmatter/sheepdog/pull/206) Fix logo size issue ([@nickschot](https://github.com/nickschot))\n  * [#200](https://github.com/mainmatter/sheepdog/pull/200) Update example code snippets to be closer to actual demo ([@nickschot](https://github.com/nickschot))\n  * [#205](https://github.com/mainmatter/sheepdog/pull/205) Various style fixes to the timeline ([@nickschot](https://github.com/nickschot))\n  * [#203](https://github.com/mainmatter/sheepdog/pull/203) Add copyright to footer ([@nickschot](https://github.com/nickschot))\n  * [#201](https://github.com/mainmatter/sheepdog/pull/201) Fix dark mode get started button appearing with the wrong colors ([@nickschot](https://github.com/nickschot))\n* Other\n  * [#204](https://github.com/mainmatter/sheepdog/pull/204) Improve readme ([@marcoow](https://github.com/marcoow))\n\n#### :house: Internal\n* `@sheepdog/docs`\n  * [#223](https://github.com/mainmatter/sheepdog/pull/223) chore: add plausible analytics ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#202](https://github.com/mainmatter/sheepdog/pull/202) Add netlify redirects ([@beerinho](https://github.com/beerinho))\n* `@sheepdog/svelte`\n  * [#221](https://github.com/mainmatter/sheepdog/pull/221) chore: setup `pkg.pr.new` ([@paoloricciuti](https://github.com/paoloricciuti))\n* Other\n  * [#213](https://github.com/mainmatter/sheepdog/pull/213) enable gravity again ([@marcoow](https://github.com/marcoow))\n  * [#210](https://github.com/mainmatter/sheepdog/pull/210) add wildcard redirects ([@beerinho](https://github.com/beerinho))\n  * [#207](https://github.com/mainmatter/sheepdog/pull/207) Move netlify.toml to root folder ([@beerinho](https://github.com/beerinho))\n  * [#208](https://github.com/mainmatter/sheepdog/pull/208) add LICENSE ([@marcoow](https://github.com/marcoow))\n\n#### Committers: 4\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Marco Otte-Witte ([@marcoow](https://github.com/marcoow))\n- Nick Schot ([@nickschot](https://github.com/nickschot))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

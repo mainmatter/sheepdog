@@ -1,5 +1,46 @@
 # Changelog
 
+## Release (2024-11-08)
+
+@sheepdog/svelte 0.12.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/docs`, `@sheepdog/svelte`
+  * [#222](https://github.com/mainmatter/sheepdog/pull/222) feat: add `transform` function to annotate a function to be transformed by the vite plugin ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :memo: Documentation
+* `@sheepdog/docs`, `@sheepdog/svelte`
+  * [#222](https://github.com/mainmatter/sheepdog/pull/222) feat: add `transform` function to annotate a function to be transformed by the vite plugin ([@paoloricciuti](https://github.com/paoloricciuti))
+* `@sheepdog/docs`
+  * [#223](https://github.com/mainmatter/sheepdog/pull/223) chore: add plausible analytics ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#219](https://github.com/mainmatter/sheepdog/pull/219) woof ([@beerinho](https://github.com/beerinho))
+  * [#218](https://github.com/mainmatter/sheepdog/pull/218) Update homepage copy ([@beerinho](https://github.com/beerinho))
+  * [#206](https://github.com/mainmatter/sheepdog/pull/206) Fix logo size issue ([@nickschot](https://github.com/nickschot))
+  * [#200](https://github.com/mainmatter/sheepdog/pull/200) Update example code snippets to be closer to actual demo ([@nickschot](https://github.com/nickschot))
+  * [#205](https://github.com/mainmatter/sheepdog/pull/205) Various style fixes to the timeline ([@nickschot](https://github.com/nickschot))
+  * [#203](https://github.com/mainmatter/sheepdog/pull/203) Add copyright to footer ([@nickschot](https://github.com/nickschot))
+  * [#201](https://github.com/mainmatter/sheepdog/pull/201) Fix dark mode get started button appearing with the wrong colors ([@nickschot](https://github.com/nickschot))
+* Other
+  * [#204](https://github.com/mainmatter/sheepdog/pull/204) Improve readme ([@marcoow](https://github.com/marcoow))
+
+#### :house: Internal
+* `@sheepdog/docs`
+  * [#223](https://github.com/mainmatter/sheepdog/pull/223) chore: add plausible analytics ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#202](https://github.com/mainmatter/sheepdog/pull/202) Add netlify redirects ([@beerinho](https://github.com/beerinho))
+* `@sheepdog/svelte`
+  * [#221](https://github.com/mainmatter/sheepdog/pull/221) chore: setup `pkg.pr.new` ([@paoloricciuti](https://github.com/paoloricciuti))
+* Other
+  * [#213](https://github.com/mainmatter/sheepdog/pull/213) enable gravity again ([@marcoow](https://github.com/marcoow))
+  * [#210](https://github.com/mainmatter/sheepdog/pull/210) add wildcard redirects ([@beerinho](https://github.com/beerinho))
+  * [#207](https://github.com/mainmatter/sheepdog/pull/207) Move netlify.toml to root folder ([@beerinho](https://github.com/beerinho))
+  * [#208](https://github.com/mainmatter/sheepdog/pull/208) add LICENSE ([@marcoow](https://github.com/marcoow))
+
+#### Committers: 4
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Marco Otte-Witte ([@marcoow](https://github.com/marcoow))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-10-11)
 
 @sheepdog/svelte 0.11.0 (minor)
