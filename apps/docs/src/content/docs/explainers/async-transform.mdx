@@ -11,7 +11,7 @@ confident in using it. If you want to know how to setup the Vite plugin please g
 link.
 
 <LinkCard
-	href="getting-started/installation/#setup-the-async-transform"
+	href="/getting-started/installation/#setup-the-async-transform"
 	title="Setup the Async Transform"
 	description="Read the short guide about how to setup the Async Transform"
 />
@@ -259,6 +259,100 @@ and the same works even for imported functions with the same name.
 		return yield result.json();
 	});
 </script>
+```
+
+</TabItem>
+
+</Tabs>
+
+However sometimes you might want to have a single function to create multiple tasks or maybe you
+want to have your tasks in a separate ts file. Well good news for you...
+
+## The `transform` function
+
+If you want to tell `@sheepdog/svelte` that a function is meant to be transformed because you will
+pass that function to a task you can do so by using the `transform` function exported from
+`@sheepdog/svelte/utils`.
+
+This function doesn't do anything at runtime but it serves to purpose:
+
+1. As a marker for the vite plugin to transform the function you pass to it.
+2. as a "safety measure". The function will actually throw in `DEV` if you use it without the Async
+   Transform. This will warn you that what you expect to be a mid-run-cancellable function it is not
+   because you forgot to add the vite plugin.
+
+Here's how a transformed function will look like
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { transform } from '@sheepdog/svelte/utils';
+
+// this will be converted
+const myTask = transform(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+// this will be converted
+const myTask = async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+};
+```
+
+</TabItem>
+
+</Tabs>
+
+as you can see the function invocation was completely removed. This obviously works the same if you
+rename your import.
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { transform as sheepdogTransform } from '@sheepdog/svelte/utils';
+import { transform } from 'random-npm-library';
+
+// this will remain untouched
+const otherTransform = transform(async () => {
+	// async stuff
+});
+
+// this will be converted
+const myTask = sheepdogTransform(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+import { transform } from 'random-npm-library';
+
+// this will remain untouched
+const otherTransform = transform(async () => {
+	// async stuff
+});
+
+// this will be converted
+const myTask = async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+};
 ```
 
 </TabItem>

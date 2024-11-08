@@ -76,12 +76,14 @@ export class CancelationError extends Error {
 	}
 }
 
+export type TaskFunction<TArgs = unknown, TReturn = unknown> = (
+	args: TArgs,
+	utils: SheepdogUtils,
+) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>;
+
 export function createTask<TArgs = unknown, TReturn = unknown, TModifier = object>(
 	adapter: TaskAdapter<TReturn, TModifier>,
-	gen_or_fun: (
-		args: TArgs,
-		utils: SheepdogUtils,
-	) => Promise<TReturn> | AsyncGenerator<unknown, TReturn, unknown>,
+	gen_or_fun: TaskFunction<TArgs, TReturn>,
 	options?: TaskOptions,
 ) {
 	const handler_factory = handlers[options?.kind ?? 'default'];

@@ -1,0 +1,43 @@
+---
+title: Transform
+description: the transform function
+---
+
+import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+This function allows you to mark a function that is not directly passed to the `task` function as
+transformable from the Async Transform.
+
+<LinkCard
+	href="/explainers/async-transform"
+	title="Async Transform"
+	description="Read more about the Async Transform"
+/>
+
+## Usage
+
+You can import this function from `@sheepdog/svelte/utils` and call it with the same first argument
+you would pass to the `task` function
+
+```ts
+import { transform } from '@sheepdog/svelte/utils';
+
+const myTask = transform(async (id: number) => {
+	const res = await fetch(`/products/${id}`);
+	return await res.json();
+});
+```
+
+and this is really all you need to do. If you added the Async Transform vite plugin this function
+will be transformed and the `transform` import will be removed
+
+```ts
+const myTask = async function* (id: number) {
+	const res = yield fetch(`/products/${id}`);
+	return yield res.json();
+};
+```
+
+If by any chance you forgot to add the vite plugin the function will just return the function as is
+but it will throw an error at runtime (only in dev mode) to let you know that you need to include
+the vite plugin to actually transform the function.

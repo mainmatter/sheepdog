@@ -187,4 +187,54 @@ describe('threeshake', () => {
 			"
 		`);
 	});
+
+	test('importing `transform` should treeshake the rest of the library', async () => {
+		const file = await does_it_shake(`import { transform } from '@sheepdog/svelte';
+			
+			console.log(transform);`);
+		expect(file).toMatchInlineSnapshot(`
+			"function transform(fn) {
+			  {
+			    throw new Error("You are using the transform function without the vite plugin. Please add the \`asyncTransform\` plugin to your \`vite.config.ts\`");
+			  }
+			}
+			function rune_outside_svelte(rune) {
+			  {
+			    const error = new Error(\`rune_outside_svelte
+			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files\`);
+			    error.name = "Svelte error";
+			    throw error;
+			  }
+			}
+			{
+			  let throw_rune_error = function(rune) {
+			    if (!(rune in globalThis)) {
+			      let value;
+			      Object.defineProperty(globalThis, rune, {
+			        configurable: true,
+			        // eslint-disable-next-line getter-return
+			        get: () => {
+			          if (value !== void 0) {
+			            return value;
+			          }
+			          rune_outside_svelte(rune);
+			        },
+			        set: (v) => {
+			          value = v;
+			        }
+			      });
+			    }
+			  };
+			  var throw_rune_error2 = throw_rune_error;
+			  throw_rune_error("$state");
+			  throw_rune_error("$effect");
+			  throw_rune_error("$derived");
+			  throw_rune_error("$inspect");
+			  throw_rune_error("$props");
+			  throw_rune_error("$bindable");
+			}
+			console.log(transform);
+			"
+		`);
+	});
 });

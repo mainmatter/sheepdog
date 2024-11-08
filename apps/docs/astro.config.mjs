@@ -131,6 +131,10 @@ export default defineConfig({
 							label: 'Task Instance',
 							link: '/reference/task-instance',
 						},
+						{
+							label: 'Transform',
+							link: '/reference/transform',
+						},
 					],
 				},
 			],
