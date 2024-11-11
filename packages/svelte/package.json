@@ -55,10 +55,7 @@
 		"test:unit:ui": "vitest --ui"
 	},
 	"dependencies": {
-		"acorn": "^8.11.3",
-		"esm-env": "^1.1.4",
-		"esrap": "^1.2.2",
-		"zimmerframe": "^1.1.2"
+		"@sheepdog/core": "workspace:*"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.44.0",

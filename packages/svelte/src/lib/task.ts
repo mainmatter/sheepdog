@@ -1,7 +1,13 @@
 import { onDestroy } from 'svelte';
 import { writable } from 'svelte/store';
-import type { HandlerType, HandlersMap, SheepdogUtils, TaskOptions, TaskFunction } from './core';
-import { CancelationError, createTask, handlers } from './core';
+import type {
+	HandlerType,
+	HandlersMap,
+	SheepdogUtils,
+	TaskOptions,
+	TaskFunction,
+} from '@sheepdog/core';
+import { CancelationError, createTask, handlers } from '@sheepdog/core';
 import type { ReadableWithGet, WritableWithGet } from './internal/helpers';
 import { writable_with_get } from './internal/helpers';
 export type { SheepdogUtils, TaskOptions };
