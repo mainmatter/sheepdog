@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"outDir": "dist",
 		"strict": true,
 		"strictNullChecks": true,
 		"esModuleInterop": true,
@@ -8,6 +9,8 @@
 		"noUnusedLocals": true,
 		"skipLibCheck": true,
 		"sourceMap": true,
+		"target": "ESNext",
+		"module": "ESNext",
 		"moduleResolution": "Bundler"
 	}
 }

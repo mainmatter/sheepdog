@@ -9,7 +9,7 @@ const handler = (({ max = 1 }: { max?: number } = { max: 1 }) => {
 		if (running_controllers.size >= max) {
 			const first = running_controllers.values().next();
 			first.value?.abort();
-			running_controllers.delete(first.value);
+			running_controllers.delete(first.value!);
 		}
 		running_controllers.add(utils.abort_controller);
 		try {
