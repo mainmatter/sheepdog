@@ -53,8 +53,8 @@ importers:
         specifier: ^0.29.0
         version: 0.29.2(astro@4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3))
       '@astrojs/svelte':
-        specifier: ^5.7.2
-        version: 5.7.3(astro@4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3))(svelte@5.2.7)(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.1))
+        specifier: ^6.0.0
+        version: 6.0.2(@types/node@22.9.1)(astro@4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3))(svelte@5.2.7)(typescript@5.6.3)
       '@fontsource/calistoga':
         specifier: ^5.0.21
         version: 5.1.0
@@ -248,12 +248,12 @@ packages:
     peerDependencies:
       astro: ^4.14.0
 
-  '@astrojs/svelte@5.7.3':
-    resolution: {integrity: sha512-0PAwn2KLVpGsJppG8dWM1P9+/VrjAdhMWgEgwC1PjY2xFG565bTw7OuGaS5zh5Fu4AcjVoBkVQKjW/N3mLnrJA==}
+  '@astrojs/svelte@6.0.2':
+    resolution: {integrity: sha512-Jn60LLH+AbjtLIOQuL0SUI0fxMwpT89VraoGkEwF33ZgCT59H8fMQOj9eNf632P/SHRbKpD+Q+PJjODn5OcKoQ==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
     peerDependencies:
       astro: ^4.0.0
-      svelte: ^4.0.0 || ^5.0.0-next.190
+      svelte: ^5.1.16
       typescript: ^5.3.3
 
   '@astrojs/telemetry@3.1.0':
@@ -5222,16 +5222,24 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/svelte@5.7.3(astro@4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3))(svelte@5.2.7)(typescript@5.6.3)(vite@5.4.11(@types/node@22.9.1))':
+  '@astrojs/svelte@6.0.2(@types/node@22.9.1)(astro@4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3))(svelte@5.2.7)(typescript@5.6.3)':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 4.0.1(svelte@5.2.7)(vite@5.4.11(@types/node@22.9.1))
       astro: 4.16.14(@types/node@22.9.1)(rollup@4.27.3)(typescript@5.6.3)
       svelte: 5.2.7
       svelte2tsx: 0.7.22(svelte@5.2.7)(typescript@5.6.3)
       typescript: 5.6.3
+      vite: 5.4.11(@types/node@22.9.1)
     transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
       - supports-color
-      - vite
+      - terser
 
   '@astrojs/telemetry@3.1.0':
     dependencies:
