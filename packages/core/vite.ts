@@ -16,7 +16,7 @@ type Nodes =
 	| BlockStatement
 	| AwaitExpression;
 
-export async function asyncTransform() {
+export async function asyncTransform(): Promise<Plugin> {
 	const { parse } = await import('acorn');
 	const { print } = await import('esrap');
 	const { walk } = await import('zimmerframe');
@@ -140,5 +140,5 @@ export async function asyncTransform() {
 				/** in case parsing fails */
 			}
 		},
-	} satisfies Plugin;
+	};
 }
