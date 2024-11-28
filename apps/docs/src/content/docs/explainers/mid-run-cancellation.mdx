@@ -6,13 +6,13 @@ description: How to handle the cancellation of a task mid execution
 import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 import BlankLink from '@components/BlankLink.astro';
 
-As we hinted in the [What is it?](/getting-started/what-is-it/) explainer one of the advantages of
+As we hinted in the [What is it?](/getting-started/what-is-it/) explainer, one of the advantages of
 `@sheepdog/svelte` is that it allows you to really "cancel" a task. Let's look at the actual problem
-and how it is solves with `@sheepdog/svelte`.
+and how it is solved with `@sheepdog/svelte`.
 
 ## The problem
 
-Promises are the de facto way to run asynchronous code in Javascript and (especially after the
+Promises are the de facto way to run asynchronous code in JavaScript and (especially after the
 introduction of the `async` and `await` keywords) they are quite nice to work with.
 
 ```ts
@@ -26,7 +26,7 @@ async function myStuff() {
 }
 ```
 
-However, they have a big problem: once invoked there's no way to stop the execution of the code.
+However, they have a big problem: Once invoked there is no way to stop the execution of the code.
 This can lead to performance problems in the simplest case or even bugs in more complex scenarios.
 
 ```ts
@@ -42,7 +42,7 @@ async function fetchALotOfStuff() {
 ```
 
 This is especially true if we are invoking those functions within a UI framework because we tend to
-assign values outside of the scope of the function to reactively show them in the ui.
+assign values outside of the scope of the function to reactively show them in the UI.
 
 ```svelte
 <script>
@@ -71,10 +71,10 @@ The simplest way to solve this problem is to set up a variable and check it afte
 
 	let canceled = false;
 
-	function fetchList(){
+	function fetchList() {
 		canceled = false;
 		const response = await fetch('/api/very-long-list');
-		if(canceled) return;
+		if (canceled) return;
 		list = await response.json();
 	}
 </script>
@@ -82,7 +82,7 @@ The simplest way to solve this problem is to set up a variable and check it afte
 <button on:click={fetchList}>fetch</button>
 <button
 	on:click={() => {
-		cancel = true;
+		canceled = true;
 	}}>cancel</button
 >
 
@@ -120,11 +120,9 @@ Every task has its own `AbortController` and you can cancel a single task instan
 
 	let list;
 
-	const fetchTask = task((_, { signal })=>{
-		// we can pass the signal to fetch to eventually abort the in-flight request
+	const fetchTask = task((_, { signal }) => {
+		// we can pass the signal to fetch to potentially abort the in-flight request
 		const response = await fetch('/api/very-long-list', { signal });
-		// and we can check if the signal is aborted and return to avoid side effects
-		if(signal.aborted) return;
 		list = await response.json();
 	});
 	
@@ -155,19 +153,20 @@ Every task has its own `AbortController` and you can cancel a single task instan
 ```
 
 We've gained the ability to stop in-flight fetches with the `AbortSignal` without having to create a
-separate `canceled` variable. That's a win. But we can do better.
+separate `canceled` variable. That's a win, but it does not cover other async functions or library
+APIs that do not support `AbortSignals`.
 
 ### Solution 2: Async generators
 
-Those who doesn't know about <BlankLink
+Those who don't know about <BlankLink
 	href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators"
 	body="generators"
-/> might be a bit confused right know and those who know about them might be already running away in
-fear but please bear with us for a second and we will show you that generators are not really that
+/> might be a bit confused right now and those who know about them might be already running away in
+fear, but please bear with us for a second and we will show you that generators are not really that
 scary.
 
-A generator is a particular function in Javascript that is able to `yield` back the execution to the
-caller, the syntax to create one looks like this
+A generator is a particular function in JavaScript that is able to `yield` back the execution to the
+caller. The syntax to create one looks like this:
 
 ```ts
 function* ping() {
@@ -185,14 +184,14 @@ generator.next('ping');
 // logs: "after yield: ping"
 ```
 
-I know, I told you this wouldn't be scary and for the moment I haven't keep my promise (pun
-intended). But the main takeaway from this snippet of code is to show that generator functions have
+I know, I told you this wouldn't be scary and for the moment I haven't kept my promise (pun
+intended). But the main takeaway from this snippet of code is that generator functions have
 a way to stop executing and return something to the caller and the caller has a way to communicate
 something back.
 
 `@sheepdog/svelte` has been built to be able to accept an async generator function and, most
 importantly, has been built to make the generator function work basically like a normal async
-function if you change `await` with `yield`. Let's take a look
+function if you replace `await` with `yield`. Let's take a look
 
 <Tabs>
 
@@ -221,18 +220,18 @@ const myTask = task(async (_, { signal }) => {
 
 </Tabs>
 
-As you can see, the code in the two tabs the code changes very little but with generators
+As you can see, the code in the two tabs changes very little but with generators
 `@sheepdog/svelte` has the ability to never call `next` if the task was canceled. This means that
-the if you cancel the task while fetch is still in-flight the second line of the function will
+if you cancel the task while fetch is still in-flight the second line of the function will
 **never** be called!
 
-There's one small detail we've hidden from you however: `yield` doesn't work very well with
-Typescript, especially if there are multiple of them. If you try to paste that code in a `.ts` file
-(or in a svelte component with `<script lang='ts'>`) you will see all sort of errors. This is
-because Typescript doesn't know which kind of data `@sheepdog/svelte` will pass back to the
+There is one small detail we have hidden from you, however: `yield` doesn't work very well with
+TypeScript, especially if there are multiple of them. If you try to paste that code in a `.ts` file
+(or in a Svelte component with `<script lang='ts'>`), you will see all sorts of errors. This is
+because TypeScript doesn't know which kind of data `@sheepdog/svelte` will pass back to the
 generator.
 
-To fix this problem you can use `yield` as a sort of `if+return`
+To fix this problem, you can use `yield` as a sort of `if+return`
 
 ```ts
 let value;
@@ -252,19 +251,19 @@ Can we do better than this? Yes we can!
 
 ### Solution 3: Async Transform
 
-`@sheepdog/svelte` really cares about your DX and that's why we have built a vite plugin that you
-can use to get the best of both words: the dynamic cancellation of generators and the expressivity
+`@sheepdog/svelte` really cares about your DX and that's why we have built a Vite plugin that you
+can use to get the best of both worlds: The dynamic cancellation of generators and the expressivity
 and simplicity of async functions.
 
 <Aside type="tip">
-	You can read about how to setup the Async Transform in our [installation
+	You can read about how to set up the Async Transform in our [installation
 	guide](/getting-started/installation/#setup-the-async-transform) or read more about how it works
 	in our [Async Transform guide](/explainers/async-transform)
 </Aside>
 
-In short, what the vite plugin does is transform every async function inside a `task` to an async
-generator and it substitute every `await` with a `yield`. This fixes all our problems because the
-Typescript language server will resolve the types based on your actual code while at runtime
+In short, what the Vite plugin does, is transform every async function inside a `task` to an async
+generator and it substitutes every `await` with a `yield`. This fixes all our problems because the
+TypeScript language server will resolve the types based on your actual code while at runtime
 `@sheepdog/svelte` will be able to cancel every task, even in the middle of an execution!
 
 ```svelte
@@ -273,7 +272,7 @@ Typescript language server will resolve the types based on your actual code whil
 
 	let list;
 
-	const fetchTask = task((_, { signal })=>{
+	const fetchTask = task((_, { signal }) => {
 		const response = await fetch('/api/very-long-list', { signal });
 		// this line will never be executed if the task is canceled before fetch ends
 		list = await response.json();
