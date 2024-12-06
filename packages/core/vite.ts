@@ -5,6 +5,7 @@ import type {
 	CallExpression,
 	FunctionExpression,
 	ImportDeclaration,
+	Program,
 } from 'acorn';
 import type { Plugin } from 'vite';
 
@@ -25,11 +26,16 @@ export async function asyncTransform(): Promise<Plugin> {
 		name: 'sheepdog-async-transform',
 		async transform(code, id) {
 			try {
-				const ast = parse(code, {
-					ecmaVersion: 'latest',
-					locations: true,
-					sourceType: 'module',
-				});
+				let ast: Program;
+				try {
+					ast = parse(code, {
+						ecmaVersion: 'latest',
+						locations: true,
+						sourceType: 'module',
+					});
+				} catch {
+					return;
+				}
 				let task_fn_name: string;
 				const transform_fn_names = new Set<string>();
 				// let's walk once to find the name (we were using a promise before but that's just messy)
