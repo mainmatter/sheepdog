@@ -1,37 +1,37 @@
 {
-	"name": "@sheepdog/root",
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:mainmatter/sheepdog.git"
-	},
-	"version": "0.0.1",
-	"description": "monorepo for @sheepdog code and docs",
-	"private": true,
-	"scripts": {
-		"build:docs": "pnpm --dir packages/svelte build && pnpm --dir apps/docs build",
-		"dev:docs": "pnpm --dir apps/docs dev",
-		"dev": "pnpm --dir packages/svelte dev",
-		"test": "pnpm run --dir packages/svelte test",
-		"format": "pnpm -r format",
-		"lint": "pnpm -r lint"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"type": "module",
-	"devDependencies": {
-		"@gravityci/cli": "^0.0.4",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "2.46.1",
-		"globals": "^15.2.0",
-		"prettier-plugin-svelte": "^3.2.3",
-		"release-plan": "^0.11.0",
-		"typescript": "^5.4.5",
-		"typescript-eslint": "^8.0.0"
-	},
-	"volta": {
-		"node": "22.12.0",
-		"pnpm": "9.14.4"
-	},
-	"packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"
+  "name": "@sheepdog/root",
+  "version": "0.0.1",
+  "private": true,
+  "description": "monorepo for @sheepdog code and docs",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mainmatter/sheepdog.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "build:docs": "pnpm --dir packages/svelte build && pnpm --dir apps/docs build",
+    "dev": "pnpm --dir packages/svelte dev",
+    "dev:docs": "pnpm --dir apps/docs dev",
+    "format": "pnpm -r format",
+    "lint": "pnpm -r lint",
+    "test": "pnpm run --dir packages/svelte test"
+  },
+  "devDependencies": {
+    "@gravityci/cli": "^0.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "2.46.1",
+    "globals": "^15.2.0",
+    "prettier-plugin-svelte": "^3.2.3",
+    "release-plan": "^0.11.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.0.0"
+  },
+  "packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab",
+  "volta": {
+    "node": "22.12.0",
+    "pnpm": "9.14.4"
+  }
 }
