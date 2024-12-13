@@ -46,7 +46,8 @@ describe('threeshake', () => {
 			function rune_outside_svelte(rune) {
 			  {
 			    const error = new Error(\`rune_outside_svelte
-			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files\`);
+			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files
+			https://svelte.dev/e/rune_outside_svelte\`);
 			    error.name = "Svelte error";
 			    throw error;
 			  }
@@ -100,7 +101,8 @@ describe('threeshake', () => {
 			function rune_outside_svelte(rune) {
 			  {
 			    const error = new Error(\`rune_outside_svelte
-			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files\`);
+			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files
+			https://svelte.dev/e/rune_outside_svelte\`);
 			    error.name = "Svelte error";
 			    throw error;
 			  }
@@ -151,7 +153,8 @@ describe('threeshake', () => {
 			function rune_outside_svelte(rune) {
 			  {
 			    const error = new Error(\`rune_outside_svelte
-			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files\`);
+			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files
+			https://svelte.dev/e/rune_outside_svelte\`);
 			    error.name = "Svelte error";
 			    throw error;
 			  }
@@ -201,7 +204,8 @@ describe('threeshake', () => {
 			function rune_outside_svelte(rune) {
 			  {
 			    const error = new Error(\`rune_outside_svelte
-			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files\`);
+			The \\\`\${rune}\\\` rune is only available inside \\\`.svelte\\\` and \\\`.svelte.js/ts\\\` files
+			https://svelte.dev/e/rune_outside_svelte\`);
 			    error.name = "Svelte error";
 			    throw error;
 			  }
