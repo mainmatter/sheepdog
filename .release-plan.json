@@ -1,30 +1,13 @@
 {
   "solution": {
     "@sheepdog/core": {
-      "impact": "patch",
-      "oldVersion": "0.0.1",
-      "newVersion": "0.0.2",
-      "constraints": [
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
-        }
-      ],
-      "pkgJSONPath": "./packages/core/package.json"
+      "oldVersion": "0.0.2"
     },
     "@sheepdog/svelte": {
       "impact": "patch",
-      "oldVersion": "0.12.0",
-      "newVersion": "0.12.1",
+      "oldVersion": "0.12.1",
+      "newVersion": "0.12.2",
       "constraints": [
-        {
-          "impact": "patch",
-          "reason": "Has dependency `workspace:*` on @sheepdog/core"
-        },
         {
           "impact": "patch",
           "reason": "Appears in changelog section :house: Internal"
@@ -33,5 +16,5 @@
       "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2024-12-06)\n\n@sheepdog/core 0.0.2 (patch)\n@sheepdog/svelte 0.12.1 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`\n  * [#246](https://github.com/mainmatter/sheepdog/pull/246) Improve error handling of the async transform ([@beerinho](https://github.com/beerinho))\n\n#### :memo: Documentation\n* `@sheepdog/docs`\n  * [#235](https://github.com/mainmatter/sheepdog/pull/235) Docs: Various fixes in \"Mid run cancellation\" section ([@brunnerh](https://github.com/brunnerh))\n\n#### :house: Internal\n* Other\n  * [#245](https://github.com/mainmatter/sheepdog/pull/245) update release-plan ([@mansona](https://github.com/mansona))\n* `@sheepdog/docs`\n  * [#235](https://github.com/mainmatter/sheepdog/pull/235) Docs: Various fixes in \"Mid run cancellation\" section ([@brunnerh](https://github.com/brunnerh))\n* `@sheepdog/core`, `@sheepdog/svelte`\n  * [#231](https://github.com/mainmatter/sheepdog/pull/231) chore: restructure monorepo ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 4\n- Chris Manson ([@mansona](https://github.com/mansona))\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n- [@brunnerh](https://github.com/brunnerh)\n"
+  "description": "## Release (2024-12-13)\n\n@sheepdog/svelte 0.12.2 (patch)\n\n#### :house: Internal\n* Other\n  * [#249](https://github.com/mainmatter/sheepdog/pull/249) add bug issue template ([@beerinho](https://github.com/beerinho))\n* `@sheepdog/svelte`\n  * [#251](https://github.com/mainmatter/sheepdog/pull/251) Remove stderr.log & add to gitignore ([@nickschot](https://github.com/nickschot))\n\n#### Committers: 2\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Nick Schot ([@nickschot](https://github.com/nickschot))\n"
 }
