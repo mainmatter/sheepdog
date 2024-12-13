@@ -29,6 +29,8 @@ body:
       description: Select the severity of this issue
       options:
         - annoyance
+        - serious but i have a workaround
+        - blocking me on a specific feature
         - blocking all usage of Sheepdog
     validations:
       required: true
