@@ -1,5 +1,19 @@
 # Changelog
 
+## Release (2024-12-13)
+
+@sheepdog/svelte 0.12.2 (patch)
+
+#### :house: Internal
+* Other
+  * [#249](https://github.com/mainmatter/sheepdog/pull/249) add bug issue template ([@beerinho](https://github.com/beerinho))
+* `@sheepdog/svelte`
+  * [#251](https://github.com/mainmatter/sheepdog/pull/251) Remove stderr.log & add to gitignore ([@nickschot](https://github.com/nickschot))
+
+#### Committers: 2
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+
 ## Release (2024-12-06)
 
 @sheepdog/core 0.0.2 (patch)
