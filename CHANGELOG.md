@@ -1,5 +1,32 @@
 # Changelog
 
+## Release (2024-12-06)
+
+@sheepdog/core 0.0.2 (patch)
+@sheepdog/svelte 0.12.1 (patch)
+
+#### :bug: Bug Fix
+* `@sheepdog/core`
+  * [#246](https://github.com/mainmatter/sheepdog/pull/246) Improve error handling of the async transform ([@beerinho](https://github.com/beerinho))
+
+#### :memo: Documentation
+* `@sheepdog/docs`
+  * [#235](https://github.com/mainmatter/sheepdog/pull/235) Docs: Various fixes in "Mid run cancellation" section ([@brunnerh](https://github.com/brunnerh))
+
+#### :house: Internal
+* Other
+  * [#245](https://github.com/mainmatter/sheepdog/pull/245) update release-plan ([@mansona](https://github.com/mansona))
+* `@sheepdog/docs`
+  * [#235](https://github.com/mainmatter/sheepdog/pull/235) Docs: Various fixes in "Mid run cancellation" section ([@brunnerh](https://github.com/brunnerh))
+* `@sheepdog/core`, `@sheepdog/svelte`
+  * [#231](https://github.com/mainmatter/sheepdog/pull/231) chore: restructure monorepo ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 4
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+- [@brunnerh](https://github.com/brunnerh)
+
 ## Release (2024-11-08)
 
 @sheepdog/svelte 0.12.0 (minor)
