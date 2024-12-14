@@ -82,15 +82,13 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			},
 			onError(instance_id, error) {
 				const instance = instances.get(instance_id);
-				event_target.dispatchEvent(new SheepdogEvent('error'));
-
 				if (instance) {
-					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('error'));
-					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('finish'));
 					task_instance.lastErrored = instance.instance;
 					instance.instance.error = error;
 					instance.is_running = false;
 					update_is_running();
+					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('error'));
+					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('finish'));
 					// we delete after a microtask to avoid returnModifier
 					// not founding the instance in case of a syncronous
 					// cancellation (for example with drop)
@@ -98,15 +96,15 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instances.delete(instance_id);
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('error'));
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
-				event_target.dispatchEvent(new SheepdogEvent('cancel'));
 				if (instance) {
-					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('cancel'));
-					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('finish'));
 					instance.is_running = false;
 					update_is_running();
+					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('cancel'));
+					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('finish'));
 					// we delete after a microtask to avoid returnModifier
 					// not founding the instance in case of a syncronous
 					// cancellation (for example with drop)
@@ -114,6 +112,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instances.delete(instance_id);
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('cancel'));
 			},
 			onInstanceCreate(instance_id) {
 				const instance_event_target = new EventTarget();
@@ -129,23 +128,22 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					},
 					is_running: false,
 				};
-				event_target.dispatchEvent(new SheepdogEvent('instance-create'));
 				task_instance.last = instance.instance;
 				instances.set(instance_id, instance);
+				event_target.dispatchEvent(new SheepdogEvent('instance-create'));
 			},
 			onInstanceStart(instance_id) {
 				const instance = instances.get(instance_id);
-				event_target.dispatchEvent(new SheepdogEvent('instance-start'));
 				if (instance) {
 					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('start'));
 					instance.is_running = true;
 					update_is_running();
 				}
 				task_instance.performCount++;
+				event_target.dispatchEvent(new SheepdogEvent('instance-start'));
 			},
 			onInstanceComplete(instance_id, last_result) {
 				const instance = instances.get(instance_id);
-				event_target.dispatchEvent(new SheepdogEvent('instance-complete'));
 				if (instance) {
 					instance.instance.value = last_result;
 					instance.is_running = false;
@@ -159,6 +157,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						instances.delete(instance_id);
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('instance-complete'));
 			},
 			returnModifier(instance_id, returned_value) {
 				const instance = instances.get(instance_id);
