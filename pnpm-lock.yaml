@@ -194,6 +194,76 @@ importers:
         specifier: ^2.1.2
         version: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
 
+  packages/vanilla:
+    dependencies:
+      '@sheepdog/core':
+        specifier: workspace:*
+        version: link:../core
+    devDependencies:
+      '@types/eslint':
+        specifier: 9.6.1
+        version: 9.6.1
+      '@types/eslint-config-prettier':
+        specifier: ^6.11.3
+        version: 6.11.3
+      '@types/eslint__js':
+        specifier: ^8.42.3
+        version: 8.42.3
+      '@vitest/coverage-v8':
+        specifier: ^2.0.0
+        version: 2.1.8(vitest@2.1.8)
+      '@vitest/ui':
+        specifier: ^2.0.0
+        version: 2.1.8(vitest@2.1.8)
+      eslint:
+        specifier: ^9.2.0
+        version: 9.16.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@9.16.0)
+      eslint-plugin-playwright:
+        specifier: ^2.0.0
+        version: 2.1.0(eslint@9.16.0)
+      eslint-plugin-svelte:
+        specifier: 2.46.1
+        version: 2.46.1(eslint@9.16.0)(svelte@5.12.0)
+      execa:
+        specifier: ^9.4.0
+        version: 9.5.2
+      fixturify-project:
+        specifier: ^7.1.3
+        version: 7.1.3
+      globals:
+        specifier: ^15.2.0
+        version: 15.13.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.4.2
+      prettier-plugin-svelte:
+        specifier: ^3.2.3
+        version: 3.3.2(prettier@3.4.2)(svelte@5.12.0)
+      publint:
+        specifier: ^0.2.7
+        version: 0.2.12
+      tslib:
+        specifier: ^2.6.2
+        version: 2.8.1
+      tsm:
+        specifier: ^2.3.0
+        version: 2.3.0
+      typescript:
+        specifier: ^5.4.5
+        version: 5.7.2
+      typescript-eslint:
+        specifier: ^8.0.0
+        version: 8.18.0(eslint@9.16.0)(typescript@5.7.2)
+      vite:
+        specifier: ^6.0.0
+        version: 6.0.3(@types/node@22.10.2)(yaml@2.5.1)
+      vitest:
+        specifier: ^2.1.2
+        version: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
+
 packages:
 
   '@adobe/css-tools@4.4.0':
