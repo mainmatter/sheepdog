@@ -46,6 +46,17 @@ export type TaskInstance<TReturn = undefined> = {
 	on: (event: InstanceEvents, cb: () => void, options?: AddEventListenerOptions) => void;
 };
 
+function define_properties<TOn, TFrom>(on: TOn, from: TFrom): asserts on is TOn & Readonly<TFrom> {
+	for (const key in from) {
+		Object.defineProperty(on, key, {
+			enumerable: true,
+			get() {
+				return from[key as never];
+			},
+		});
+	}
+}
+
 function _task<TArgs = unknown, TReturn = undefined>(
 	gen_or_fun: TaskFunction<TArgs, TReturn>,
 	options?: TaskOptions,
@@ -125,6 +136,8 @@ function _task<TArgs = unknown, TReturn = undefined>(
 								instance_event_target.removeEventListener(event, cb, options);
 							};
 						},
+						error: undefined,
+						value: undefined,
 					},
 					is_running: false,
 				};
@@ -163,13 +176,15 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				const instance = instances.get(instance_id);
 				if (!instance)
 					throw new Error('Return modifier has been called before the instance was created');
-				return Object.assign(returned_value, instance.instance);
+				define_properties(returned_value, instance.instance);
+				return returned_value;
 			},
 		},
 		gen_or_fun,
 		options,
 	);
-	return Object.assign(actual_task, task_instance);
+	define_properties(actual_task, task_instance);
+	return actual_task;
 }
 
 type HandlersShorthands = {
