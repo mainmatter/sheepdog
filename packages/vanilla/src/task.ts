@@ -12,15 +12,8 @@ export { CancelationError };
 
 export type Task<TArgs = unknown, TReturn = unknown> = ReturnType<typeof task<TArgs, TReturn>>;
 
-type Events =
-	| 'error'
-	| 'finish'
-	| 'cancel'
-	| 'instance-create'
-	| 'instance-start'
-	| 'instance-complete';
-
 type InstanceEvents = 'error' | 'finish' | 'cancel' | 'start' | 'success';
+type Events = 'start' | 'finish' | 'instance-create' | `instance-${InstanceEvents}`;
 
 class SheepdogEvent extends CustomEvent<unknown> {
 	constructor(name: Events) {
@@ -38,6 +31,7 @@ type MappedInstance<TReturn> = {
 	event_target: EventTarget;
 	is_running: boolean;
 	instance: TaskInstance<TReturn>;
+	offs: Set<() => void>;
 };
 
 export type TaskInstance<TReturn = undefined> = {
@@ -105,9 +99,13 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
+						for (const off of instance.offs) {
+							off();
+						}
 					});
 				}
-				event_target.dispatchEvent(new SheepdogEvent('error'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-error'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
@@ -121,20 +119,28 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
+						for (const off of instance.offs) {
+							off();
+						}
 					});
 				}
-				event_target.dispatchEvent(new SheepdogEvent('cancel'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-cancel'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			onInstanceCreate(instance_id) {
 				const instance_event_target = new EventTarget();
+				const offs = new Set<() => void>();
 				const instance: MappedInstance<TReturn> = {
 					event_target: instance_event_target,
+					offs,
 					instance: {
 						on(event, cb, options) {
 							instance_event_target.addEventListener(event, cb, options);
-							return () => {
+							function off() {
 								instance_event_target.removeEventListener(event, cb, options);
-							};
+							}
+							offs.add(off);
+							return off;
 						},
 						error: undefined,
 						value: undefined,
@@ -142,6 +148,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					is_running: false,
 				};
 				task_instance.last = instance.instance;
+				if (instances.size === 0) {
+					event_target.dispatchEvent(new SheepdogEvent('start'));
+				}
 				instances.set(instance_id, instance);
 				event_target.dispatchEvent(new SheepdogEvent('instance-create'));
 			},
@@ -168,9 +177,16 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
+						for (const off of instance.offs) {
+							off();
+						}
 					});
 				}
-				event_target.dispatchEvent(new SheepdogEvent('instance-complete'));
+				if (instances.size === 1) {
+					event_target.dispatchEvent(new SheepdogEvent('finish'));
+				}
+				event_target.dispatchEvent(new SheepdogEvent('instance-success'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			returnModifier(instance_id, returned_value) {
 				const instance = instances.get(instance_id);
