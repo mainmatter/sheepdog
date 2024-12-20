@@ -13,7 +13,8 @@
     "prepare": "pnpm build"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
   ],
   "exports": {
     ".": {
