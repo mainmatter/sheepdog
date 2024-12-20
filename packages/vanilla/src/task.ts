@@ -104,6 +104,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						}
 					});
 				}
+				if (![...instances.values()].some((instance) => instance.is_running)) {
+					event_target.dispatchEvent(new SheepdogEvent('finish'));
+				}
 				event_target.dispatchEvent(new SheepdogEvent('instance-error'));
 				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
@@ -123,6 +126,9 @@ function _task<TArgs = unknown, TReturn = undefined>(
 							off();
 						}
 					});
+				}
+				if (![...instances.values()].some((instance) => instance.is_running)) {
+					event_target.dispatchEvent(new SheepdogEvent('finish'));
 				}
 				event_target.dispatchEvent(new SheepdogEvent('instance-cancel'));
 				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
@@ -182,7 +188,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						}
 					});
 				}
-				if (instances.size === 1) {
+				if (![...instances.values()].some((instance) => instance.is_running)) {
 					event_target.dispatchEvent(new SheepdogEvent('finish'));
 				}
 				event_target.dispatchEvent(new SheepdogEvent('instance-success'));
