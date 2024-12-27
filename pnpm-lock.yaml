@@ -158,8 +158,8 @@ importers:
         specifier: ^15.2.0
         version: 15.13.0
       happy-dom:
-        specifier: ^15.0.0
-        version: 15.11.7
+        specifier: ^16.0.0
+        version: 16.0.0
       prettier:
         specifier: ^3.2.5
         version: 3.4.2
@@ -192,7 +192,7 @@ importers:
         version: 6.0.3(@types/node@22.10.2)(yaml@2.5.1)
       vitest:
         specifier: ^2.1.2
-        version: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
+        version: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@16.0.0)
 
 packages:
 
@@ -2895,8 +2895,8 @@ packages:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
     engines: {node: '>=6.0'}
 
-  happy-dom@15.11.7:
-    resolution: {integrity: sha512-KyrFvnl+J9US63TEzwoiJOQzZBJY7KgBushJA8X61DMbNsH+2ONkDuLDnCnwUiPTF42tLoEmrPyoqbenVA5zrg==}
+  happy-dom@16.0.0:
+    resolution: {integrity: sha512-Br2gCVyasiuBFSunZpgkKJ84ruoM/a1e6OnJj3MU1O2pz9+HDBc03WD00/DNQ2xnQpLlpGwU37TaubonvlZWIQ==}
     engines: {node: '>=18.0.0'}
 
   has-flag@4.0.0:
@@ -6790,7 +6790,7 @@ snapshots:
       svelte: 5.12.0
     optionalDependencies:
       vite: 6.0.3(@types/node@22.10.2)(yaml@2.5.1)
-      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
+      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@16.0.0)
 
   '@tootallnate/once@1.1.2': {}
 
@@ -7017,7 +7017,7 @@ snapshots:
       std-env: 3.8.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
+      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@16.0.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -7064,7 +7064,7 @@ snapshots:
       sirv: 3.0.0
       tinyglobby: 0.2.10
       tinyrainbow: 1.2.0
-      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7)
+      vitest: 2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@16.0.0)
 
   '@vitest/utils@2.1.8':
     dependencies:
@@ -8375,9 +8375,8 @@ snapshots:
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
 
-  happy-dom@15.11.7:
+  happy-dom@16.0.0:
     dependencies:
-      entities: 4.5.0
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
 
@@ -10864,7 +10863,7 @@ snapshots:
     optionalDependencies:
       vite: 6.0.3(@types/node@22.10.2)(yaml@2.5.1)
 
-  vitest@2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@15.11.7):
+  vitest@2.1.8(@types/node@22.10.2)(@vitest/ui@2.1.8)(happy-dom@16.0.0):
     dependencies:
       '@vitest/expect': 2.1.8
       '@vitest/mocker': 2.1.8(vite@5.4.11(@types/node@22.10.2))
@@ -10889,7 +10888,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 22.10.2
       '@vitest/ui': 2.1.8(vitest@2.1.8)
-      happy-dom: 15.11.7
+      happy-dom: 16.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
