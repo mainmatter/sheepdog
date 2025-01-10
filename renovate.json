@@ -11,6 +11,15 @@
 			}
 		},
 		{
+			"extends": ["group:allNonMajor"],
+			"schedule": ["before 7am every friday"],
+			"lockFileMaintenance": {
+				"enabled": true
+			},
+			"matchFileNames": ["apps/docs/**"],
+			"groupName": "Docs app (non-major)"
+		},
+		{
 			"matchUpdateTypes": ["patch", "pin"],
 			"matchCurrentVersion": "!/^0/"
 		}
