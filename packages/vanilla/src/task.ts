@@ -104,11 +104,11 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						}
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('instance-error'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 				if (![...instances.values()].some((instance) => instance.is_running)) {
 					event_target.dispatchEvent(new SheepdogEvent('finish'));
 				}
-				event_target.dispatchEvent(new SheepdogEvent('instance-error'));
-				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
@@ -127,11 +127,11 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						}
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('instance-cancel'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 				if (![...instances.values()].some((instance) => instance.is_running)) {
 					event_target.dispatchEvent(new SheepdogEvent('finish'));
 				}
-				event_target.dispatchEvent(new SheepdogEvent('instance-cancel'));
-				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			onInstanceCreate(instance_id) {
 				const instance_event_target = new EventTarget();
@@ -188,11 +188,11 @@ function _task<TArgs = unknown, TReturn = undefined>(
 						}
 					});
 				}
+				event_target.dispatchEvent(new SheepdogEvent('instance-success'));
+				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 				if (![...instances.values()].some((instance) => instance.is_running)) {
 					event_target.dispatchEvent(new SheepdogEvent('finish'));
 				}
-				event_target.dispatchEvent(new SheepdogEvent('instance-success'));
-				event_target.dispatchEvent(new SheepdogEvent('instance-finish'));
 			},
 			returnModifier(instance_id, returned_value) {
 				const instance = instances.get(instance_id);
