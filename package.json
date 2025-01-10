@@ -20,7 +20,7 @@
     "test": "pnpm run --dir packages/svelte test"
   },
   "devDependencies": {
-    "@gravityci/cli": "^0.0.4",
+    "@gravityci/cli": "^0.0.7",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "2.46.1",
     "globals": "^15.2.0",
