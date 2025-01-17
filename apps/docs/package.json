@@ -13,7 +13,7 @@
 	"dependencies": {
 		"@astrojs/check": "^0.9.0",
 		"@astrojs/netlify": "^5.4.0",
-		"@astrojs/starlight": "^0.29.0",
+		"@astrojs/starlight": "^0.31.0",
 		"@astrojs/svelte": "^6.0.0",
 		"@fontsource/calistoga": "^5.0.21",
 		"@fontsource/pt-sans": "^5.0.13",

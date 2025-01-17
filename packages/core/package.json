@@ -44,7 +44,7 @@
     "extends": "../../package.json"
   },
   "devDependencies": {
-    "publint": "^0.2.7",
+    "publint": "^0.3.0",
     "vite": "^6.0.0"
   }
 }
