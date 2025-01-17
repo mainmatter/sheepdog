@@ -104,8 +104,8 @@ importers:
         specifier: ^1.44.0
         version: 1.49.1
       '@sveltejs/adapter-auto':
-        specifier: ^3.2.0
-        version: 3.3.1(@sveltejs/kit@2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))
+        specifier: ^4.0.0
+        version: 4.0.0(@sveltejs/kit@2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))
       '@sveltejs/kit':
         specifier: ^2.5.8
         version: 2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1))
@@ -1519,8 +1519,8 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@sveltejs/adapter-auto@3.3.1':
-    resolution: {integrity: sha512-5Sc7WAxYdL6q9j/+D0jJKjGREGlfIevDyHSQ2eNETHcB1TKlQWHcAo8AS8H1QdjNvSXpvOwNjykDUHPEAyGgdQ==}
+  '@sveltejs/adapter-auto@4.0.0':
+    resolution: {integrity: sha512-kmuYSQdD2AwThymQF0haQhM8rE5rhutQXG4LNbnbShwhMO4qQGnKaaTy+88DuNSuoQDi58+thpq8XpHc1+oEKQ==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
@@ -6780,7 +6780,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@sveltejs/adapter-auto@3.3.1(@sveltejs/kit@2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))':
+  '@sveltejs/adapter-auto@4.0.0(@sveltejs/kit@2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))':
     dependencies:
       '@sveltejs/kit': 2.15.3(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1)))(svelte@5.18.0)(vite@6.0.7(@types/node@22.10.2)(yaml@2.5.1))
       import-meta-resolve: 4.1.0
