@@ -96,6 +96,9 @@ importers:
       vite:
         specifier: ^6.0.0
         version: 6.0.9(@types/node@22.10.10)(yaml@2.5.1)
+      vitest:
+        specifier: ^3.0.0
+        version: 3.0.4(@types/debug@4.1.12)(@types/node@22.10.10)(@vitest/ui@3.0.4)(happy-dom@16.7.2)(yaml@2.5.1)
 
   packages/svelte:
     dependencies:
