@@ -17,7 +17,7 @@
     "dev:docs": "pnpm --dir apps/docs dev",
     "format": "pnpm -r format",
     "lint": "pnpm -r lint",
-    "test": "pnpm run --dir packages/svelte test"
+    "test": "pnpm -r test -- --run"
   },
   "devDependencies": {
     "@gravityci/cli": "^0.0.7",

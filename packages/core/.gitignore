@@ -1,1 +1,2 @@
 dist
+tests/expected-transforms/**/_actual.js
