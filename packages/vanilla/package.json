@@ -33,7 +33,7 @@
 		"!dist/**/*.spec.*"
 	],
 	"scripts": {
-		"build": "tsc --outDir dist --declaration --sourceMap false && publint",
+		"build": "tsc && publint",
 		"format": "eslint . --fix && prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"prepare": "pnpm build",
