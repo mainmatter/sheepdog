@@ -1,8 +1,8 @@
-import { asyncTransform } from '../../vite';
+import { asyncTransform } from '../../src/vite';
 import { readdirSync, existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 
-const dir = readdirSync('./src/lib/tests/expected-transforms', {
+const dir = readdirSync('./tests/expected-transforms', {
 	withFileTypes: true,
 	recursive: true,
 });

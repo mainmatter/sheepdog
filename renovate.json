@@ -5,14 +5,14 @@
 	"packageRules": [
 		{
 			"extends": ["group:allNonMajor"],
-			"schedule": ["before 7am every friday"],
+			"schedule": ["before 7am on friday"],
 			"lockFileMaintenance": {
 				"enabled": true
 			}
 		},
 		{
 			"extends": ["group:allNonMajor"],
-			"schedule": ["before 7am every friday"],
+			"schedule": ["before 7am on friday"],
 			"lockFileMaintenance": {
 				"enabled": true
 			},
