@@ -5,7 +5,11 @@ import { writeFile } from 'node:fs/promises';
 const plugin = await asyncTransform();
 
 const expected_entries = Object.entries(
-	import.meta.glob('./expected-transforms/**/(code|transform).js', { as: 'raw', eager: true }),
+	import.meta.glob<true, string, string>('./expected-transforms/**/(code|transform).js', {
+		query: '?raw',
+		import: 'default',
+		eager: true,
+	}),
 );
 const expected = new Map<string, { code: string; transform?: string }>();
 
