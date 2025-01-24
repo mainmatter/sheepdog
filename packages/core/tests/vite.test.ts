@@ -1,4 +1,4 @@
-import { asyncTransform } from '../vite';
+import { asyncTransform } from '../src/vite';
 import { describe, it, expect } from 'vitest';
 import { writeFile } from 'node:fs/promises';
 
@@ -29,7 +29,7 @@ describe('sheepdog transform', () => {
 		const actual_transform = await plugin.transform(code, 'myfile.js');
 		if (actual_transform) {
 			// write the actual transform to file for better debugging
-			writeFile(`./src/lib/tests/expected-transforms/${id}/_actual.js`, actual_transform.code);
+			writeFile(`./tests/expected-transforms/${id}/_actual.js`, actual_transform.code);
 		}
 		expect(actual_transform?.code).toBe(transform);
 	});

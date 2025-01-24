@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { didCancel, timeout } from '$lib';
-import { CancelationError } from '$lib/task.js';
+import { didCancel, timeout } from '../src/utils.js';
+import { CancelationError } from '../src/index.js';
 
 describe('Util - didCancel', () => {
 	it('returns `true` for a CancelationError', async () => {

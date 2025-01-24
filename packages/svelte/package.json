@@ -46,8 +46,6 @@
 		"prepare": "pnpm package",
 		"prepublishOnly": "pnpm package",
 		"preview": "vite preview",
-		"generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
-		"generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f",
 		"test": "pnpm run test:unit && pnpm run test:treeshake",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",

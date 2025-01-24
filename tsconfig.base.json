@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		"outDir": "dist",
 		"strict": true,
+		"declaration": true,
 		"strictNullChecks": true,
 		"esModuleInterop": true,
 		"emitDecoratorMetadata": true,
