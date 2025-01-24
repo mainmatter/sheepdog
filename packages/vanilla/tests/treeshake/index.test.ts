@@ -20,12 +20,9 @@ async function does_it_shake(file: string) {
 	project.linkDevDependency('vite', {
 		baseDir: process.cwd(),
 	});
-	project.linkDevDependency('@sheepdog/svelte', {
+	project.linkDevDependency('@sheepdog/vanilla', {
 		baseDir: process.cwd(),
 		resolveName: '.',
-	});
-	project.linkDevDependency('svelte', {
-		baseDir: process.cwd(),
 	});
 	await project.write();
 	await execa({ cwd: project.baseDir })`vite build`;
@@ -36,7 +33,7 @@ async function does_it_shake(file: string) {
 
 describe('threeshake', () => {
 	test('importing `timeout` should treeshake the rest of the library', async () => {
-		const file = await does_it_shake(`import { timeout } from '@sheepdog/svelte';
+		const file = await does_it_shake(`import { timeout } from '@sheepdog/vanilla';
 			
 			timeout();`);
 		expect(file).toMatchInlineSnapshot(`
@@ -49,7 +46,7 @@ describe('threeshake', () => {
 	});
 
 	test('importing `didCancel` should treeshake the rest of the library', async () => {
-		const file = await does_it_shake(`import { didCancel } from '@sheepdog/svelte';
+		const file = await does_it_shake(`import { didCancel } from '@sheepdog/vanilla';
 			
 			console.log(didCancel());`);
 		expect(file).toMatchInlineSnapshot(`
@@ -68,7 +65,7 @@ describe('threeshake', () => {
 	});
 
 	test('importing `CancelationError` should treeshake the rest of the library', async () => {
-		const file = await does_it_shake(`import { CancelationError } from '@sheepdog/svelte';
+		const file = await does_it_shake(`import { CancelationError } from '@sheepdog/vanilla';
 			
 			console.log(CancelationError);`);
 		expect(file).toMatchInlineSnapshot(`
@@ -84,7 +81,7 @@ describe('threeshake', () => {
 	});
 
 	test('importing `transform` should treeshake the rest of the library', async () => {
-		const file = await does_it_shake(`import { transform } from '@sheepdog/svelte';
+		const file = await does_it_shake(`import { transform } from '@sheepdog/vanilla';
 			
 			console.log(transform);`);
 		expect(file).toMatchInlineSnapshot(`
