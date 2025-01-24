@@ -199,8 +199,8 @@ describe.each([
 			perform.click();
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalled();
+				expect(return_value).toHaveBeenCalledWith(returned_value);
 			});
-			expect(return_value).toHaveBeenCalledWith(returned_value);
 		});
 
 		it('passing a value to perform passes the same value as the first argument of the function', async () => {
@@ -498,16 +498,17 @@ describe.each([
 			throw to_throw;
 		});
 		let returned_value: { error: Error; store: Task } | undefined;
+		const return_value = vi.fn((value) => {
+			returned_value = value as never;
+		});
 		const { getByTestId } = render(component, {
 			fn,
-			return_value(value) {
-				returned_value = value as never;
-			},
+			return_value,
 		});
 		const perform = getByTestId(`perform-error`);
 		perform.click();
 		await vi.waitFor(() => {
-			expect(fn).toHaveBeenCalled();
+			expect(return_value).toHaveBeenCalled();
 		});
 		expect(returned_value).toBeDefined();
 		if (!returned_value) throw new Error('No returned value');
