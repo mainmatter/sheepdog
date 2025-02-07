@@ -150,8 +150,8 @@ export function createTask<TArgs = unknown, TReturn = unknown, TModifier = objec
 			adapter.onInstanceCreate(instance_id);
 			handler(
 				() => {
-					adapter.onInstanceStart(instance_id);
 					queueMicrotask(async () => {
+						adapter.onInstanceStart(instance_id);
 						try {
 							const gen_or_value = await gen_or_fun(args[0]!, {
 								signal: abort_controller.signal,
