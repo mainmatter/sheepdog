@@ -1,5 +1,31 @@
 # Changelog
 
+## Release (2025-02-07)
+
+@sheepdog/core 0.1.0 (minor)
+@sheepdog/svelte 0.12.2 (patch)
+
+#### :rocket: Enhancement
+* `@sheepdog/core`
+  * [#270](https://github.com/mainmatter/sheepdog/pull/270) feat: generalize async transform ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#271](https://github.com/mainmatter/sheepdog/pull/271) fix: generalize async transform for `@sheepdog/svelte` ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#251](https://github.com/mainmatter/sheepdog/pull/251) Remove stderr.log & add to gitignore ([@nickschot](https://github.com/nickschot))
+* Other
+  * [#269](https://github.com/mainmatter/sheepdog/pull/269) build(deps): update dependency @gravityci/cli to v0.0.8 ([@oscard0m](https://github.com/oscard0m))
+  * [#252](https://github.com/mainmatter/sheepdog/pull/252) Config renovate to create separate group for docs app updates ([@nickschot](https://github.com/nickschot))
+  * [#249](https://github.com/mainmatter/sheepdog/pull/249) add bug issue template ([@beerinho](https://github.com/beerinho))
+* `@sheepdog/core`, `@sheepdog/svelte`
+  * [#264](https://github.com/mainmatter/sheepdog/pull/264) chore: move tests to `core` and restructure monorepo a bit ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 4
+- Daniel Beer ([@beerinho](https://github.com/beerinho))
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+- Oscar Dominguez ([@oscard0m](https://github.com/oscard0m))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2024-12-06)
 
 @sheepdog/core 0.0.2 (patch)

@@ -1,8 +1,12 @@
-import { asyncTransform } from '../src/vite';
+import { createAsyncTransformPlugin } from '../src/vite';
 import { describe, it, expect } from 'vitest';
 import { writeFile } from 'node:fs/promises';
 
-const plugin = await asyncTransform();
+const plugin = await createAsyncTransformPlugin([
+	'@sheepdog/svelte',
+	'@sheepdog/svelte/task',
+	'@sheepdog/svelte/utils',
+])();
 
 const expected_entries = Object.entries(
 	import.meta.glob<true, string, string>('./expected-transforms/**/(code|transform).js', {
