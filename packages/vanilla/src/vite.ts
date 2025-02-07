@@ -1,3 +1,5 @@
-import { asyncTransform } from '@sheepdog/core/vite';
+import { createAsyncTransformPlugin } from '@sheepdog/core/vite';
 
-export { asyncTransform };
+const asyncTransform = createAsyncTransformPlugin(["@sheepdog/vanilla","@sheepdog/vanilla/task","@sheepdog/vanilla/utils"]);
+
+export { asyncTransform	 }
