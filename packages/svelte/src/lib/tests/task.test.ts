@@ -106,6 +106,7 @@ describe.each([
 		});
 
 		it('it can be rerun after being cancelled using `cancelAll`', async () => {
+			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
@@ -131,9 +132,11 @@ describe.each([
 			await vi.waitFor(() => {
 				expect(count).toBe(1);
 			});
+			vi.useRealTimers();
 		});
 
 		it('it can be rerun after the last instance is cancelled', async () => {
+			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
@@ -159,9 +162,11 @@ describe.each([
 			await vi.waitFor(() => {
 				expect(count).toBe(1);
 			});
+			vi.useRealTimers();
 		});
 
 		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
+			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;
 			let task_signal: AbortSignal;
@@ -183,6 +188,7 @@ describe.each([
 				expect(task_signal.aborted).toBeTruthy();
 			});
 			expect(count).toBe(0);
+			vi.useRealTimers();
 		});
 
 		it("if awaited returns the value it's returned from the function", async () => {
@@ -222,17 +228,26 @@ describe.each([
 		});
 
 		it('has the correct derived state for performCount', async () => {
-			const fn = vi.fn();
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
+			vi.advanceTimersByTime(1);
 			perform.click();
+			vi.advanceTimersByTime(1);
 			perform.click();
+			vi.advanceTimersByTime(1);
 			perform.click();
+			vi.advanceTimersByTime(1);
 			perform.click();
+			vi.advanceTimersByTime(wait_time);
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(perform_count.expected);
 			});
@@ -240,6 +255,7 @@ describe.each([
 		});
 
 		it('has the correct derived state for isRunning', async () => {
+			vi.useFakeTimers();
 			let finished = 0;
 			const fn = vi.fn(async function* () {
 				await timeout(50);
@@ -273,6 +289,7 @@ describe.each([
 				expect(finished).toBe(is_running.wait_after);
 			});
 			expect(get(store).isRunning).toBe(false);
+			vi.useRealTimers();
 		});
 
 		it('has the correct derived state for last', async () => {
@@ -560,6 +577,7 @@ describe("task - specific functionality 'default'", () => {
 		});
 
 		it("cancel the last instance if you call cancel on the returned instance, the function is a generator and there's a yield after every await", async () => {
+			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;
 			const task_signals: AbortSignal[] = [];
@@ -586,6 +604,7 @@ describe("task - specific functionality 'default'", () => {
 			});
 			await vi.advanceTimersByTimeAsync(wait_time);
 			expect(count).toBe(2);
+			vi.useRealTimers();
 		});
 	});
 });
@@ -615,6 +634,43 @@ describe("task - specific functionality 'enqueue'", () => {
 			expect(max_concurrent).toBe(1);
 		});
 
+		it("doesn't run if it is cancelled before starting (async generator)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async function* () {
+				await timeout(wait_time);
+				yield;
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
+		});
+
+		it("doesn't run if it is cancelled before starting  (async function)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
+		});
+
 		it('runs multiple time if performed multiple time but only `max` at a time (max: 3)', async () => {
 			let concurrent = 0;
 			let max_concurrent = -Infinity;
@@ -641,6 +697,7 @@ describe("task - specific functionality 'enqueue'", () => {
 		});
 
 		it("cancel the last instance if you call cancel on the returned instance, the function is a generator and there's a yield after every await", async () => {
+			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;
 			const task_signals: AbortSignal[] = [];
@@ -667,6 +724,7 @@ describe("task - specific functionality 'enqueue'", () => {
 			});
 			await vi.advanceTimersByTimeAsync(wait_time);
 			expect(count).toBe(2);
+			vi.useRealTimers();
 		});
 	});
 });
@@ -702,6 +760,43 @@ describe("task - specific functionality 'drop'", () => {
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(2);
 			});
+		});
+
+		it("doesn't run if it is cancelled before starting (async generator)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async function* () {
+				await timeout(wait_time);
+				yield;
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
+		});
+
+		it("doesn't run if it is cancelled before starting  (async function)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
 		});
 
 		it('runs only `max` time if performed when other instances are already running (max: 3)', async () => {
@@ -765,6 +860,43 @@ describe("task - specific functionality 'keepLatest'", () => {
 			});
 		});
 
+		it("doesn't run if it is cancelled before starting (async generator)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async function* () {
+				await timeout(wait_time);
+				yield;
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
+		});
+
+		it("doesn't run if it is cancelled before starting  (async function)", async () => {
+			const wait_time = 50;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const { getByTestId } = render(Enqueue, {
+				fn,
+			});
+			const perform = getByTestId(`perform-${selector}`);
+			const cancel = getByTestId(`cancel-${selector}`);
+			perform.click();
+			await Promise.resolve();
+			perform.click();
+			await Promise.resolve();
+			cancel.click();
+			expect(fn).toHaveBeenCalledTimes(1);
+		});
+
 		it('completes only `max` + 1 times if performed when other instances are already running (max: 3)', async () => {
 			let finished = 0;
 			const fn = vi.fn(async function* () {
@@ -814,8 +946,11 @@ describe("task - specific functionality 'restart'", () => {
 			});
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
+			await Promise.resolve();
 			perform.click();
+			await Promise.resolve();
 			perform.click();
+			await Promise.resolve();
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(3);
 			});
@@ -845,8 +980,11 @@ describe("task - specific functionality 'restart'", () => {
 			});
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
+			await Promise.resolve();
 			perform.click();
+			await Promise.resolve();
 			perform.click();
+			await Promise.resolve();
 			perform.click();
 			await vi.waitFor(() => {
 				expect(abort_signals[0]?.aborted).toBe(true);
