@@ -103,7 +103,7 @@ importers:
   packages/svelte:
     dependencies:
       '@sheepdog/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
     devDependencies:
       '@playwright/test':
