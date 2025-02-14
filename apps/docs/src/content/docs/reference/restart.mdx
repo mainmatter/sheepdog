@@ -49,6 +49,12 @@ To specify a task as restartable, you can either use the dot notation or the opt
 
 </Tabs>
 
+<Aside type="caution">
+	If you invoke `perform` multiple times in the same microtask, only the last instance will actually
+	run because by the time the function is invoked the previous invocations would've been already
+	canceled.
+</Aside>
+
 ### Max concurrency
 
 This is how you can specify the maximum number of concurrent instances. The default is 1, here we're
