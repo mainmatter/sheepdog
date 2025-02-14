@@ -1,29 +1,25 @@
 {
   "solution": {
     "@sheepdog/core": {
-      "impact": "minor",
-      "oldVersion": "0.0.2",
-      "newVersion": "0.1.0",
+      "impact": "patch",
+      "oldVersion": "0.1.0",
+      "newVersion": "0.1.1",
       "constraints": [
         {
-          "impact": "minor",
-          "reason": "Appears in changelog section :rocket: Enhancement"
-        },
-        {
           "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
+          "reason": "Appears in changelog section :bug: Bug Fix"
         }
       ],
       "pkgJSONPath": "./packages/core/package.json"
     },
     "@sheepdog/svelte": {
       "impact": "patch",
-      "oldVersion": "0.12.1",
-      "newVersion": "0.12.2",
+      "oldVersion": "0.12.2",
+      "newVersion": "0.12.3",
       "constraints": [
         {
           "impact": "patch",
-          "reason": "Has dependency `workspace:*` on @sheepdog/core"
+          "reason": "Appears in changelog section :bug: Bug Fix"
         },
         {
           "impact": "patch",
@@ -33,5 +29,5 @@
       "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2025-02-07)\n\n@sheepdog/core 0.1.0 (minor)\n@sheepdog/svelte 0.12.2 (patch)\n\n#### :rocket: Enhancement\n* `@sheepdog/core`\n  * [#270](https://github.com/mainmatter/sheepdog/pull/270) feat: generalize async transform ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#271](https://github.com/mainmatter/sheepdog/pull/271) fix: generalize async transform for `@sheepdog/svelte` ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#251](https://github.com/mainmatter/sheepdog/pull/251) Remove stderr.log & add to gitignore ([@nickschot](https://github.com/nickschot))\n* Other\n  * [#269](https://github.com/mainmatter/sheepdog/pull/269) build(deps): update dependency @gravityci/cli to v0.0.8 ([@oscard0m](https://github.com/oscard0m))\n  * [#252](https://github.com/mainmatter/sheepdog/pull/252) Config renovate to create separate group for docs app updates ([@nickschot](https://github.com/nickschot))\n  * [#249](https://github.com/mainmatter/sheepdog/pull/249) add bug issue template ([@beerinho](https://github.com/beerinho))\n* `@sheepdog/core`, `@sheepdog/svelte`\n  * [#264](https://github.com/mainmatter/sheepdog/pull/264) chore: move tests to `core` and restructure monorepo a bit ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 4\n- Daniel Beer ([@beerinho](https://github.com/beerinho))\n- Nick Schot ([@nickschot](https://github.com/nickschot))\n- Oscar Dominguez ([@oscard0m](https://github.com/oscard0m))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-02-14)\n\n@sheepdog/core 0.1.1 (patch)\n@sheepdog/svelte 0.12.3 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/docs`, `@sheepdog/core`, `@sheepdog/svelte`\n  * [#273](https://github.com/mainmatter/sheepdog/pull/273) fix: don't call the function if the task has been canceled before starting ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#276](https://github.com/mainmatter/sheepdog/pull/276) chore: change workspace dep ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

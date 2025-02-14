@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2025-02-14)
+
+@sheepdog/core 0.1.1 (patch)
+@sheepdog/svelte 0.12.3 (patch)
+
+#### :bug: Bug Fix
+* `@sheepdog/docs`, `@sheepdog/core`, `@sheepdog/svelte`
+  * [#273](https://github.com/mainmatter/sheepdog/pull/273) fix: don't call the function if the task has been canceled before starting ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#276](https://github.com/mainmatter/sheepdog/pull/276) chore: change workspace dep ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-02-07)
 
 @sheepdog/core 0.1.0 (minor)
