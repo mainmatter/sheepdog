@@ -203,7 +203,7 @@ importers:
   packages/vanilla:
     dependencies:
       '@sheepdog/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
     devDependencies:
       '@types/eslint':

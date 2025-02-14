@@ -1,6 +1,6 @@
 {
 	"name": "@sheepdog/vanilla",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/mainmatter/sheepdog.git"
@@ -46,7 +46,7 @@
 		"test:unit:ui": "vitest --ui"
 	},
 	"dependencies": {
-		"@sheepdog/core": "workspace:*"
+		"@sheepdog/core": "workspace:^"
 	},
 	"devDependencies": {
 		"@types/eslint": "9.6.1",
