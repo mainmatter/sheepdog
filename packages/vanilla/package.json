@@ -1,6 +1,6 @@
 {
 	"name": "@sheepdog/vanilla",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/mainmatter/sheepdog.git"
@@ -38,8 +38,6 @@
 		"lint": "prettier --check . && eslint .",
 		"prepare": "pnpm build",
 		"prepublishOnly": "pnpm build",
-		"generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
-		"generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f",
 		"test": "pnpm run test:unit && pnpm run test:treeshake",
 		"test:unit": "vitest",
 		"test:treeshake": "pnpm build && vitest --config treeshake.vite.config.ts",
