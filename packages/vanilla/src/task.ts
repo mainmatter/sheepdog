@@ -89,6 +89,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 				const instance = instances.get(instance_id);
 				if (instance) {
 					task_instance.lastErrored = instance.instance;
+					task_instance.lastRunning = undefined;
 					instance.instance.error = error;
 					instance.is_running = false;
 					update_is_running();
@@ -113,6 +114,8 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			onInstanceCancel(instance_id) {
 				const instance = instances.get(instance_id);
 				if (instance) {
+					task_instance.lastCanceled = instance.instance;
+					task_instance.lastRunning = undefined;
 					instance.is_running = false;
 					update_is_running();
 					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('cancel'));
@@ -163,6 +166,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			onInstanceStart(instance_id) {
 				const instance = instances.get(instance_id);
 				if (instance) {
+					task_instance.lastRunning = instance.instance;
 					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('start'));
 					instance.is_running = true;
 					update_is_running();
@@ -173,6 +177,8 @@ function _task<TArgs = unknown, TReturn = undefined>(
 			onInstanceComplete(instance_id, last_result) {
 				const instance = instances.get(instance_id);
 				if (instance) {
+					task_instance.lastRunning = undefined;
+					task_instance.lastSuccessful = instance.instance;
 					instance.instance.value = last_result;
 					instance.is_running = false;
 					update_is_running();
