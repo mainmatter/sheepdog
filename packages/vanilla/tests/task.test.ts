@@ -195,6 +195,166 @@ describe.each([
 			vi.useRealTimers();
 		});
 
+		it('event instance-cancel and instance-finish is called when an instance is cancelled with cancelAll', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn() {
+				yield timeout(wait_time);
+			}
+			const my_task = task[selector][name](fn);
+			const cancel = vi.fn();
+			const finish = vi.fn();
+			my_task.on('instance-cancel', cancel);
+			my_task.on('instance-finish', finish);
+			async function perform() {
+				try {
+					await my_task.perform();
+				} catch {
+					/** empty */
+				}
+			}
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(cancel).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			my_task.cancelAll();
+			expect(cancel).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it('event instance-cancel and instance-finish is called when an instance is cancelled with cancel', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn() {
+				yield timeout(wait_time);
+			}
+			const my_task = task[selector][name](fn);
+			const cancel = vi.fn();
+			const finish = vi.fn();
+			my_task.on('instance-cancel', cancel);
+			my_task.on('instance-finish', finish);
+			function perform() {
+				const instance = my_task.perform();
+				instance.catch(() => {});
+				return instance;
+			}
+			const last = perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(cancel).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			last.cancel();
+			expect(cancel).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it('event instance-cancel and instance-finish is called when an instance is cancelled with because a new instance is performed', async (ctx) => {
+			if (name === 'default' || name === 'enqueue') {
+				// skip because they don't cancel previous tasks
+				ctx.skip();
+			}
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn() {
+				yield timeout(wait_time);
+			}
+			const my_task = task[selector][name](fn);
+			const cancel = vi.fn();
+			const finish = vi.fn();
+			my_task.on('instance-cancel', cancel);
+			my_task.on('instance-finish', finish);
+			function perform() {
+				const instance = my_task.perform();
+				instance.catch(() => {});
+				return instance;
+			}
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(cancel).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			perform();
+			// we perform three times so we can test keepLatest in the same test
+			await vi.advanceTimersByTimeAsync(5);
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(cancel).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it('event instance-create is called when an instance is created', async () => {
+			async function* fn() {}
+			const my_task = task[selector][name](fn);
+			const listener = vi.fn();
+			my_task.on('instance-create', listener);
+			my_task.perform();
+			expect(listener).toHaveBeenCalled();
+		});
+
+		it('event instance-error and instance-finish is called when an instance errored out', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn() {
+				yield timeout(wait_time);
+				throw new Error();
+			}
+			const my_task = task[selector][name](fn);
+			const error = vi.fn();
+			const finish = vi.fn();
+			my_task.on('instance-error', error);
+			my_task.on('instance-finish', finish);
+			function perform() {
+				const instance = my_task.perform();
+				instance.catch(() => {});
+				return instance;
+			}
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(error).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(error).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it('event instance-success and instance-finish is called when an instance completes running', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn() {
+				yield timeout(wait_time);
+			}
+			const my_task = task[selector][name](fn);
+			const success = vi.fn();
+			const finish = vi.fn();
+			my_task.on('instance-success', success);
+			my_task.on('instance-finish', finish);
+			function perform() {
+				const instance = my_task.perform();
+				instance.catch(() => {});
+				return instance;
+			}
+			perform();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(success).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			await vi.advanceTimersByTimeAsync(5);
+			expect(success).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it.todo('event instance-start is called when an instance starts');
+		it.todo('event start is called when the running instance count goes from 0 to at least 1');
+		it.todo('event finish is called when the running instance count goes to 0');
+		it.todo('event cancel and event finish is called on the instance when');
+		it.todo('event error and event finish is called on the instance when');
+		it.todo('event success and event finish is called on the instance when');
+		it.todo('event start is called on the instance when');
+
 		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
 			vi.useFakeTimers();
 			let count = 0;
