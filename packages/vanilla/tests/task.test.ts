@@ -347,7 +347,7 @@ describe.each([
 			vi.useRealTimers();
 		});
 
-		it.only('event instance-start is called when an instance starts', async () => {
+		it('event instance-start is called when an instance starts', async () => {
 			async function* fn() {}
 			const my_task = task[selector][name](fn);
 			const start = vi.fn();
@@ -357,7 +357,7 @@ describe.each([
 			expect(start).toHaveBeenCalled();
 		});
 
-		it.only('event start is called when the running instance count goes from 0 to at least 1', async () => {
+		it('event start is called when the running instance count goes from 0 to at least 1', async () => {
 			vi.useFakeTimers();
 			const wait_time = 10;
 			async function* fn() {
@@ -375,7 +375,7 @@ describe.each([
 			expect(start).toHaveBeenCalledTimes(2);
 			vi.useRealTimers();
 		});
-		it.only('event finish is called when the running instance count goes to 0', async () => {
+		it('event finish is called when the running instance count goes to 0', async () => {
 			vi.useFakeTimers();
 			const wait_time = 10;
 			async function* fn() {
@@ -392,7 +392,7 @@ describe.each([
 			vi.useRealTimers();
 		});
 
-		it.only('event cancel and event finish is called on the instance when that specific instance is cancelled with cancel', async () => {
+		it('event cancel and event finish is called on the instance when that specific instance is cancelled with cancel', async () => {
 			vi.useFakeTimers();
 			const wait_time = 10;
 			async function* fn(wait_time: number) {
@@ -427,9 +427,90 @@ describe.each([
 			expect(not_cancelled_finish).not.toHaveBeenCalled();
 			vi.useRealTimers();
 		});
-		it.todo('event error and event finish is called on the instance when');
-		it.todo('event success and event finish is called on the instance when');
-		it.todo('event start is called on the instance when');
+		it('event error and event finish is called on the instance when an error is thrown', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn({ wait_time, error }: { wait_time: number; error: boolean }) {
+				yield timeout(wait_time);
+				if (error) throw new Error();
+			}
+			// @ts-expect-error adding a max to the task to allow for multiple task...it's an error for default
+			const my_task = task[selector][name](fn, { max: 2 });
+			const error = vi.fn();
+			const finish = vi.fn();
+			const not_errored_error = vi.fn();
+			const not_errored_finish = vi.fn();
+			function perform(wait_time: number, error: boolean) {
+				const instance = my_task.perform({ wait_time, error });
+				instance.catch(() => {});
+				return instance;
+			}
+			// waiting longer to be safe
+			const not_errored = perform(wait_time * 2, false);
+			const last = perform(wait_time, true);
+			not_errored.on('error', not_errored_error);
+			not_errored.on('finish', not_errored_finish);
+			last.on('error', error);
+			last.on('finish', finish);
+			await vi.advanceTimersByTimeAsync(1);
+			expect(error).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			await vi.advanceTimersByTimeAsync(wait_time);
+			expect(error).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			expect(not_errored_error).not.toHaveBeenCalled();
+			expect(not_errored_finish).not.toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+		it('event success and event finish is called on the instance when an instance completes successfully', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			async function* fn(wait_time: number) {
+				yield timeout(wait_time);
+			}
+			// @ts-expect-error adding a max to the task to allow for multiple task...it's an error for default
+			const my_task = task[selector][name](fn, { max: 2 });
+			const success = vi.fn();
+			const finish = vi.fn();
+			const longer_success = vi.fn();
+			const longer_finish = vi.fn();
+			function perform(wait_time: number) {
+				const instance = my_task.perform(wait_time);
+				instance.catch(() => {});
+				return instance;
+			}
+			// waiting longer to be safe
+			const longer = perform(wait_time * 2);
+			const last = perform(wait_time);
+			longer.on('success', longer_success);
+			longer.on('finish', longer_finish);
+			last.on('success', success);
+			last.on('finish', finish);
+			await vi.advanceTimersByTimeAsync(1);
+			expect(success).not.toHaveBeenCalled();
+			expect(finish).not.toHaveBeenCalled();
+			await vi.advanceTimersByTimeAsync(wait_time);
+			expect(success).toHaveBeenCalled();
+			expect(finish).toHaveBeenCalled();
+			expect(longer_success).not.toHaveBeenCalled();
+			expect(longer_finish).not.toHaveBeenCalled();
+			vi.useRealTimers();
+		});
+
+		it('event start is called on the instance when the instance is run', async () => {
+			async function* fn() {}
+			const my_task = task[selector][name](fn);
+			const start = vi.fn();
+			function perform() {
+				const instance = my_task.perform();
+				instance.catch(() => {});
+				return instance;
+			}
+			const last = perform();
+			last.on('start', start);
+			await Promise.resolve();
+			expect(start).toHaveBeenCalled();
+		});
 
 		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
 			vi.useFakeTimers();
