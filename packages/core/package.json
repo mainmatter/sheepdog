@@ -16,7 +16,8 @@
     "generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
   ],
   "exports": {
     ".": {
