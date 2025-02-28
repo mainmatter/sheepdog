@@ -912,6 +912,44 @@ describe("task - specific functionality 'enqueue'", () => {
 			expect(max_concurrent).toBe(1);
 		});
 
+		it('emit the `start` event only when we pass from no task running to at least one task running', async () => {
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].enqueue(fn);
+			const start = vi.fn();
+			my_task.on('start', start);
+			my_task.perform();
+			my_task.perform();
+			const last = my_task.perform();
+			expect(start).toHaveBeenCalledTimes(1);
+			await last;
+			my_task.perform();
+			expect(start).toHaveBeenCalledTimes(2);
+		});
+
+		it('emit the `instance-start` event when the task is actually being performed', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].enqueue(fn);
+			const start = vi.fn();
+			my_task.on('instance-start', start);
+			my_task.perform();
+			my_task.perform();
+			my_task.perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time + 1);
+			expect(start).toHaveBeenCalledTimes(2);
+			await vi.advanceTimersByTimeAsync(wait_time + 1);
+			expect(start).toHaveBeenCalledTimes(3);
+			vi.useRealTimers();
+		});
+
 		it("doesn't run if it is cancelled before starting (async generator)", async () => {
 			const wait_time = 50;
 			const fn = vi.fn(async function* () {
@@ -1048,6 +1086,60 @@ describe("task - specific functionality 'drop'", () => {
 			});
 		});
 
+		it('emit the `start` event only when we pass from no task running to at least one task running', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].drop(fn);
+			const start = vi.fn();
+			my_task.on('start', start);
+			async function perform() {
+				try {
+					await my_task.perform();
+				} catch {
+					/**empty */
+				}
+			}
+			perform();
+			perform();
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time + 1);
+			expect(start).toHaveBeenCalledTimes(1);
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(2);
+		});
+
+		it('emit the `instance-start` event when the task is actually being performed', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].drop(fn);
+			const start = vi.fn();
+			my_task.on('instance-start', start);
+			async function perform() {
+				try {
+					await my_task.perform();
+				} catch {
+					/**empty */
+				}
+			}
+			perform();
+			perform();
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time * 3);
+			expect(start).toHaveBeenCalledTimes(1);
+			vi.useRealTimers();
+		});
+
 		it("doesn't run if it is cancelled before starting (async generator)", async () => {
 			const wait_time = 50;
 			const fn = vi.fn(async function* () {
@@ -1157,6 +1249,61 @@ describe("task - specific functionality 'keepLatest'", () => {
 			await vi.waitFor(() => {
 				expect(finished).toBe(3);
 			});
+		});
+
+		it('emit the `start` event only when we pass from no task running to at least one task running', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].keepLatest(fn);
+			const start = vi.fn();
+			my_task.on('start', start);
+			async function perform() {
+				try {
+					await my_task.perform();
+				} catch {
+					/**empty */
+				}
+			}
+			perform();
+			perform();
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time + 1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time + 1);
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(2);
+		});
+
+		it('emit the `instance-start` event when the task is actually being performed', async () => {
+			vi.useFakeTimers();
+			const wait_time = 10;
+			const fn = vi.fn(async () => {
+				await timeout(wait_time);
+			});
+			const my_task = task[selector].keepLatest(fn);
+			const start = vi.fn();
+			my_task.on('instance-start', start);
+			async function perform() {
+				try {
+					await my_task.perform();
+				} catch {
+					/**empty */
+				}
+			}
+			perform();
+			perform();
+			perform();
+			await vi.advanceTimersByTimeAsync(1);
+			expect(start).toHaveBeenCalledTimes(1);
+			await vi.advanceTimersByTimeAsync(wait_time * 3);
+			expect(start).toHaveBeenCalledTimes(2);
+			vi.useRealTimers();
 		});
 
 		it("doesn't run if it is cancelled before starting (async generator)", async () => {
