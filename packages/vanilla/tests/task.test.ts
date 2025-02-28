@@ -512,7 +512,7 @@ describe.each([
 			expect(start).toHaveBeenCalled();
 		});
 
-		it("doesn't runs to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
+		it("doesn't run to completion if it's cancelled, the function is a generator and there's a yield after every await", async () => {
 			vi.useFakeTimers();
 			let count = 0;
 			const wait_time = 50;

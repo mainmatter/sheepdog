@@ -96,7 +96,7 @@ function _task<TArgs = unknown, TReturn = undefined>(
 					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('error'));
 					instance.event_target.dispatchEvent(new SheepdogInstanceEvent('finish'));
 					// we delete after a microtask to avoid returnModifier
-					// not founding the instance in case of a syncronous
+					// not finding the instance in case of a synchronous
 					// cancellation (for example with drop)
 					queueMicrotask(() => {
 						instances.delete(instance_id);
