@@ -46,6 +46,7 @@ export default [
 	},
 	{
 		rules: {
+			'svelte/require-each-key': 'off',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
