@@ -239,15 +239,15 @@ describe.each([
 			const store = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
-			vi.advanceTimersByTime(1);
+			await vi.advanceTimersByTimeAsync(1);
 			perform.click();
-			vi.advanceTimersByTime(1);
+			await vi.advanceTimersByTimeAsync(1);
 			perform.click();
-			vi.advanceTimersByTime(1);
+			await vi.advanceTimersByTimeAsync(1);
 			perform.click();
-			vi.advanceTimersByTime(1);
+			await vi.advanceTimersByTimeAsync(1);
 			perform.click();
-			vi.advanceTimersByTime(wait_time);
+			await vi.advanceTimersByTimeAsync(wait_time);
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(perform_count.expected);
 			});
