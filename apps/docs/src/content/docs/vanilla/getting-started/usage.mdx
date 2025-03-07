@@ -1,0 +1,147 @@
+---
+title: Usage
+description: Basic usage of `@sheepdog/svelte`.
+---
+
+import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
+
+The simplest way to use `@sheepdog/svelte` is the following
+
+```svelte
+<script>
+	import { task, timeout } from '@sheepdog/svelte';
+
+	const myTask = task(async () => {
+		// async stuff
+	});
+</script>
+
+<button
+	on:click={() => {
+		myTask.perform();
+	}}
+>
+	do async stuff
+</button>
+```
+
+This will run your async function when the user presses the button. _"But why not use a normal async
+function?"_ I hear you ask.
+
+**Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
+a lot of useful information about your task!**
+
+## `Task` structure
+
+- `isRunning`: whether the task is currently running or not
+- `last`: the last task instance, regardless of whether it errored, was canceled, or was successful
+- `lastCanceled`: the last canceled task instance
+- `lastErrored`: the last errored task instance
+- `lastRunning`: the last running task instance, as soon as the task stops running, this will be
+  undefined
+- `lastSuccessful`: the last successful task instance
+- `performCount`: the number of times the task has been run,
+
+```ts
+type Task = {
+	/**
+	 * whether the task is currently running or not
+	 */
+	isRunning: boolean;
+	/**
+	 * the last task instance, regardless of whether it errored, was canceled, or was successful
+	 */
+	last?: TaskInstance;
+	/**
+	 * the last canceled task instance
+	 */
+	lastCanceled?: TaskInstance;
+	/**
+	 * the last errored task instance
+	 */
+	lastErrored?: TaskInstance;
+	/**
+	 * the last running task instance, as soon as the task stops running, this will be undefined
+	 */
+	lastRunning?: TaskInstance;
+	/**
+	 * the last successful task instance
+	 */
+	lastSuccessful?: TaskInstance;
+	/**
+	 * number of times the task has been run,
+	 */
+	performCount: number;
+};
+```
+
+## `TaskInstance` structure
+
+To make it easier to reason about, every type of task modifier utilizes the same underlying structure. You can find more detail about the structure of the `TaskInstance` in the [reference docs](/reference/task-instance).
+
+## Task modifiers
+
+`@sheepdog/svelte` allows you to specify a task modifier that changes the behavior of the perform
+function. By default when you call `perform` the task will be executed immediately regardless if
+there are other instances of the same task in execution. For example, you could use the `enqueue`
+modifier to instruct `@sheepdog/svelte` to execute the task instances one after another (in a
+queue - who would've thought)
+
+Here's how you can specify the modifier:
+
+<Tabs syncKey="examples">
+	<TabItem label="Dot notation">
+	```svelte ins=".enqueue" {4}
+	<script>
+		import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task.enqueue(async () => {
+    		// async stuff
+    	});
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff one by one
+    </button>
+    ```
+    </TabItem>
+    <TabItem label="Option notation">
+    ```svelte ins="enqueue" {6}
+    <script>
+    	import { task, timeout } from '@sheepdog/svelte';
+
+    	const myTask = task(async () => {
+    		// async stuff
+    	}, { kind: "enqueue" });
+    </script>
+
+    <button on:click={()=>{
+    	myTask.perform();
+    }}>
+    	do async stuff one by one
+    </button>
+    ```
+    </TabItem>
+
+</Tabs>
+
+<LinkCard
+	href="/explainers/task-modifiers/"
+	title="Task modifiers"
+	description="Read everything about task modifiers in our guide"
+/>
+
+There are currently five task modifiers that you can apply to your task.
+
+- `default`: the default behavior, every task will run immediately
+- `drop`: if other tasks are already running the new instance will be immediately canceled
+- `enqueue`: every task instance is stored in a queue and executed with a
+  <BlankLink href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)" body="FIFO" />
+  strategy
+- `keepLatest`: like drop but the last instance will actually be kept around and executed as soon as
+  the current running instance finishes
+- `restart`: the oldest running task instance is canceled and the new one will start running
+  immediately

@@ -143,4 +143,9 @@ export default defineConfig({
 	],
 	output: 'static',
 	adapter: netlify({}),
+	redirects: {
+		'/explainers/[...all]': '/svelte/explainers/[...all]',
+		'/getting-started/[...all]': '/svelte/getting-started/[...all]',
+		'/reference/[...all]': '/svelte/reference/[...all]',
+	},
 });
