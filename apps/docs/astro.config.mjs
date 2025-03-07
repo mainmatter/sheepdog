@@ -13,17 +13,19 @@ export default defineConfig({
 			alias: {
 				'@assets': path.resolve(process.cwd(), './src/assets'),
 				'@components': path.resolve(process.cwd(), './src/components'),
+				'@utils': path.resolve(process.cwd(), './src/utils'),
 			},
 		},
 	},
 	integrations: [
 		starlight({
+			routeMiddleware: './src/route-data.ts',
 			components: {
 				SiteTitle: './src/components/SiteTitle.astro',
 				Hero: './src/components/Hero.astro',
 				Footer: './src/components/Footer.astro',
 			},
-			title: '@sheepdog/svelte',
+			title: '@sheepdog',
 			expressiveCode: {
 				themes: ['github-dark-default', 'github-light-default'],
 			},

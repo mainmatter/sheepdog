@@ -1,8 +1,9 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro';
 import MainmatterLogo from '../assets/Mainmatter.astro';
+import { is_homepage } from '@utils/is-homepage';
 
-const isHomepage = Astro.locals.starlightRoute.id === '';
+const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
 ---
 
 {
