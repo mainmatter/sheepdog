@@ -3,7 +3,7 @@ import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/SiteTitle.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
 
-const isHomepage = Astro.props.slug === '';
+const isHomepage = Astro.locals.starlightRoute.id === '';
 ---
 
 {
