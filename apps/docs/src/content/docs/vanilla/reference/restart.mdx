@@ -1,0 +1,279 @@
+---
+title: Restart task
+description: the Restart task function
+---
+
+import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+This is the way to create a restartable task.
+
+This will cancel the oldest instance of the task and start a new instance of it. You can also
+provide a `max` that will only restart the oldest task instance if the threshold is exceeded.
+
+## Usage
+
+To specify a task as restartable, you can either use the dot notation or the options notation.
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task.restart(async () => {
+		// your code
+	});
+</script>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'restart' },
+	);
+</script>
+```
+
+</TabItem>
+
+</Tabs>
+
+<Aside type="caution">
+	If you invoke `perform` multiple times in the same microtask, only the last instance will actually
+	run because by the time the function is invoked the previous invocations would've been already
+	canceled.
+</Aside>
+
+### Max concurrency
+
+This is how you can specify the maximum number of concurrent instances. The default is 1, here we're
+setting it to 5.
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task.restart(
+		async () => {
+			// your code
+		},
+		{ max: 5 },
+	);
+</script>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'restart', max: 5 },
+	);
+</script>
+```
+
+</TabItem>
+
+</Tabs>
+
+### The task store
+
+The return value of the task function will be a svelte store where you can access state from all the
+instances running and eventually cancel them with `cancelAll`.
+
+<LinkCard
+	href="/getting-started/usage/#task-structure"
+	title="Task structure"
+	description="Take a look at the Task structure documentation in our Getting started"
+/>
+
+### Passing props
+
+While defining a task, if the function that you pass in has some arguments, those will be required
+by the `perform` function (and it will be strongly typed too).
+
+<Aside type="caution">
+	If you need to pass multiple props you should use an object because the second parameter will
+	always be the [SheepdogUtils](/reference/sheepdog-utils).
+</Aside>
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task.restart(async (id: string) => {
+		// your code
+	});
+</script>
+
+<button
+	on:click={() => {
+		restartTask.perform('42');
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task(
+		async (id: string) => {
+			// your code
+		},
+		{ kind: 'restart' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		restartTask.perform('42');
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>
+
+### Getting the return value
+
+If you return something from your task you can access the return value by awaiting the `perform`
+function.
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task.restart(async () => {
+		return 42;
+	});
+</script>
+
+<button
+	on:click={() => {
+		const number = await restartTask.perform();
+		console.log(number); // 42
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task(
+		async () => {
+			return 42;
+		},
+		{ kind: 'restart' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		const number = await restartTask.perform();
+		console.log(number); // 42
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>
+
+### Getting the `TaskInstance`
+
+If you don't await the `perform` function, then you'll get back the
+[task instance](/reference/task-instance) that you can use either to cancel it or to get its current
+state. The `TaskInstance` is also a svelte store and you can access the current value with
+`instance.get()`.
+
+<Tabs syncKey="notation">
+
+<TabItem label="Dot notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task.restart(async () => {
+		// your code
+	});
+</script>
+
+<button
+	on:click={() => {
+		const lastRun = restartTask.perform();
+		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		lastRun.cancel();
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+<TabItem label="Options notation">
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const restartTask = task(
+		async () => {
+			// your code
+		},
+		{ kind: 'restart' },
+	);
+</script>
+
+<button
+	on:click={() => {
+		lastRun = restartTask.perform();
+		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		lastRun.cancel();
+	}}>perform</button
+>
+```
+
+</TabItem>
+
+</Tabs>

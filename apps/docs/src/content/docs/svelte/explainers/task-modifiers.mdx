@@ -3,7 +3,7 @@ title: Task modifiers
 description: How task modifiers work
 ---
 
-import Timeline from '../TimelineExplainer.svelte';
+import Timeline from '../../TimelineExplainer.svelte';
 
 In [Getting started](/getting-started/usage#task-modifiers), you've seen that you can specify a
 modifier on the task, either with the dot notation or the options notation. The reason you have this
@@ -16,8 +16,8 @@ they behave and hopefully make it clearer to understand when to use one or the o
 ## Default
 
 By default, every task simply runs as soon as you perform it. This is basically like a function call
-with the added benefit of having derived state and cancellability. You might've seen
-this simple demonstration on our homepage; but if you didn't, allow me to introduce you to the friend that will
+with the added benefit of having derived state and cancellability. You might've seen this simple
+demonstration on our homepage; but if you didn't, allow me to introduce you to the friend that will
 guide us through discovering the task modifiers: the Timeline demo!
 
 Take your time to familiarize yourself with it: you can perform a new task by clicking on the
@@ -33,8 +33,8 @@ to nuke them all!
 The `enqueue` task, as the name suggests, creates a queue of all the task instances after the max
 concurrency has been reached. This means that up until the moment max concurrency is exceeded every
 task instance will be executed immediately. But if you try to perform a new task instance and the
-number of running instances is above the `max` level, that new task instance will be stored in a queue
-and executed as soon as the number of concurrent instances drops below the `max` again.
+number of running instances is above the `max` level, that new task instance will be stored in a
+queue and executed as soon as the number of concurrent instances drops below the `max` again.
 
 This is the right kind of task to use when you want to be sure that every task instance is executed
 at some point (unless the user leaves the page) but you also don't want to run them concurrently. A
@@ -83,7 +83,8 @@ the same time.
 ## Drop
 
 The `drop` task will simply ignore (and thus drop) every `perform` that is executed when the `max`
-amount of concurrent task instances is exceeded. With a max concurrency of 1, our example will drop any other tasks that are performed while our initial task is running.
+amount of concurrent task instances is exceeded. With a max concurrency of 1, our example will drop
+any other tasks that are performed while our initial task is running.
 
 You can think of this kind of task as a sort of throttle; and since the function will be just tossed
 away you should use this modifier only when you don't care about the "execution loss". A good

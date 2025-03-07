@@ -1,0 +1,108 @@
+---
+title: Task Instance
+description: the underlying structure of every task instance
+---
+
+### Structure
+
+To standardize the approach regardless of which task modifier you're using, every task modifier will use the same underlying `TaskInstance` structure inside of a svelte store.
+
+A `TaskInstance` comprises of:
+- `error`: if an error is thrown inside the task instance, it will be found here
+- `hasStarted`: it is possible for the task instance to be in a queue, waiting to start. This property will change to `true` the instant the task instance has started
+- `isCanceled`: whether the task instance was canceled
+- `isError`: whether the task instance throw an error before completing
+- `isRunning`: whether the task instance is currently running
+- `isSuccessful`: whether the task instance completed successfully
+- `value`: if the task instance completed successfully, this will be the return value
+
+And for those of you that prefer to read code, here is the typing of the `TaskInstance`:
+```ts
+type TaskInstance<TReturn> = {
+	/**
+	 * If an error is thrown inside the task instance, it will be found here.
+	 */
+	error?: Error;
+
+  /**
+   * Indicates whether the task instance has started.
+   */
+  hasStarted: boolean;
+
+	/**
+	 * Indicates whether the task instance was canceled.
+	 */
+	isCanceled: boolean;
+
+	/**
+	 * Indicates whether the task instance threw an error before completing.
+	 */
+	isError: boolean;
+
+	/**
+	 * Indicates whether the task instance is currently running.
+	 */
+	isRunning: boolean;
+
+	/**
+	 * Indicates whether the task instance completed successfully.
+	 */
+	isSuccessful: boolean;
+
+	/**
+	 * If the task instance completed successfully, this will be the return value.
+	 */
+	value?: TReturn;
+};
+```
+
+You can access these properties just as you would with any other Svelte store:
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const myTask = task(async () => {
+		// your code
+	});
+
+  let lastInstance;
+</script>
+
+<button on:click={() => {
+  lastInstance = myTask.perform()
+  }}> Press me </button>
+
+  {#if $lastInstance.isRunning}
+    Last instance is running!
+  {/if}
+
+<button on:click={() => {
+  const myInstance = myTask.perform()
+  myInstance.get() // { isRunning: true, hasStarted: true, ... }
+  }}> Press me </button>
+```
+
+### Cancellation
+
+Each task instance is also packaged with a `cancel` function that can be used to cancel itself.
+
+```svelte
+<script lang="ts">
+	import { task } from '@sheepdog/svelte';
+
+	const myTask = task(async () => {
+		// your code
+	});
+
+  let lastInstance;
+</script>
+
+<button on:click={() => {
+  lastInstance = myTask.perform()
+  }}> Press me </button>
+
+<button on:click={() => {
+  lastInstance?.cancel()
+  }}> Cancel </button>
+```
