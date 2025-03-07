@@ -1,0 +1,7 @@
+# Unlabeled Changes
+
+* `@sheepdog/docs`
+  * [#285](https://github.com/mainmatter/sheepdog/pull/285) docs: update starlight components to use `Astro.locals.starlightRoute` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+
+*Cannot plan release until the above changes are labeled*.
