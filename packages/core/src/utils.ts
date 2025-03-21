@@ -1,6 +1,6 @@
 import { DEV } from 'esm-env';
-import { CancelationError } from './index';
-import type { TaskFunction } from './index';
+import { CancelationError } from './index.js';
+import type { TaskFunction } from './index.js';
 
 /**
  * Utility method to know if a `perform` thrown because it was canceled
