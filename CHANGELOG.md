@@ -2,6 +2,18 @@
 
 ## Release (2025-03-21)
 
+* @sheepdog/core 0.2.1 (patch)
+* @sheepdog/svelte 0.12.5 (patch)
+
+#### :bug: Bug Fix
+* `@sheepdog/core`, `@sheepdog/svelte`
+  * [#295](https://github.com/mainmatter/sheepdog/pull/295) fix: update all the imports ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
+## Release (2025-03-21)
+
 * @sheepdog/core 0.2.0 (minor)
 * @sheepdog/svelte 0.12.4 (patch)
 * @sheepdog/vanilla 0.1.0 (minor)
