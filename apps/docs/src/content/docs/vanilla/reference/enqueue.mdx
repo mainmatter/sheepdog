@@ -18,31 +18,27 @@ To specify a task as enqueue-able, you can either use the dot notation or the op
 
 <TabItem label="Dot notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task.enqueue(async () => {
-		// your code
-	});
-</script>
+const enqueued = task.enqueue(async () => {
+	// your code
+});
 ```
 
 </TabItem>
 
 <TabItem label="Options notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task(
-		async () => {
-			// your code
-		},
-		{ kind: 'enqueue' },
-	);
-</script>
+const enqueued = task(
+	async () => {
+		// your code
+	},
+	{ kind: 'enqueue' },
+);
 ```
 
 </TabItem>
@@ -58,47 +54,43 @@ setting it to 5.
 
 <TabItem label="Dot notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task.enqueue(
-		async () => {
-			// your code
-		},
-		{ max: 5 },
-	);
-</script>
+const enqueued = task.enqueue(
+	async () => {
+		// your code
+	},
+	{ max: 5 },
+);
 ```
 
 </TabItem>
 
 <TabItem label="Options notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task(
-		async () => {
-			// your code
-		},
-		{ kind: 'enqueue', max: 5 },
-	);
-</script>
+const enqueued = task(
+	async () => {
+		// your code
+	},
+	{ kind: 'enqueue', max: 5 },
+);
 ```
 
 </TabItem>
 
 </Tabs>
 
-### The task store
+### The task
 
-The return value of the task function will be a svelte store where you can access state from all the
-instances running and eventually cancel them with `cancelAll`.
+The return value of the task function will be an object with getters where you can access state from
+all the instances running and eventually cancel them with `cancelAll`.
 
 <LinkCard
-	href="/getting-started/usage/#task-structure"
+	href="/vanilla/getting-started/usage/#task-structure"
 	title="Task structure"
 	description="Take a look at the Task structure documentation in our Getting started"
 />
@@ -110,50 +102,42 @@ by the `perform` function (and it will be strongly typed too).
 
 <Aside type="caution">
 	If you need to pass multiple props you should use an object because the second parameter will
-	always be the [SheepdogUtils](/reference/sheepdog-utils).
+	always be the [SheepdogUtils](/vanilla/reference/sheepdog-utils).
 </Aside>
 
 <Tabs syncKey="notation">
 
 <TabItem label="Dot notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task.enqueue(async (id: string) => {
-		// your code
-	});
-</script>
+const enqueued = task.enqueue(async (id: string) => {
+	// your code
+});
 
-<button
-	on:click={() => {
-		enqueued.perform('42');
-	}}>perform</button
->
+button.addEventListener('click', () => {
+	enqueued.perform('42');
+});
 ```
 
 </TabItem>
 
 <TabItem label="Options notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task(
-		async (id: string) => {
-			// your code
-		},
-		{ kind: 'enqueue' },
-	);
-</script>
+const enqueued = task(
+	async (id: string) => {
+		// your code
+	},
+	{ kind: 'enqueue' },
+);
 
-<button
-	on:click={() => {
-		enqueued.perform('42');
-	}}>perform</button
->
+button.addEventListener('click', () => {
+	enqueued.perform('42');
+});
 ```
 
 </TabItem>
@@ -169,45 +153,37 @@ function.
 
 <TabItem label="Dot notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task.enqueue(async () => {
-		return 42;
-	});
-</script>
+const enqueued = task.enqueue(async () => {
+	return 42;
+});
 
-<button
-	on:click={() => {
-		const number = await enqueued.perform();
-		console.log(number); // 42
-	}}>perform</button
->
+button.addEventListener('click', () => {
+	const number = await enqueued.perform();
+	console.log(number); // 42
+});
 ```
 
 </TabItem>
 
 <TabItem label="Options notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task(
-		async () => {
-			return 42;
-		},
-		{ kind: 'enqueue' },
-	);
-</script>
+const enqueued = task(
+	async () => {
+		return 42;
+	},
+	{ kind: 'enqueue' },
+);
 
-<button
-	on:click={() => {
-		const number = await enqueued.perform();
-		console.log(number); // 42
-	}}>perform</button
->
+button.addEventListener('click', () => {
+	const number = await enqueued.perform();
+	console.log(number); // 42
+});
 ```
 
 </TabItem>
@@ -217,55 +193,51 @@ function.
 ### Getting the `TaskInstance`
 
 If you don't await the `perform` function, then you'll get back the
-[task instance](/reference/task-instance) that you can use either to cancel it or to get its current
-state. The `TaskInstance` is also a svelte store and you can access the current value with
-`instance.get()`.
+[task instance](/vanilla/reference/task-instance) that you can use either to cancel it or to get its
+current state. The `TaskInstance` is also an object with getters you can access the current value
+with `instance.value` or register events on it with `instance.on`.
 
 <Tabs syncKey="notation">
 
 <TabItem label="Dot notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task.enqueue(async () => {
-		// your code
+const enqueued = task.enqueue(async () => {
+	// your code
+});
+
+button.addEventListener('click', () => {
+	const lastRun = enqueued.perform();
+	lastRun.on('success', () => {
+		console.log(lastRun.value);
 	});
-</script>
-
-<button
-	on:click={() => {
-		const lastRun = enqueued.perform();
-		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
-		lastRun.cancel();
-	}}>perform</button
->
+	lastRun.cancel();
+});
 ```
 
 </TabItem>
 
 <TabItem label="Options notation">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const enqueued = task(
-		async () => {
-			// your code
-		},
-		{ kind: 'enqueue' },
-	);
-</script>
+const enqueued = task(
+	async () => {
+		// your code
+	},
+	{ kind: 'enqueue' },
+);
 
-<button
-	on:click={() => {
-		lastRun = enqueued.perform();
-		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
-		lastRun.cancel();
-	}}>perform</button
->
+button.addEventListener('click', () => {
+	lastRun = enqueued.perform();
+	lastRun.on('success', () => {
+		console.log(lastRun.value);
+	});
+	lastRun.cancel();
+});
 ```
 
 </TabItem>

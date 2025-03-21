@@ -9,18 +9,18 @@ This function allows you to mark a function that is not directly passed to the `
 transformable from the Async Transform.
 
 <LinkCard
-	href="/explainers/async-transform"
+	href="/vanilla/explainers/async-transform"
 	title="Async Transform"
 	description="Read more about the Async Transform"
 />
 
 ## Usage
 
-You can import this function from `@sheepdog/svelte/utils` and call it with the same first argument
+You can import this function from `@sheepdog/vanilla/utils` and call it with the same first argument
 you would pass to the `task` function
 
 ```ts
-import { transform } from '@sheepdog/svelte/utils';
+import { transform } from '@sheepdog/vanilla/utils';
 
 const myTask = transform(async (id: number) => {
 	const res = await fetch(`/products/${id}`);
