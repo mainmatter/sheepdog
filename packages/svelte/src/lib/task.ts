@@ -8,8 +8,8 @@ import type {
 	TaskFunction,
 } from '@sheepdog/core';
 import { CancelationError, createTask, handlers } from '@sheepdog/core';
-import type { ReadableWithGet, WritableWithGet } from './internal/helpers';
-import { writable_with_get } from './internal/helpers';
+import type { ReadableWithGet, WritableWithGet } from './internal/helpers.js';
+import { writable_with_get } from './internal/helpers.js';
 export type { SheepdogUtils, TaskOptions };
 
 export { CancelationError };
