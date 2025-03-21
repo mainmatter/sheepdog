@@ -1,5 +1,5 @@
 // Reexport your entry components here
-import { didCancel, timeout, transform } from './utils';
+import { didCancel, timeout, transform } from './utils.js';
 import { task, CancelationError } from './task.js';
 export type { Task, SheepdogUtils, TaskInstance } from './task.js';
 
