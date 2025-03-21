@@ -1,5 +1,32 @@
 # Changelog
 
+## Release (2025-03-21)
+
+* @sheepdog/core 0.2.0 (minor)
+* @sheepdog/svelte 0.12.4 (patch)
+* @sheepdog/vanilla 0.1.0 (minor)
+
+#### :rocket: Enhancement
+* `@sheepdog/core`, `@sheepdog/vanilla`
+  * [#253](https://github.com/mainmatter/sheepdog/pull/253) feat: init `@sheepdog/vanilla` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :bug: Bug Fix
+* `@sheepdog/vanilla`
+  * [#294](https://github.com/mainmatter/sheepdog/pull/294) fix: utils import for vanilla ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :memo: Documentation
+* [#285](https://github.com/mainmatter/sheepdog/pull/285) docs: update starlight components to use `Astro.locals.starlightRoute` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* Other
+  * [#293](https://github.com/mainmatter/sheepdog/pull/293) Attempt to fix split renovate config ([@nickschot](https://github.com/nickschot))
+* `@sheepdog/svelte`, `@sheepdog/vanilla`
+  * [#284](https://github.com/mainmatter/sheepdog/pull/284) chore: allow for better treeshake in esbuild/rolldown ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 2
+- Nick Schot ([@nickschot](https://github.com/nickschot))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-02-14)
 
 @sheepdog/core 0.1.1 (patch)
