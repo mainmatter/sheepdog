@@ -5,10 +5,10 @@ description: How task modifiers work
 
 import Timeline from '../../TimelineExplainer.svelte';
 
-In [Getting started](/getting-started/usage#task-modifiers), you've seen that you can specify a
-modifier on the task, either with the dot notation or the options notation. The reason you have this
-ability is so that you can specify what should happen when multiple, concurrent task instances are
-running.
+In [Getting started](/vanilla/getting-started/usage#task-modifiers), you've seen that you can
+specify a modifier on the task, either with the dot notation or the options notation. The reason you
+have this ability is so that you can specify what should happen when multiple, concurrent task
+instances are running.
 
 In this explainer we will guide you through how each of our modifiers work, with examples of how
 they behave and hopefully make it clearer to understand when to use one or the other.
@@ -43,35 +43,28 @@ your files but you don't want to send them all together because that would be to
 and also makes it harder to handle in case of an error. You can use `enqueue` to allow only `max`
 file uploads at a time.
 
-```svelte
-<script lang="ts">
-	import { task, timeout } from '@sheepdog/svelte';
-	import upload from './file-upload';
+```ts
+import { task, timeout } from '@sheepdog/vanilla';
+import upload from './file-upload';
 
-	let files = [];
+let files = [];
 
-	const uploadFile = task.enqueue(
-		async (file: File) => {
-			await upload(file);
-		},
-		{ max: 3 },
-	);
-</script>
+const uploadFile = task.enqueue(
+	async (file: File) => {
+		await upload(file);
+	},
+	{ max: 3 },
+);
 
-<input
-	type="file"
-	multiple
-	on:change={(e) => {
-		files = [...e.target.files];
-	}}
-/>
-<button
-	on:click={() => {
-		for (let file of files) {
-			uploadFile.perform(file);
-		}
-	}}>start upload</button
->
+input.addEventListener('change', (e) => {
+	files = [...e.target.files];
+});
+
+startUpload.addEventListener('click', () => {
+	for (let file of files) {
+		uploadFile.perform(file);
+	}
+});
 ```
 
 You can play around with it in our Timeline and you may notice a new parameter available for you:
@@ -90,23 +83,17 @@ You can think of this kind of task as a sort of throttle; and since the function
 away you should use this modifier only when you don't care about the "execution loss". A good
 example could be triggering a very expensive task that you want to make sure is only triggered once.
 
-```svelte
-<script lang="ts">
-	import { task, timeout } from '@sheepdogs/svelte';
+```ts
+import { task, timeout } from '@sheepdog/vanilla';
 
-	const expensiveTask = task.drop(async () => {
-		await timeout(200);
-		// do very costly calculations that should only be triggered once at a time.
-	});
-</script>
+const expensiveTask = task.drop(async () => {
+	await timeout(200);
+	// do very costly calculations that should only be triggered once at a time.
+});
 
-<button
-	on:click={() => {
-		expensiveTask.perform();
-	}}
->
-	Do something expensive
-</button>
+button.addEventListener('click', () => {
+	expensiveTask.perform();
+});
 ```
 
 I know you are waiting for it so here's your `drop` Timeline playground:
@@ -124,21 +111,17 @@ will be executed only once the `perform` as not been called for 200ms. This is v
 perform fetch requests while the user is typing without inundating your server with requests. Once
 the user stops typing the last request will go through without being canceled.
 
-```svelte
-<script lang="ts">
-	import { task, timeout } from '@sheepdogs/svelte';
+```ts
+import { task, timeout } from '@sheepdog/vanilla';
 
-	const search = task.restart(async (query: string) => {
-		await timeout(200);
-		const res = await fetch(`/api/search?q=${query}`);
-	});
-</script>
+const search = task.restart(async (query: string) => {
+	await timeout(200);
+	const res = await fetch(`/api/search?q=${query}`);
+});
 
-<input
-	on:input={(e) => {
-		search.perform(e.target.value);
-	}}
-/>
+input.addEventListener('input', (e) => {
+	search.perform(e.target.value);
+});
 ```
 
 And as per usual, here's your `restart` Timeline playground:
@@ -163,35 +146,28 @@ or more saves while you are fetching the data you:
 
 That's where `keepLatest` will come in handy!
 
-```svelte
-<script lang="ts">
-	import Document from '$lib/Document.svelte';
-	import { ws } from '$lib/websocket';
-	import { task } from '@sheepdogs/svelte';
-	import { onMount } from 'svelte';
+```ts
+import { ws } from '$lib/websocket';
+import { task } from '@sheepdog/vanilla';
+import { renderDocument } from '$lib/renderer';
 
-	let document;
+const loadDocument = task.keepLatest(async () => {
+	const res = await fetch(`/api/get-document`);
+	const document = await res.json();
+	renderDocument(document);
+});
 
-	const loadDocument = task.keepLatest(async () => {
-		const res = await fetch(`/api/get-document`);
-		document = await res.json();
-	});
+loadDocument.perform();
 
-	onMount(() => {
-		loadDocument.perform();
-		return ws.on('new-save', () => {
-			loadDocument.perform();
-		});
-	});
-</script>
-
-<Document {document} />
+ws.on('new-save', () => {
+	loadDocument.perform();
+});
 ```
 
 <Timeline selected_task_type="keepLatest" client:load />
 
 ## Conclusion
 
-Task modifiers are very powerful and one of the core features of `@sheepdog/svelte`, this explainer
+Task modifiers are very powerful and one of the core features of `@sheepdog/vanilla`, this explainer
 aims to give you all the tools to use them at their best...and some playful time with the timeline
 example!

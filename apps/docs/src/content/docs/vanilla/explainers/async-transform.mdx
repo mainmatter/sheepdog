@@ -11,7 +11,7 @@ confident in using it. If you want to know how to setup the Vite plugin please g
 link.
 
 <LinkCard
-	href="/getting-started/installation/#setup-the-async-transform"
+	href="/vanilla/getting-started/installation/#setup-the-async-transform"
 	title="Setup the Async Transform"
 	description="Read the short guide about how to setup the Async Transform"
 />
@@ -87,8 +87,8 @@ The reason we are writing this explainer is because we firmly believe that if yo
 be changed by some script you should fully understand how it changes it and what the final result
 will look like.
 
-As shown in our [Mid run cancellation](/explainers/mid-run-cancellation) explainer, this Vite plugin
-aims to solve a couple of problems with async code in Typescript:
+As shown in our [Mid run cancellation](/vanilla/explainers/mid-run-cancellation) explainer, this
+Vite plugin aims to solve a couple of problems with async code in Typescript:
 
 - Promises are not cancelable: once you start them there's no way to stop the code in the middle of
   the function from executing.
@@ -102,46 +102,34 @@ Vite plugin to transform your async functions into generators!
 
 <TabItem label="Before">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const myTask = task(async () => {
-		const result = await fetch('/api/my-endpoint');
-		return await result.json();
-	});
-</script>
+const myTask = task(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
 
-<button
-	on:click={() => {
-		myTask.perform();
-	}}
->
-	perform
-</button>
+button.addEventListener('click', () => {
+	myTask.perform();
+});
 ```
 
 </TabItem>
 
 <TabItem label="After">
 
-```svelte
-<script lang="ts">
-	import { task } from '@sheepdog/svelte';
+```ts
+import { task } from '@sheepdog/vanilla';
 
-	const myTask = task(async function* () {
-		const result = yield fetch('/api/my-endpoint');
-		return yield result.json();
-	});
-</script>
+const myTask = task(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
 
-<button
-	on:click={() => {
-		myTask.perform();
-	}}
->
-	perform
-</button>
+button.addEventListener('click', () => {
+	myTask.perform();
+});
 ```
 
 </TabItem>
@@ -163,50 +151,46 @@ will be left untouched.
 
 <TabItem label="Before">
 
-```svelte
-<script lang="ts">
-	import { task as sheepdogTask } from '@sheepdog/svelte';
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
 
-	function task(fn: () => Promise<any>) {
-		// your code
-	}
+function task(fn: () => Promise<any>) {
+	// your code
+}
 
-	// this will remain untouched
-	const otherTask = task(async () => {
-		// some async stuff
-	});
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
 
-	// this will be transformed
-	const myTask = sheepdogTask(async () => {
-		const result = await fetch('/api/my-endpoint');
-		return await result.json();
-	});
-</script>
+// this will be transformed
+const myTask = sheepdogTask(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
 ```
 
 </TabItem>
 
 <TabItem label="After">
 
-```svelte
-<script lang="ts">
-	import { task as sheepdogTask } from '@sheepdog/svelte';
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
 
-	function task(fn: () => Promise<any>) {
-		// your code
-	}
+function task(fn: () => Promise<any>) {
+	// your code
+}
 
-	// this will remain untouched
-	const otherTask = task(async () => {
-		// some async stuff
-	});
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
 
-	// this will be transformed
-	const myTask = sheepdogTask(async function* () {
-		const result = yield fetch('/api/my-endpoint');
-		return yield result.json();
-	});
-</script>
+// this will be transformed
+const myTask = sheepdogTask(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
 ```
 
 </TabItem>
@@ -221,44 +205,40 @@ and the same works even for imported functions with the same name.
 
 {/* prettier-ignore-start */}
 
-```svelte
-<script lang="ts">
-	import { task as sheepdogTask } from '@sheepdog/svelte';
-	import { task } from 'random-npm-library';
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+import { task } from 'random-npm-library';
 
-	// this will remain untouched
-	const otherTask = task(async () => {
-		// some async stuff
-	});
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
 
-	// this will be transformed
-	const myTask = sheepdogTask(async () => {
-		const result = await fetch('/api/my-endpoint');
-		return await result.json();
-	});
-</script>
+// this will be transformed
+const myTask = sheepdogTask(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
 ```
 
 </TabItem>
 
 <TabItem label="After">
 
-```svelte
-<script lang="ts">
-	import { task as sheepdogTask } from '@sheepdog/svelte';
-	import { task } from 'random-npm-library';
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+import { task } from 'random-npm-library';
 
-	// this will remain untouched
-	const otherTask = task(async () => {
-		// some async stuff
-	});
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
 
-	// this will be transformed
-	const myTask = sheepdogTask(async function* () {
-		const result = yield fetch('/api/my-endpoint');
-		return yield result.json();
-	});
-</script>
+// this will be transformed
+const myTask = sheepdogTask(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
 ```
 
 </TabItem>
@@ -270,9 +250,9 @@ want to have your tasks in a separate ts file. Well good news for you...
 
 ## The `transform` function
 
-If you want to tell `@sheepdog/svelte` that a function is meant to be transformed because you will
+If you want to tell `@sheepdog/vanilla` that a function is meant to be transformed because you will
 pass that function to a task you can do so by using the `transform` function exported from
-`@sheepdog/svelte/utils`.
+`@sheepdog/vanilla/utils`.
 
 This function doesn't do anything at runtime but it serves to purpose:
 
@@ -288,7 +268,7 @@ Here's how a transformed function will look like
 <TabItem label="Before">
 
 ```ts
-import { transform } from '@sheepdog/svelte/utils';
+import { transform } from '@sheepdog/vanilla/utils';
 
 // this will be converted
 const myTask = transform(async () => {
@@ -321,7 +301,7 @@ rename your import.
 <TabItem label="Before">
 
 ```ts
-import { transform as sheepdogTransform } from '@sheepdog/svelte/utils';
+import { transform as sheepdogTransform } from '@sheepdog/vanilla/utils';
 import { transform } from 'random-npm-library';
 
 // this will remain untouched

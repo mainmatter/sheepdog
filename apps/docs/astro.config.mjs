@@ -62,6 +62,7 @@ export default defineConfig({
 			editLink: {
 				baseUrl: 'https://github.com/mainmatter/sheepdog/edit/main',
 			},
+			// the sidebar is updated in `route-data.ts` to prepend the correct package name
 			sidebar: [
 				{
 					label: 'Getting started',

@@ -1,36 +1,30 @@
 ---
 title: Usage
-description: Basic usage of `@sheepdog/svelte`.
+description: Basic usage of `@sheepdog/vanilla`.
 ---
 
 import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
 import BlankLink from '@components/BlankLink.astro';
 
-The simplest way to use `@sheepdog/svelte` is the following
+The simplest way to use `@sheepdog/vanilla` is the following
 
-```svelte
-<script>
-	import { task, timeout } from '@sheepdog/svelte';
+```ts
+import { task, timeout } from '@sheepdog/vanilla';
 
-	const myTask = task(async () => {
-		// async stuff
-	});
-</script>
+const myTask = task(async () => {
+	// async stuff
+});
 
-<button
-	on:click={() => {
-		myTask.perform();
-	}}
->
-	do async stuff
-</button>
+button.addEventListener('click', () => {
+	myTask.perform();
+});
 ```
 
 This will run your async function when the user presses the button. _"But why not use a normal async
 function?"_ I hear you ask.
 
-**Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
-a lot of useful information about your task!**
+**Because the `myTask` variable that you used to call `perform` is also a special object that
+contains a lot of useful information about your task!**
 
 ## `Task` structure
 
@@ -42,6 +36,25 @@ a lot of useful information about your task!**
   undefined
 - `lastSuccessful`: the last successful task instance
 - `performCount`: the number of times the task has been run,
+
+it also returns two functions.
+
+The `on` function that has the same structure of an event listener (so you can pass a signal to it
+for example) and allow you to listen for the following events:
+
+- `start`: emitted when the number of running tasks goes from 0 to at least 1
+- `finish`: emitted when the number of running tasks goes from to 0
+- `instance-create`: emitted when an instance of the task is created (for
+  [tasks with a modifier](#task-modifiers) the task might be created but not executed immediately)
+- `instance-error`: emitted when an instance of the task errors out
+- `instance-finish`: emitted when an instance of the task terminates, be it for an error, a cancel,
+  or a success
+- `instance-cancel`: emitted when an instance of the task is canceled
+- `instance-start`: emitted when an instance of the task actually starts
+- `instance-success`: emitted when an instance of the task completes successfully
+
+The `destroy` function is used to clean up everything the task has allocated, and cancelling the
+task
 
 ```ts
 type Task = {
@@ -73,63 +86,76 @@ type Task = {
 	 * number of times the task has been run,
 	 */
 	performCount: number;
+	/**
+	 * a function to add a listener on the task itself, the events you can listen for are:
+	 *
+	 * - start
+	 * - finish
+	 * - instance-create
+	 * - instance-error
+	 * - instance-finish
+	 * - instance-cancel
+	 * - instance-start
+	 * - instance-success
+	 */
+	on: (event: Events, cb: () => void, options?: AddEventListenerOptions) => void;
+	/**
+	 * a function to destroy the task, this will cancel it and clean every resource allocated by the task
+	 */
+	destroy: () => void;
 };
 ```
 
 ## `TaskInstance` structure
 
-To make it easier to reason about, every type of task modifier utilizes the same underlying structure. You can find more detail about the structure of the `TaskInstance` in the [reference docs](/reference/task-instance).
+To make it easier to reason about, every type of task modifier utilizes the same underlying
+structure. You can find more detail about the structure of the `TaskInstance` in the
+[reference docs](/vanilla/reference/task-instance).
 
 ## Task modifiers
 
-`@sheepdog/svelte` allows you to specify a task modifier that changes the behavior of the perform
+`@sheepdog/vanilla` allows you to specify a task modifier that changes the behavior of the perform
 function. By default when you call `perform` the task will be executed immediately regardless if
 there are other instances of the same task in execution. For example, you could use the `enqueue`
-modifier to instruct `@sheepdog/svelte` to execute the task instances one after another (in a
+modifier to instruct `@sheepdog/vanilla` to execute the task instances one after another (in a
 queue - who would've thought)
 
 Here's how you can specify the modifier:
 
 <Tabs syncKey="examples">
 	<TabItem label="Dot notation">
-	```svelte ins=".enqueue" {4}
-	<script>
-		import { task, timeout } from '@sheepdog/svelte';
+
+    ```ts ins=".enqueue" {4}
+    	import { task, timeout } from '@sheepdog/vanilla';
 
     	const myTask = task.enqueue(async () => {
     		// async stuff
     	});
-    </script>
 
-    <button on:click={()=>{
-    	myTask.perform();
-    }}>
-    	do async stuff one by one
-    </button>
+    	button.addEventListener('click', () => {
+    		myTask.perform();
+    	});
     ```
+
     </TabItem>
     <TabItem label="Option notation">
-    ```svelte ins="enqueue" {6}
-    <script>
-    	import { task, timeout } from '@sheepdog/svelte';
+    ```ts ins="enqueue" {5}
+    	import { task, timeout } from '@sheepdog/vanilla';
 
     	const myTask = task(async () => {
     		// async stuff
     	}, { kind: "enqueue" });
-    </script>
 
-    <button on:click={()=>{
-    	myTask.perform();
-    }}>
-    	do async stuff one by one
-    </button>
+    	button.addEventListener('click', () => {
+    		myTask.perform();
+    	});
     ```
     </TabItem>
 
 </Tabs>
 
 <LinkCard
-	href="/explainers/task-modifiers/"
+	href="/vanilla/explainers/task-modifiers/"
 	title="Task modifiers"
 	description="Read everything about task modifiers in our guide"
 />

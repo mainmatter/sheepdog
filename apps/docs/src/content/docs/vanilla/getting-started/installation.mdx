@@ -1,46 +1,43 @@
 ---
 title: Installation
-description: How to install `@sheepdog/svelte`.
+description: How to install `@sheepdog/vanilla`.
 ---
 
 import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
-
-As the name suggests `@sheepdog/svelte` is meant to be used in a `svelte` project.
 
 To install, run the following command with your preferred package manager.
 
 <Tabs>
 	<TabItem label="npm">
-		<Code lang="bash" code="npm install @sheepdog/svelte" />
+		<Code lang="bash" code="npm install @sheepdog/vanilla" />
 	</TabItem>
 	<TabItem label="yarn">
-		<Code lang="bash" code="yarn add @sheepdog/svelte" />
+		<Code lang="bash" code="yarn add @sheepdog/vanilla" />
 	</TabItem>
 	<TabItem label="pnpm">
-		<Code lang="bash" code="pnpm install @sheepdog/svelte" />
+		<Code lang="bash" code="pnpm install @sheepdog/vanilla" />
 	</TabItem>
 	<TabItem label="bun">
-		<Code lang="bash" code="bun add @sheepdog/svelte" />
+		<Code lang="bash" code="bun add @sheepdog/vanilla" />
 	</TabItem>
 </Tabs>
 
 ## Setup the Async Transform
 
 <Aside>
-	This is the way we recommend using `@sheepdog/svelte` but it is optional. To understand more about
-	the Async Transform, check out the [guide](/explainers/async-transform)
+	If you are using `@sheepdog/vanilla` in a Vite project this is the way we recommend using
+	`@sheepdog/vanilla` but it is optional. To understand more about the Async Transform, check out
+	the [guide](/vanilla/explainers/async-transform)
 </Aside>
 
 The Async Transform is a Vite plugin so to set it up you need to modify your `vite.config.{js|ts}`
 
 ```diff lang="ts" title="vite.config.ts"
-import { sveltekit } from '@sveltejs/kit/vite';
-+import { asyncTransform } from '@sheepdog/svelte/vite';
++import { asyncTransform } from '@sheepdog/vanilla/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig(({ mode }) => ({
 	plugins: [
-		sveltekit(),
 +		asyncTransform(),
 	],
 	// rest of your config
@@ -50,4 +47,4 @@ export default defineConfig(({ mode }) => ({
 And that's it! You can now use async tasks with proper mid-run cancellation!
 
 Remember: the Async Transform will only change your code in some very specific places, read more
-about it in [the async transform explainer](/explainers/async-transform).
+about it in [the async transform explainer](/vanilla/explainers/async-transform).
