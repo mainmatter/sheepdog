@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import default_handler from './handlers/default';
-import drop from './handlers/drop';
-import enqueue from './handlers/enqueue';
-import keep_latest from './handlers/keep_latest';
-import restart from './handlers/restart';
+import default_handler from './handlers/default.js';
+import drop from './handlers/drop.js';
+import enqueue from './handlers/enqueue.js';
+import keep_latest from './handlers/keep_latest.js';
+import restart from './handlers/restart.js';
 
 export const handlers = {
 	default: default_handler,

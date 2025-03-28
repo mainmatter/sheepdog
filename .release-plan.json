@@ -2,8 +2,9 @@
   "solution": {
     "@sheepdog/core": {
       "impact": "patch",
-      "oldVersion": "0.1.0",
-      "newVersion": "0.1.1",
+      "oldVersion": "0.2.0",
+      "newVersion": "0.2.1",
+      "tagName": "latest",
       "constraints": [
         {
           "impact": "patch",
@@ -14,20 +15,20 @@
     },
     "@sheepdog/svelte": {
       "impact": "patch",
-      "oldVersion": "0.12.2",
-      "newVersion": "0.12.3",
+      "oldVersion": "0.12.4",
+      "newVersion": "0.12.5",
+      "tagName": "latest",
       "constraints": [
         {
           "impact": "patch",
           "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./packages/svelte/package.json"
+    },
+    "@sheepdog/vanilla": {
+      "oldVersion": "0.1.0"
     }
   },
-  "description": "## Release (2025-02-14)\n\n@sheepdog/core 0.1.1 (patch)\n@sheepdog/svelte 0.12.3 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/docs`, `@sheepdog/core`, `@sheepdog/svelte`\n  * [#273](https://github.com/mainmatter/sheepdog/pull/273) fix: don't call the function if the task has been canceled before starting ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#276](https://github.com/mainmatter/sheepdog/pull/276) chore: change workspace dep ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-03-21)\n\n* @sheepdog/core 0.2.1 (patch)\n* @sheepdog/svelte 0.12.5 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`, `@sheepdog/svelte`\n  * [#295](https://github.com/mainmatter/sheepdog/pull/295) fix: update all the imports ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
