@@ -20,6 +20,7 @@
 		"test": "pnpm -r test -- --run"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.23.0",
 		"@gravityci/cli": "^0.0.9",
 		"eslint-config-prettier": "^10.0.0",
 		"eslint-plugin-svelte": "3.3.3",
