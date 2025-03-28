@@ -7,7 +7,7 @@ import Demo from '../components/demo.svelte';
 
 import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
 
-const sheepdogDemoCode = `
+const sheepdogSvelteDemoCode = `
 <script>
 	import { task, timeout } from '@sheepdog/svelte';
 	
@@ -38,7 +38,7 @@ const sheepdogDemoCode = `
 {/if}
 `;
 
-const nativeDemoCode = `
+const nativeSvelteDemoCode = `
 <script>
 	let _currentValue;
 	let timeout;
@@ -82,6 +82,115 @@ const nativeDemoCode = `
 	No sheep found
 {/if}
 `;
+
+const sheepdogVanillaDemoCode = `
+import { task, timeout } from "@sheepdog/vanilla";
+
+const container = document.getElementById('search-container');
+container.innerHTML = \`
+		<label for="search">Search</label>
+		<input name="search" type="text" />
+		<div id="output"></div>
+	\`;
+
+const searchInput = container.querySelector('input[name="search"]');
+const outputContainer = container.querySelector('#output');
+
+const search = task(
+	async function* (value) {
+		yield timeout(500);
+		const response = yield fetch('/my-favourite-sheep?search=' + value);
+		if (!response.ok) {
+			throw new Error(\`HTTP error! status: \${response.status}\`);
+		}
+		return yield response.json();
+	},
+	{ kind: 'restart' }
+);
+
+search.on('start', () => {
+	outputContainer.innerHTML = 'Loading...';
+});
+
+search.on('error', () => {
+	outputContainer.innerHTML = 'There was an error';
+});
+
+search.on('instance-success', () => {
+	const value = search.lastSuccessful.value
+	outputContainer.innerHTML =
+		value && value.length
+			? \`
+		<ul>
+			\${value.map((name) => \`<li>\${name}</li>\`).join('')}
+		</ul>
+	\`
+			: 'No sheep found';
+});
+
+searchInput.addEventListener('input', (event) => { 
+	search.perform(event.target.value);
+})
+`;
+
+const nativeVanillaDemoCode = `
+let timeout;
+let currentValue;
+let isRunning = false;
+
+const container = document.getElementById('search-container');
+container.innerHTML = \`
+	<label for="search">Search</label>
+	<input name="search" type="text" />
+	<div id="output"></div>
+\`
+const searchInput = container.querySelector('input[name="search"]');
+const outputContainer = container.querySelector('#output')
+
+const search = (value) => {
+	if (timeout) {
+		clearTimeout(timeout);
+	}
+
+	const _timeout = setTimeout(async () => {
+		try {
+			const response = await fetch('/my-favourite-sheep?search=' + value);
+			if (!response.ok) {
+				throw new Error(\`HTTP error! status: \${response.status}\`);
+			}
+			const results = await response.json();
+
+			if (timeout === _timeout) {
+				currentValue = results;
+				timeout = undefined;
+				isRunning = false;
+				render();
+			}
+		} catch (error) {
+			console.error('Error fetching sheep:', error);
+			currentValue = null;
+			timeout = undefined;
+			isRunning = false;
+			render();
+		}
+	}, 500);
+	timeout = _timeout;
+	isRunning = true;
+	render();
+};
+
+const render = () => {
+	outputContainer.innerHTML = isRunning ? 'Loading...' : currentValue && currentValue.length ? \`
+		<ul>
+			\${currentValue.map(name => \`<li>\${name}</li>\`).join('')}
+		</ul>
+	\` : 'No sheep found';
+};
+
+searchInput.addEventListener('input', (event) => search(event.target.value));
+
+render();
+`;
 ---
 
 <section class="description">
@@ -92,17 +201,32 @@ const nativeDemoCode = `
 	</p>
 	<p><i>Because managing tasks shouldn't feel like chasing sheep.</i></p>
 </section>
-
 <section class="demo">
 	<div>
-		<h3>Code</h3>
+		<div>
+			<h3>Code</h3>
+		</div>
 		<div class="tabbed-code-wrapper">
 			<Tabs>
-				<TabItem label="Sheepdog">
-					<Code lang="svelte" code={sheepdogDemoCode} />
+				<TabItem label="Svelte">
+					<Tabs>
+						<TabItem label="Sheepdog">
+							<Code lang="svelte" code={sheepdogSvelteDemoCode} />
+						</TabItem>
+						<TabItem label="Native">
+							<Code lang="svelte" code={nativeSvelteDemoCode} />
+						</TabItem>
+					</Tabs>
 				</TabItem>
-				<TabItem label="Native">
-					<Code lang="javascript" code={nativeDemoCode} />
+				<TabItem label="Vanilla">
+					<Tabs>
+						<TabItem label="Sheepdog">
+							<Code lang="javascript" code={sheepdogVanillaDemoCode} />
+						</TabItem>
+						<TabItem label="Native">
+							<Code lang="javascript" code={nativeVanillaDemoCode} />
+						</TabItem>
+					</Tabs>
 				</TabItem>
 			</Tabs>
 		</div>
@@ -171,19 +295,28 @@ const nativeDemoCode = `
 	}
 
 	.tabbed-code-wrapper {
+		position: relative;
 		border: 2px solid var(--sl-color-white);
 		border-radius: 1.25rem;
 	}
 
 	.tabbed-code-wrapper :global(.tablist-wrapper) {
+		position: absolute;
+		top: 0;
+		left: 0;
 		display: flex;
 		justify-content: end;
 		margin-top: -2px;
 		margin-right: -2px;
 	}
 
-	.tabbed-code-wrapper :global(section[role='tabpanel']) {
-		margin-top: 0;
+	.tabbed-code-wrapper :global([role='tabpanel'] .tablist-wrapper) {
+		left: unset;
+		right: 0;
+	}
+
+	.tabbed-code-wrapper :global([role='tabpanel']) {
+		margin-top: 2.5rem;
 	}
 
 	.tabbed-code-wrapper :global(.tablist-wrapper ul) {
