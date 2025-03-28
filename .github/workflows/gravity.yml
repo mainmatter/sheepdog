@@ -12,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
+      - uses: pnpm/action-setup@v4
       - run: pnpm i --frozen-lockfile
       - run: cd packages/svelte && pnpm run build
       - run: pnpm gravityci "packages/svelte/dist/"
