@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.23.0
+        version: 9.23.0
       '@gravityci/cli':
         specifier: ^0.0.9
         version: 0.0.9
@@ -206,9 +209,6 @@ importers:
         specifier: workspace:^
         version: link:../core
     devDependencies:
-      '@eslint/js':
-        specifier: ^9.23.0
-        version: 9.23.0
       '@types/eslint':
         specifier: 9.6.1
         version: 9.6.1
