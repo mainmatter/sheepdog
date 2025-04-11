@@ -1,9 +1,8 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
-import Default from '@astrojs/starlight/components/SiteTitle.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
+import { is_homepage } from '@utils/is-homepage.ts';
 
-const isHomepage = Astro.locals.starlightRoute.id === '';
+const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
 ---
 
 {
@@ -13,16 +12,54 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 			<span class="sr-only">built by Mainmatter</span>
 		</div>
 	) : (
-		<Default {...Astro.props}>
-			<slot />
-		</Default>
+		<div class="select-wrapper">
+			<select name="library-select" id="library-select" />
+		</div>
 	)
 }
 
+<script>
+	const select = document.getElementById('library-select') as HTMLSelectElement;
+	const currentLibrary = window.location.pathname.split('/')[1];
+
+	let options = [
+		{ value: 'svelte', text: '@sheepdog/svelte' },
+		{ value: 'vanilla', text: '@sheepdog/vanilla' },
+	];
+
+	if (select) {
+		const currentPage = options.splice(
+			options.findIndex((option) => option.value === currentLibrary),
+			1,
+		)[0];
+		options.unshift(currentPage);
+		options.forEach((page) => {
+			const option = document.createElement('option');
+			option.value = page.value;
+			option.textContent = page.text;
+			select.appendChild(option);
+		});
+		select.value = currentLibrary;
+		select.addEventListener('change', function (event) {
+			const value = (event.target as HTMLSelectElement).value;
+			location.href = `/${value}/getting-started/what-is-it`;
+		});
+	}
+</script>
+
 <style>
 	.built-by > :global(svg) {
-			height: 2.5rem;
-			width: auto;
-			display: block;
+		height: 2.5rem;
+		width: auto;
+		display: block;
+	}
+
+	.select-wrapper select {
+		padding: 0.5rem 0 0.5rem 0.5rem;
+		border-radius: 0.5rem;
+		border: var(--sl-color-hairline-light) 1px solid;
+		/* -webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none; */
 	}
 </style>

@@ -13,17 +13,19 @@ export default defineConfig({
 			alias: {
 				'@assets': path.resolve(process.cwd(), './src/assets'),
 				'@components': path.resolve(process.cwd(), './src/components'),
+				'@utils': path.resolve(process.cwd(), './src/utils'),
 			},
 		},
 	},
 	integrations: [
 		starlight({
+			routeMiddleware: './src/route-data.ts',
 			components: {
 				SiteTitle: './src/components/SiteTitle.astro',
 				Hero: './src/components/Hero.astro',
 				Footer: './src/components/Footer.astro',
 			},
-			title: '@sheepdog/svelte',
+			title: '@sheepdog',
 			expressiveCode: {
 				themes: ['github-dark-default', 'github-light-default'],
 			},
@@ -60,6 +62,7 @@ export default defineConfig({
 			editLink: {
 				baseUrl: 'https://github.com/mainmatter/sheepdog/edit/main',
 			},
+			// the sidebar is updated in `route-data.ts` to prepend the correct package name
 			sidebar: [
 				{
 					label: 'Getting started',
@@ -143,4 +146,22 @@ export default defineConfig({
 	],
 	output: 'static',
 	adapter: netlify({}),
+	redirects: {
+		'/explainers/async-transform': '/svelte/explainers/async-transform',
+		'/explainers/linking-tasks': '/svelte/explainers/linking-tasks',
+		'/explainers/mid-run-cancellation': '/svelte/explainers/mid-run-cancellation',
+		'/explainers/task-modifiers': '/svelte/explainers/task-modifiers',
+		'/getting-started/installation': '/svelte/getting-started/installation',
+		'/getting-started/usage': '/svelte/getting-started/usage',
+		'/getting-started/what-is-it': '/svelte/getting-started/what-is-it',
+		'/reference/[...all]': '/svelte/reference/[...all]',
+		'/reference/default': '/svelte/reference/default',
+		'/reference/drop': '/svelte/reference/drop',
+		'/reference/enqueue': '/svelte/reference/enqueue',
+		'/reference/keep-latest': '/svelte/reference/keep-latest',
+		'/reference/restart': '/svelte/reference/restart',
+		'/reference/sheepdog-utils': '/svelte/reference/sheepdog-utils',
+		'/reference/task-instance': '/svelte/reference/task-instance',
+		'/reference/transform': '/svelte/reference/transform',
+	},
 });

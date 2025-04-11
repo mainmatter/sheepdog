@@ -1,0 +1,340 @@
+---
+title: Async Transform
+description: How the Async Transform works
+---
+
+import { LinkCard, Tabs, TabItem, Aside, Code } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
+
+This explainer is meant to show you how the `Async Transform` Vite plugin works so that you can be
+confident in using it. If you want to know how to setup the Vite plugin please go to the following
+link.
+
+<LinkCard
+	href="/vanilla/getting-started/installation/#setup-the-async-transform"
+	title="Setup the Async Transform"
+	description="Read the short guide about how to setup the Async Transform"
+/>
+
+## What is a Vite plugin?
+
+If you just want to know about what the `Async Transform` does, feel free to skip to the next
+paragraph. If you're completely new to Vite plugins or just want to understand more about what they
+are; here's a brief introduction.
+
+<details>
+	<summary>Introduction to Vite plugins</summary>
+
+    A Vite plugin is essentially a small bit of code with a series of methods that Vite will call
+    sequentially during the dev and build script.
+
+    Every function is called at a specific moment of the build and can affect it in different ways.
+
+    Here's an example of a simple Vite plugin that is very similar to one in <BlankLink href="https://vitejs.dev/guide/api-plugin" body="their documentation" />
+
+    <Code lang="ts" code={`
+
+export const simpleTransform = {
+	// name is used during debug
+	name: 'simple-transform',
+	transform(src, fileName){
+		// we only handle our custom file extension
+		if(fileName.endsWith('.myext')){
+			return {
+				// we transform the text in our file
+				// to JS
+				code: myExtToJs(src),
+				// if possible, return a sourcemap to allow for better debugging
+				map: null,
+			}
+		}
+	}
+};
+`}/>
+
+In this case we handle our own custom file extension and compile that to JS but you can also use the
+transform hook to change your JS.
+
+    <Code lang="ts" code={`
+
+export const simpleTransform = {
+	// name is used during debug
+	name: 'remove-console-logs',
+	transform(src){
+		return {
+			code: src.replaceAll(/console.log\(.+?\)/g, ""),
+			map: null,
+		}
+	}
+};
+`}/>
+
+This super simple plugin eliminates every instance of `console.log()` from your code.
+
+<Aside type="caution">
+	Don't use this anywhere. It's just a silly example and you should probably be a bit more nuanced
+	than `replaceAll` if you want to remove logs from your code.
+</Aside>
+
+The gist of it is: you can do a lot of cool things with a Vite plugin and we decided to build the
+Async Transform to make your life (hopefully) easier!
+
+</details>
+
+## How does the `Async Transform` change my code?
+
+The reason we are writing this explainer is because we firmly believe that if you allow your code to
+be changed by some script you should fully understand how it changes it and what the final result
+will look like.
+
+As shown in our [Mid run cancellation](/vanilla/explainers/mid-run-cancellation) explainer, this
+Vite plugin aims to solve a couple of problems with async code in Typescript:
+
+- Promises are not cancelable: once you start them there's no way to stop the code in the middle of
+  the function from executing.
+- Generators can be "stopped" mid execution but Typescript doesn't play very well with the `yield`
+  keyword.
+
+To fix these problems, we let you write the simple and more familiar async code, and we provide a
+Vite plugin to transform your async functions into generators!
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { task } from '@sheepdog/vanilla';
+
+const myTask = task(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+
+button.addEventListener('click', () => {
+	myTask.perform();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+import { task } from '@sheepdog/vanilla';
+
+const myTask = task(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
+
+button.addEventListener('click', () => {
+	myTask.perform();
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+As you can see we aim to touch your code the bare minimum. But I can still see the worry on your
+face, so let's dive a bit more and make a couple of clarifications
+
+### What about my other async functions?
+
+If you don't want to see all of your beloved async functions be turned into generators, worry not,
+because we specifically target only the async functions that are arguments of our own `task` or
+`task.modifier` functions. And we were really careful with this so even if you have other functions
+that are named `task` or if you rename your import everything outside the argument of that function
+will be left untouched.
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+
+function task(fn: () => Promise<any>) {
+	// your code
+}
+
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
+
+// this will be transformed
+const myTask = sheepdogTask(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+
+function task(fn: () => Promise<any>) {
+	// your code
+}
+
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
+
+// this will be transformed
+const myTask = sheepdogTask(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+and the same works even for imported functions with the same name.
+
+<Tabs>
+
+<TabItem label="Before">
+
+{/* prettier-ignore-start */}
+
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+import { task } from 'random-npm-library';
+
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
+
+// this will be transformed
+const myTask = sheepdogTask(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+import { task as sheepdogTask } from '@sheepdog/vanilla';
+import { task } from 'random-npm-library';
+
+// this will remain untouched
+const otherTask = task(async () => {
+	// some async stuff
+});
+
+// this will be transformed
+const myTask = sheepdogTask(async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+However sometimes you might want to have a single function to create multiple tasks or maybe you
+want to have your tasks in a separate ts file. Well good news for you...
+
+## The `transform` function
+
+If you want to tell `@sheepdog/vanilla` that a function is meant to be transformed because you will
+pass that function to a task you can do so by using the `transform` function exported from
+`@sheepdog/vanilla/utils`.
+
+This function doesn't do anything at runtime but it serves to purpose:
+
+1. As a marker for the vite plugin to transform the function you pass to it.
+2. as a "safety measure". The function will actually throw in `DEV` if you use it without the Async
+   Transform. This will warn you that what you expect to be a mid-run-cancellable function it is not
+   because you forgot to add the vite plugin.
+
+Here's how a transformed function will look like
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { transform } from '@sheepdog/vanilla/utils';
+
+// this will be converted
+const myTask = transform(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+// this will be converted
+const myTask = async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+};
+```
+
+</TabItem>
+
+</Tabs>
+
+as you can see the function invocation was completely removed. This obviously works the same if you
+rename your import.
+
+<Tabs>
+
+<TabItem label="Before">
+
+```ts
+import { transform as sheepdogTransform } from '@sheepdog/vanilla/utils';
+import { transform } from 'random-npm-library';
+
+// this will remain untouched
+const otherTransform = transform(async () => {
+	// async stuff
+});
+
+// this will be converted
+const myTask = sheepdogTransform(async () => {
+	const result = await fetch('/api/my-endpoint');
+	return await result.json();
+});
+```
+
+</TabItem>
+
+<TabItem label="After">
+
+```ts
+import { transform } from 'random-npm-library';
+
+// this will remain untouched
+const otherTransform = transform(async () => {
+	// async stuff
+});
+
+// this will be converted
+const myTask = async function* () {
+	const result = yield fetch('/api/my-endpoint');
+	return yield result.json();
+};
+```
+
+</TabItem>
+
+</Tabs>
