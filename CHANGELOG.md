@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-05-16)
+
+
+
+#### :house: Internal
+* [#303](https://github.com/mainmatter/sheepdog/pull/303) chore: add require label workflow ([@paoloricciuti](https://github.com/paoloricciuti))
+* [#297](https://github.com/mainmatter/sheepdog/pull/297) fix: use spaces in `package.json`'s ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-03-21)
 
 * @sheepdog/core 0.2.1 (patch)
