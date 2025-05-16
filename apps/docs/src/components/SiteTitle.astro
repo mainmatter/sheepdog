@@ -1,9 +1,12 @@
 ---
-import Default from '@astrojs/starlight/components/SiteTitle.astro';
+import Default from '@astrojs/starlight/components/Header.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
 import { is_homepage } from '@utils/is-homepage.ts';
 
 const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
+
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+const { current_package, available_packages } = Astro.locals;
 ---
 
 {
@@ -13,7 +16,23 @@ const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
 			<span class="sr-only">built by Mainmatter</span>
 		</div>
 	) : (
-		<Default />
+		<>
+			<a href={siteTitleHref} class="site-title sl-flex">
+				<span translate="no">{siteTitle}</span>
+			</a>
+			<span class="site-title">/</span>
+			<details class="site-title">
+				<summary>
+					{current_package}
+					<span>▼</span>
+				</summary>
+				<div>
+					{available_packages.map((pkg) => (
+						<a href="">{pkg}</a>
+					))}
+				</div>
+			</details>
+		</>
 	)
 }
 
@@ -22,5 +41,73 @@ const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
 		height: 2.5rem;
 		width: auto;
 		display: block;
+	}
+	.site-title {
+		align-items: center;
+		gap: var(--sl-nav-gap);
+		font-size: var(--sl-text-h4);
+		font-weight: 600;
+		color: var(--sl-color-text-accent);
+		text-decoration: none;
+		white-space: nowrap;
+		min-width: 0;
+		position: relative;
+		div {
+			position: absolute;
+			z-index: 99;
+			display: grid;
+			padding-top: 0;
+			left: 0;
+			top: 100%;
+			background-color: var(--sl-color-black);
+			border-radius: 0.5rem;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			overflow: hidden;
+			border: 1px solid var(--sl-color-gray-5);
+			a {
+				padding: 0.25rem 0.5rem;
+				font-size: var(--sl-text-base);
+				text-decoration: none;
+				color: var(--sl-color-text-accent);
+				border-bottom: 1px solid var(--sl-color-gray-5);
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+	}
+	details {
+		cursor: pointer;
+	}
+	details::details-content {
+		block-size: 0;
+		--timing: 0.25s;
+		transition:
+			block-size var(--timing),
+			content-visibility var(--timing);
+		transition-behavior: allow-discrete;
+	}
+	details:open::details-content {
+		block-size: auto;
+	}
+	summary {
+		display: flex;
+		align-items: baseline;
+		gap: 0.25rem;
+
+		span {
+			transition: transform 0.25s;
+			font-size: var(--sl-text-xs);
+			details:open & {
+				transform: rotate(180deg);
+			}
+		}
+	}
+	summary::marker {
+		content: '';
+	}
+	span {
+		overflow: hidden;
 	}
 </style>

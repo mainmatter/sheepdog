@@ -1,6 +1,7 @@
 /* Dark mode colors. */
 :root {
-	--sheepdog-primary: #6200EE;
+	interpolate-size: allow-keywords;
+	--sheepdog-primary: #6200ee;
 
 	--sl-color-accent-low: #262320;
 	--sl-color-accent: #70685d;
@@ -22,7 +23,7 @@
 
 /* Light mode colors. */
 :root[data-theme='light'] {
-	--sheepdog-primary: #6200EE;
+	--sheepdog-primary: #6200ee;
 
 	--sl-color-accent-low: #d9d6d3;
 	--sl-color-accent: #726a5f;
@@ -63,4 +64,8 @@
 	border-radius: 3rem;
 	font-weight: bold;
 	white-space: nowrap;
+}
+
+.title-wrapper {
+	overflow: visible;
 }

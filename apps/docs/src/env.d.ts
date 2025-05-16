@@ -4,6 +4,7 @@ declare global {
 	namespace App {
 		export interface Locals {
 			available_packages: string[];
+			current_package: string;
 		}
 	}
 }
