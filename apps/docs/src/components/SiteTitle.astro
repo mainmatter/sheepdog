@@ -1,5 +1,4 @@
 ---
-import Default from '@astrojs/starlight/components/Header.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
 import { is_homepage } from '@utils/is-homepage.ts';
 
@@ -28,7 +27,7 @@ const { current_package, available_packages } = Astro.locals;
 				</summary>
 				<div>
 					{available_packages.map((pkg) => (
-						<a href="">{pkg}</a>
+						<a href={`/${pkg}/getting-started/what-is-it`}>{pkg}</a>
 					))}
 				</div>
 			</details>
@@ -53,12 +52,8 @@ const { current_package, available_packages } = Astro.locals;
 		min-width: 0;
 		position: relative;
 		div {
-			position: absolute;
-			z-index: 99;
 			display: grid;
 			padding-top: 0;
-			left: 0;
-			top: 100%;
 			background-color: var(--sl-color-black);
 			border-radius: 0.5rem;
 			border-top-left-radius: 0;
@@ -68,6 +63,7 @@ const { current_package, available_packages } = Astro.locals;
 			a {
 				padding: 0.25rem 0.5rem;
 				font-size: var(--sl-text-base);
+				font-weight: 400;
 				text-decoration: none;
 				color: var(--sl-color-text-accent);
 				border-bottom: 1px solid var(--sl-color-gray-5);
@@ -81,6 +77,10 @@ const { current_package, available_packages } = Astro.locals;
 		cursor: pointer;
 	}
 	details::details-content {
+		position: absolute;
+		overflow: hidden;
+		left: 0;
+		top: 100%;
 		block-size: 0;
 		--timing: 0.25s;
 		transition:
@@ -93,10 +93,11 @@ const { current_package, available_packages } = Astro.locals;
 	}
 	summary {
 		display: flex;
-		align-items: baseline;
+		align-items: center;
 		gap: 0.25rem;
 
 		span {
+			font-family: monospace;
 			transition: transform 0.25s;
 			font-size: var(--sl-text-xs);
 			details:open & {
