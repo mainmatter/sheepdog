@@ -1,5 +1,4 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/SiteTitle.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
 
@@ -21,8 +20,8 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 
 <style>
 	.built-by > :global(svg) {
-			height: 2.5rem;
-			width: auto;
-			display: block;
+		height: 2.5rem;
+		width: auto;
+		display: block;
 	}
 </style>

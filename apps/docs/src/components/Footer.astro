@@ -1,5 +1,4 @@
 ---
-import type { Props } from '@astrojs/starlight/props';
 import Default from '@astrojs/starlight/components/Footer.astro';
 import MainmatterLogo from '../assets/Mainmatter.astro';
 
@@ -9,7 +8,11 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 {
 	isHomepage ? (
 		<footer>
-			<a href="https://mainmatter.com/svelte-consulting/" target="_blank" rel="noopener noreferrer">
+			<a
+				href="https://mainmatter.com/svelte-consulting/"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
 				<MainmatterLogo />
 			</a>
 			&copy; 2024 Mainmatter GmbH
@@ -23,18 +26,18 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 
 <style>
 	footer {
-			text-align: center;
-			padding: 100px 0 0 0;
+		text-align: center;
+		padding: 100px 0 0 0;
 	}
 
 	footer > a {
-			display: block;
+		display: block;
 	}
 
 	footer > a > :global(svg) {
-			height: 50px;
-			width: auto;
-			max-width: 50vw;
-      color: var(--sl-color-white);
+		height: 50px;
+		width: auto;
+		max-width: 50vw;
+		color: var(--sl-color-white);
 	}
 </style>
