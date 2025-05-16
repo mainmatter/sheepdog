@@ -13,14 +13,14 @@
 	"dependencies": {
 		"@astrojs/check": "^0.9.0",
 		"@astrojs/netlify": "^6.0.0",
-		"@astrojs/starlight": "^0.32.0",
+		"@astrojs/starlight": "^0.34.0",
 		"@astrojs/svelte": "^7.0.0",
 		"@fontsource/calistoga": "^5.0.21",
 		"@fontsource/pt-sans": "^5.0.13",
 		"@sheepdog/svelte": "workspace:*",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"astro": "^5.0.0",
-		"sharp": "^0.33.0",
+		"sharp": "^0.34.0",
 		"svelte": "^5.0.0",
 		"typescript": "^5.4.5"
 	},
