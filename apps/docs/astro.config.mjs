@@ -55,9 +55,7 @@ export default defineConfig({
 					},
 				},
 			],
-			social: {
-				github: 'https://github.com/mainmatter/sheepdog',
-			},
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/mainmatter/sheepdog' }],
 			customCss: ['./src/styles/global.css'],
 			editLink: {
 				baseUrl: 'https://github.com/mainmatter/sheepdog/edit/main',
