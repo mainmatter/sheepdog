@@ -15,6 +15,7 @@ export const onRequest = defineRouteMiddleware((context) => {
 				continue;
 			}
 			element.href = `/${current_package}${element.href}`;
+			element.isCurrent = context.url.pathname === element.href;
 		}
 	}
 	update_sidebar(sidebar);
