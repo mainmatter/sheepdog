@@ -1,0 +1,78 @@
+---
+title: Task Instance
+description: the underlying structure of every task instance
+---
+
+### Structure
+
+To standardize the approach regardless of which task modifier you're using, every task modifier will
+use the same underlying `TaskInstance` structure inside of a svelte store.
+
+A `TaskInstance` comprises of:
+
+- `error`: if an error is thrown inside the task instance, it will be found here
+- `value`: if the task instance completed successfully, this will be the return value
+- `on`: a function to add a listener on the task instance itself, the events you can listen for are:
+  - `error`: emitted by the instance when an error is thrown during the run
+  - `finish`: emitted by the instance when for whatever reason it finishes (either if it errors, is
+    being canceled or it complete successfully)
+  - `cancel`: emitted by the instance when the task is canceled
+  - `start`: emitted by the instance when the task actually starts (it could be canceled before this
+    event is emitted)
+  - `success`: emitted by the instance when the execution terminates without erroring out or being
+    canceled
+
+And for those of you that prefer to read code, here is the typing of the `TaskInstance`:
+
+```ts
+type TaskInstance<TReturn> = {
+	/**
+	 * If an error is thrown inside the task instance, it will be found here.
+	 */
+	error?: Error;
+
+	/**
+	 * If the task instance completed successfully, this will be the return value.
+	 */
+	value?: TReturn;
+
+	/**
+	 * A function to add a listener on the task instance itself, the events you can listen for are:
+	 *
+	 * - error
+	 * - finish
+	 * - cancel
+	 * - start
+	 * - success
+	 */
+	on: (event: InstanceEvents, cb: () => void, options?: AddEventListenerOptions) => void;
+};
+```
+
+where `InstanceEvents` is:
+
+```ts
+type InstanceEvents = 'error' | 'finish' | 'cancel' | 'start' | 'success';
+```
+
+### Cancellation
+
+Each task instance is also packaged with a `cancel` function that can be used to cancel itself.
+
+```ts
+import { task } from '@sheepdog/svelte';
+
+const myTask = task(async () => {
+	// your code
+});
+
+let lastInstance;
+
+button.addEventListener('click', () => {
+	lastInstance = myTask.perform();
+});
+
+cancelLast.addEventListener('click', () => {
+	lastInstance?.cancel();
+});
+```

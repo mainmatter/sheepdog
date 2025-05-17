@@ -1,0 +1,173 @@
+---
+title: Usage
+description: Basic usage of `@sheepdog/vanilla`.
+---
+
+import { Tabs, TabItem, Code, Aside, LinkCard } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
+
+The simplest way to use `@sheepdog/vanilla` is the following
+
+```ts
+import { task, timeout } from '@sheepdog/vanilla';
+
+const myTask = task(async () => {
+	// async stuff
+});
+
+button.addEventListener('click', () => {
+	myTask.perform();
+});
+```
+
+This will run your async function when the user presses the button. _"But why not use a normal async
+function?"_ I hear you ask.
+
+**Because the `myTask` variable that you used to call `perform` is also a special object that
+contains a lot of useful information about your task!**
+
+## `Task` structure
+
+- `isRunning`: whether the task is currently running or not
+- `last`: the last task instance, regardless of whether it errored, was canceled, or was successful
+- `lastCanceled`: the last canceled task instance
+- `lastErrored`: the last errored task instance
+- `lastRunning`: the last running task instance, as soon as the task stops running, this will be
+  undefined
+- `lastSuccessful`: the last successful task instance
+- `performCount`: the number of times the task has been run,
+
+it also returns two functions.
+
+The `on` function that has the same structure of an event listener (so you can pass a signal to it
+for example) and allow you to listen for the following events:
+
+- `start`: emitted when the number of running tasks goes from 0 to at least 1
+- `finish`: emitted when the number of running tasks goes from to 0
+- `instance-create`: emitted when an instance of the task is created (for
+  [tasks with a modifier](#task-modifiers) the task might be created but not executed immediately)
+- `instance-error`: emitted when an instance of the task errors out
+- `instance-finish`: emitted when an instance of the task terminates, be it for an error, a cancel,
+  or a success
+- `instance-cancel`: emitted when an instance of the task is canceled
+- `instance-start`: emitted when an instance of the task actually starts
+- `instance-success`: emitted when an instance of the task completes successfully
+
+The `destroy` function is used to clean up everything the task has allocated, and cancelling the
+task
+
+```ts
+type Task = {
+	/**
+	 * whether the task is currently running or not
+	 */
+	isRunning: boolean;
+	/**
+	 * the last task instance, regardless of whether it errored, was canceled, or was successful
+	 */
+	last?: TaskInstance;
+	/**
+	 * the last canceled task instance
+	 */
+	lastCanceled?: TaskInstance;
+	/**
+	 * the last errored task instance
+	 */
+	lastErrored?: TaskInstance;
+	/**
+	 * the last running task instance, as soon as the task stops running, this will be undefined
+	 */
+	lastRunning?: TaskInstance;
+	/**
+	 * the last successful task instance
+	 */
+	lastSuccessful?: TaskInstance;
+	/**
+	 * number of times the task has been run,
+	 */
+	performCount: number;
+	/**
+	 * a function to add a listener on the task itself, the events you can listen for are:
+	 *
+	 * - start
+	 * - finish
+	 * - instance-create
+	 * - instance-error
+	 * - instance-finish
+	 * - instance-cancel
+	 * - instance-start
+	 * - instance-success
+	 */
+	on: (event: Events, cb: () => void, options?: AddEventListenerOptions) => void;
+	/**
+	 * a function to destroy the task, this will cancel it and clean every resource allocated by the task
+	 */
+	destroy: () => void;
+};
+```
+
+## `TaskInstance` structure
+
+To make it easier to reason about, every type of task modifier utilizes the same underlying
+structure. You can find more detail about the structure of the `TaskInstance` in the
+[reference docs](/vanilla/reference/task-instance).
+
+## Task modifiers
+
+`@sheepdog/vanilla` allows you to specify a task modifier that changes the behavior of the perform
+function. By default when you call `perform` the task will be executed immediately regardless if
+there are other instances of the same task in execution. For example, you could use the `enqueue`
+modifier to instruct `@sheepdog/vanilla` to execute the task instances one after another (in a
+queue - who would've thought)
+
+Here's how you can specify the modifier:
+
+<Tabs syncKey="examples">
+	<TabItem label="Dot notation">
+
+    ```ts ins=".enqueue" {4}
+    	import { task, timeout } from '@sheepdog/vanilla';
+
+    	const myTask = task.enqueue(async () => {
+    		// async stuff
+    	});
+
+    	button.addEventListener('click', () => {
+    		myTask.perform();
+    	});
+    ```
+
+    </TabItem>
+    <TabItem label="Option notation">
+    ```ts ins="enqueue" {5}
+    	import { task, timeout } from '@sheepdog/vanilla';
+
+    	const myTask = task(async () => {
+    		// async stuff
+    	}, { kind: "enqueue" });
+
+    	button.addEventListener('click', () => {
+    		myTask.perform();
+    	});
+    ```
+    </TabItem>
+
+</Tabs>
+
+<LinkCard
+	href="/vanilla/explainers/task-modifiers/"
+	title="Task modifiers"
+	description="Read everything about task modifiers in our guide"
+/>
+
+There are currently five task modifiers that you can apply to your task.
+
+- `default`: the default behavior, every task will run immediately
+- `drop`: if other tasks are already running the new instance will be immediately canceled
+- `enqueue`: every task instance is stored in a queue and executed with a
+  <BlankLink href="https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)" body="FIFO" />
+  strategy
+- `keepLatest`: like drop but the last instance will actually be kept around and executed as soon as
+  the current running instance finishes
+- `restart`: the oldest running task instance is canceled and the new one will start running
+  immediately
