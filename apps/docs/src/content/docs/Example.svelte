@@ -2,7 +2,6 @@
 	import { task, didCancel } from '@sheepdog/svelte';
 	import Timeline from './Timeline.svelte';
 	import Tabs from '../../components/Tabs.svelte';
-	import { readable } from 'svelte/store';
 
 	export let max = 1;
 	export let selected_task_type = 'enqueue';
@@ -106,7 +105,7 @@
 		<button
 			class="button"
 			on:click={() => {
-				if (!$example_task.isRunning) return;
+				if (!example_task.isRunning) return;
 				example_task.cancelAll();
 			}}>Cancel all</button
 		>

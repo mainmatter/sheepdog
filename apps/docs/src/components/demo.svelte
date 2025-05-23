@@ -1,14 +1,12 @@
 <script>
 	import { task } from '@sheepdog/svelte';
 
-	let sheep = [
-		'Autumn', 'Buttercup', 'Chloe', 'Dolly', 'Emma', 'Freddie'
-	]
+	let sheep = ['Autumn', 'Buttercup', 'Chloe', 'Dolly', 'Emma', 'Freddie'];
 
-	let timeout = (t) => new Promise(r => setTimeout(r,t));
-	let searchTask = task.restart(async function*(value) {
+	let timeout = (t) => new Promise((r) => setTimeout(r, t));
+	let searchTask = task.restart(async function* (value) {
 		yield timeout(500);
-		return sheep.filter(s => s.toLowerCase().includes(value.toLowerCase()));
+		return sheep.filter((s) => s.toLowerCase().includes(value.toLowerCase()));
 	});
 
 	function getTaskState(searchTask) {
@@ -21,22 +19,22 @@
 		} else {
 			return 'idle';
 		}
-	};
-	$: taskState = getTaskState($searchTask);
+	}
+	let taskState = $derived(getTaskState(searchTask));
 </script>
 
 <div class="demo">
 	<label class="label">
 		Search <span class="state">State: {taskState}</span>
-		<input type="text" on:input={({ target: { value }}) => searchTask.perform(value)}/>
+		<input type="text" oninput={({ target: { value } }) => searchTask.perform(value)} />
 	</label>
 
 	<ul class="sheep">
-		{#if $searchTask.isRunning}
+		{#if searchTask.isRunning}
 			<li>Loading...</li>
-		{:else if $searchTask.lastSuccessful}
-			{#if $searchTask.lastSuccessful.value.length}
-				{#each $searchTask.lastSuccessful.value as name}
+		{:else if searchTask.lastSuccessful}
+			{#if searchTask.lastSuccessful.value.length}
+				{#each searchTask.lastSuccessful.value as name}
 					<li>{name}</li>
 				{/each}
 			{:else}
@@ -57,22 +55,22 @@
 	}
 
 	.state {
-	  float: right;
+		float: right;
 	}
 
 	.label input {
-			font-weight: normal;
-			display: block;
-			width: 100%;
-      background: var(--sl-color-gray-4);
-			border: 2px solid var(--sl-color-white);
-			border-radius: 0.5rem;
-			margin: 0;
-			padding: 0.25rem 0.5rem;
+		font-weight: normal;
+		display: block;
+		width: 100%;
+		background: var(--sl-color-gray-4);
+		border: 2px solid var(--sl-color-white);
+		border-radius: 0.5rem;
+		margin: 0;
+		padding: 0.25rem 0.5rem;
 	}
 
-  :global([data-theme='light']) .label input {
-      background: #fff;
+	:global([data-theme='light']) .label input {
+		background: #fff;
 	}
 
 	.sheep {
@@ -81,10 +79,10 @@
 		padding: 0.5rem 0;
 		background: var(--sl-color-gray-4);
 		border-radius: 0.75rem;
-		box-shadow: var(--sl-shadow-md)
+		box-shadow: var(--sl-shadow-md);
 	}
 
-  :global([data-theme='light']) .sheep {
+	:global([data-theme='light']) .sheep {
 		background: #fff;
 	}
 
