@@ -2,6 +2,16 @@
 
 ## Release (2025-05-23)
 
+
+
+#### :house: Internal
+* [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
+## Release (2025-05-23)
+
 * @sheepdog/core 0.2.2 (patch)
 
 #### :bug: Bug Fix
