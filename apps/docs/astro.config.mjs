@@ -106,35 +106,35 @@ export default defineConfig({
 					items: [
 						{
 							label: 'Default task',
-							link: '/reference/default',
+							link: '/reference/default/',
 						},
 						{
 							label: 'Drop task',
-							link: '/reference/drop',
+							link: '/reference/drop/',
 						},
 						{
 							label: 'Enqueue task',
-							link: '/reference/enqueue',
+							link: '/reference/enqueue/',
 						},
 						{
 							label: 'KeepLatest task',
-							link: '/reference/keep-latest',
+							link: '/reference/keep-latest/',
 						},
 						{
 							label: 'Restart task',
-							link: '/reference/restart',
+							link: '/reference/restart/',
 						},
 						{
 							label: 'Sheepdog Utils',
-							link: '/reference/sheepdog-utils',
+							link: '/reference/sheepdog-utils/',
 						},
 						{
 							label: 'Task Instance',
-							link: '/reference/task-instance',
+							link: '/reference/task-instance/',
 						},
 						{
 							label: 'Transform',
-							link: '/reference/transform',
+							link: '/reference/transform/',
 						},
 					],
 				},
