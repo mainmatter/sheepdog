@@ -108,7 +108,7 @@ export function createTask<TArgs = unknown, TReturn = unknown, TModifier = objec
 				abort_controller.controller.signal.removeEventListener('abort', abort_controller.listener);
 			});
 		},
-		perform(...args: undefined extends TArgs ? [] : [TArgs]) {
+		perform(...args: undefined extends TArgs ? [] | [TArgs] : [TArgs]) {
 			const child_tasks = new Set<ReturnType<Task<any, any>['perform']>>();
 
 			const instance_id = crypto.randomUUID();
