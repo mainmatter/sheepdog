@@ -1,17 +1,7 @@
 {
   "solution": {
     "@sheepdog/core": {
-      "impact": "patch",
-      "oldVersion": "0.2.1",
-      "newVersion": "0.2.2",
-      "tagName": "latest",
-      "constraints": [
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
-        }
-      ],
-      "pkgJSONPath": "./packages/core/package.json"
+      "oldVersion": "0.2.2"
     },
     "@sheepdog/svelte": {
       "oldVersion": "0.12.5"
@@ -20,5 +10,5 @@
       "oldVersion": "0.1.0"
     }
   },
-  "description": "## Release (2025-05-23)\n\n* @sheepdog/core 0.2.2 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`\n  * [#314](https://github.com/mainmatter/sheepdog/pull/314) fix: better types for optional arguments ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* [#303](https://github.com/mainmatter/sheepdog/pull/303) chore: add require label workflow ([@paoloricciuti](https://github.com/paoloricciuti))\n* [#297](https://github.com/mainmatter/sheepdog/pull/297) fix: use spaces in `package.json`'s ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-05-23)\n\n\n\n#### :house: Internal\n* [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
