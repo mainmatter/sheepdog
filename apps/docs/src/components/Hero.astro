@@ -65,6 +65,40 @@ if (image) {
 			isWoofed = !isWoofed;
 		}),
 	);
+
+	const package_span = document.getElementById('package');
+
+	if (package_span) {
+		const packages = package_span?.dataset.packages?.split(',') ?? [];
+
+		let current_package = 0;
+		let current_wrote = 0;
+		let deleting = false;
+
+		function typewrite_package() {
+			if (packages[current_package]) {
+				let time = 100;
+				if (current_wrote < packages[current_package].length && !deleting) {
+					current_wrote++;
+					package_span!.innerHTML = packages[current_package].substring(0, current_wrote);
+					if (current_wrote === packages[current_package].length) {
+						deleting = true;
+						time = 2000;
+					}
+				} else if (current_wrote > 0) {
+					current_wrote--;
+					package_span!.innerHTML = packages[current_package].substring(0, current_wrote);
+					if (current_wrote === 0) {
+						deleting = false;
+						current_package = (current_package + 1) % packages.length;
+					}
+				}
+				setTimeout(typewrite_package, time);
+			}
+		}
+
+		setTimeout(typewrite_package, 100);
+	}
 </script>
 
 <div class="hero">
@@ -82,7 +116,14 @@ if (image) {
 	{rawHtml && <div class="hero-html sl-flex" set:html={rawHtml} />}
 	<div class="sl-flex stack">
 		<div class="sl-flex copy">
-			<h1 id={PAGE_TITLE_ID} data-page-title set:html={title} />
+			<h1 id={PAGE_TITLE_ID} data-page-title>
+				{Astro.locals.starlightRoute.siteTitle}<span
+					data-woof
+					data-packages={Astro.locals.available_packages
+						.map((pkg) => `/${pkg}`)
+						.join(',')}
+					id="package"></span>
+			</h1>
 			{tagline && <div class="tagline" set:html={tagline} />}
 		</div>
 		{
