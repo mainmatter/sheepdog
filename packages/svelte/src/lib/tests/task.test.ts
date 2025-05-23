@@ -2,7 +2,6 @@
  * @vitest-environment happy-dom
  */
 import { render } from '@testing-library/svelte';
-import { get } from 'svelte/store';
 import { describe, expect, it, vi } from 'vitest';
 import { type SheepdogUtils, type Task, timeout } from '../index';
 import Default from './components/default.svelte';
@@ -236,7 +235,7 @@ describe.each([
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
-			const store = instance[`${selector}_task`] as Task;
+			const task = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
 			await vi.advanceTimersByTimeAsync(1);
@@ -251,7 +250,7 @@ describe.each([
 			await vi.waitFor(() => {
 				expect(fn).toHaveBeenCalledTimes(perform_count.expected);
 			});
-			expect(get(store).performCount).toBe(perform_count.expected);
+			expect(task.performCount).toBe(perform_count.expected);
 		});
 
 		it('has the correct derived state for isRunning', async () => {
@@ -265,7 +264,7 @@ describe.each([
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
-			const store = instance[`${selector}_task`] as Task;
+			const task = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
 			await vi.advanceTimersByTimeAsync(10);
@@ -284,11 +283,11 @@ describe.each([
 					interval: 10,
 				},
 			);
-			expect(get(store).isRunning).toBe(true);
+			expect(task.isRunning).toBe(true);
 			await vi.waitFor(() => {
 				expect(finished).toBe(is_running.wait_after);
 			});
-			expect(get(store).isRunning).toBe(false);
+			expect(task.isRunning).toBe(false);
 			vi.useRealTimers();
 		});
 
@@ -303,20 +302,26 @@ describe.each([
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
-			const store = instance[`${selector}_task`] as Task;
+			const task = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-			expect(get(store).last).toStrictEqual({
+			// we need to explicitly call toJSON here or else `expect` will call it
+			// and the `this` will be the wrong one
+			expect(task.last?.toJSON()).toStrictEqual({
 				hasStarted: true,
 				isCanceled: false,
 				isError: false,
 				isFinished: false,
 				isRunning: true,
 				isSuccessful: false,
+				error: undefined,
+				value: undefined,
 			});
 			await vi.waitFor(() => expect(finished).toBeTruthy());
-			expect(get(store).last).toStrictEqual({
+			// we need to explicitly call toJSON here or else `expect` will call it
+			// and the `this` will be the wrong one
+			expect(task.last?.toJSON()).toStrictEqual({
 				hasStarted: true,
 				isCanceled: false,
 				isError: false,
@@ -324,6 +329,7 @@ describe.each([
 				isRunning: false,
 				isSuccessful: true,
 				value: 42,
+				error: undefined,
 			});
 		});
 
@@ -338,20 +344,24 @@ describe.each([
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
-			const store = instance[`${selector}_task`] as Task;
+			const task = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-			expect(get(store).lastRunning).toStrictEqual({
+			// we need to explicitly call toJSON here or else `expect` will call it
+			// and the `this` will be the wrong one
+			expect(task.lastRunning?.toJSON()).toStrictEqual({
 				hasStarted: true,
 				isCanceled: false,
 				isError: false,
 				isFinished: false,
 				isRunning: true,
 				isSuccessful: false,
+				error: undefined,
+				value: undefined,
 			});
 			await vi.waitFor(() => expect(finished).toBeTruthy());
-			expect(get(store).lastRunning).toBeUndefined();
+			expect(task.lastRunning).toBeUndefined();
 		});
 
 		it('has the correct derived state for lastCanceled', async () => {
@@ -365,25 +375,29 @@ describe.each([
 			const { getByTestId, component: instance } = render(component, {
 				fn,
 			});
-			const store = instance[`${selector}_task`] as Task;
+			const task = instance[`${selector}_task`] as Task;
 			const perform = getByTestId(`perform-${selector}`);
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-			expect(get(store).lastCanceled).toBeUndefined();
+			expect(task.lastCanceled).toBeUndefined();
 			await vi.waitFor(() => expect(finished).toBeTruthy());
-			expect(get(store).lastCanceled).toBeUndefined();
+			expect(task.lastCanceled).toBeUndefined();
 			finished = false;
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			cancel.click();
-			expect(get(store).lastCanceled).toStrictEqual({
+			// we need to explicitly call toJSON here or else `expect` will call it
+			// and the `this` will be the wrong one
+			expect(task.lastCanceled?.toJSON()).toStrictEqual({
 				hasStarted: true,
 				isCanceled: true,
 				isError: false,
 				isFinished: true,
 				isRunning: false,
 				isSuccessful: false,
+				value: undefined,
+				error: undefined,
 			});
 		});
 
@@ -399,14 +413,14 @@ describe.each([
 			const cancel = getByTestId(`cancel-${selector}`);
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-			await vi.waitFor(() => expect(instances[0].get().isSuccessful).toBeTruthy());
+			await vi.waitFor(() => expect(instances[0].isSuccessful).toBeTruthy());
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 			cancel.click();
-			expect(instances[0].get().isSuccessful).toBeTruthy();
-			expect(instances[0].get().isCanceled).toBeFalsy();
-			expect(instances[1].get().isSuccessful).toBeFalsy();
-			expect(instances[1].get().isCanceled).toBeTruthy();
+			expect(instances[0].isSuccessful).toBeTruthy();
+			expect(instances[0].isCanceled).toBeFalsy();
+			expect(instances[1].isSuccessful).toBeFalsy();
+			expect(instances[1].isCanceled).toBeTruthy();
 		});
 
 		it("after an instance has completed calling `cancel` doesn't change its `isCancelled` status", async () => {
@@ -421,10 +435,10 @@ describe.each([
 			const cancel = getByTestId(`cancel-${selector}-last`);
 			perform.click();
 			await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-			await vi.waitFor(() => expect(instances[0].get().isSuccessful).toBeTruthy());
+			await vi.waitFor(() => expect(instances[0].isSuccessful).toBeTruthy());
 			cancel.click();
-			expect(instances[0].get().isSuccessful).toBeTruthy();
-			expect(instances[0].get().isCanceled).toBeFalsy();
+			expect(instances[0].isSuccessful).toBeTruthy();
+			expect(instances[0].isCanceled).toBeFalsy();
 		});
 	});
 
@@ -438,26 +452,28 @@ describe.each([
 				throw error;
 			}
 		});
-		let returned_value: { error: Error; store: Task } | undefined;
+		let returned_value: { error: Error; task: Task } | undefined;
 		const { getByTestId, component: instance } = render(component, {
 			fn,
 			return_value(value) {
 				returned_value = value as never;
 			},
 		});
-		const store = instance.default_task as Task;
+		const task = instance.default_task as Task;
 		const perform = getByTestId(`perform-error`);
 		perform.click();
 		await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-		expect(get(store).lastErrored).toBeUndefined();
+		expect(task.lastErrored).toBeUndefined();
 		await vi.waitFor(() => expect(finished).toBeTruthy());
-		expect(get(store).lastErrored).toBeUndefined();
+		expect(task.lastErrored).toBeUndefined();
 		finished = false;
 		error = new Error();
 		perform.click();
 		await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 		await vi.waitFor(() => expect(returned_value).toBeDefined());
-		expect(get(store).lastErrored).toStrictEqual({
+		// we need to explicitly call toJSON here or else `expect` will call it
+		// and the `this` will be the wrong one
+		expect(task.lastErrored?.toJSON()).toStrictEqual({
 			error,
 			hasStarted: true,
 			isCanceled: false,
@@ -465,6 +481,7 @@ describe.each([
 			isFinished: true,
 			isRunning: false,
 			isSuccessful: false,
+			value: undefined,
 		});
 	});
 
@@ -479,26 +496,28 @@ describe.each([
 			}
 			return 42;
 		});
-		let returned_value: { error: Error; store: Task } | undefined;
+		let returned_value: { error: Error; task: Task } | undefined;
 		const { getByTestId, component: instance } = render(component, {
 			fn,
 			return_value(value) {
 				returned_value = value as never;
 			},
 		});
-		const store = instance.default_task as Task;
+		const task = instance.default_task as Task;
 		const perform = getByTestId(`perform-error`);
 		perform.click();
 		await vi.waitFor(() => expect(fn).toHaveBeenCalled());
-		expect(get(store).lastSuccessful).toBeUndefined();
+		expect(task.lastSuccessful).toBeUndefined();
 		await vi.waitFor(() => expect(returned_value).toBeDefined());
-		expect(get(store).lastSuccessful).toBeUndefined();
+		expect(task.lastSuccessful).toBeUndefined();
 		finished = false;
 		error = undefined;
 		perform.click();
 		await vi.waitFor(() => expect(fn).toHaveBeenCalledTimes(2));
 		await vi.waitFor(() => expect(finished).toBeTruthy());
-		expect(get(store).lastSuccessful).toStrictEqual({
+		// we need to explicitly call toJSON here or else `expect` will call it
+		// and the `this` will be the wrong one
+		expect(task.lastSuccessful?.toJSON()).toStrictEqual({
 			hasStarted: true,
 			isCanceled: false,
 			isError: false,
@@ -506,15 +525,16 @@ describe.each([
 			isRunning: false,
 			isSuccessful: true,
 			value: 42,
+			error: undefined,
 		});
 	});
 
-	it('re-throws any error thrown in the perform function and has the error in the error field of the store', async () => {
+	it('re-throws any error thrown in the perform function and has the error in the error field of the task', async () => {
 		const to_throw = new Error('my error');
 		const fn = vi.fn(async () => {
 			throw to_throw;
 		});
-		let returned_value: { error: Error; store: Task } | undefined;
+		let returned_value: { error: Error; task: Task } | undefined;
 		const return_value = vi.fn((value) => {
 			returned_value = value as never;
 		});
@@ -530,7 +550,7 @@ describe.each([
 		expect(returned_value).toBeDefined();
 		if (!returned_value) throw new Error('No returned value');
 		expect(returned_value.error).toBe(to_throw);
-		expect(get(returned_value.store).last?.error).toBe(to_throw);
+		expect(returned_value.task.last?.error).toBe(to_throw);
 	});
 });
 
@@ -1170,7 +1190,7 @@ describe('link - invoke a task inside a task and cancel the instance if parent i
 				const perform = getByTestId(`perform-${selector}`);
 				perform.click();
 				perform.click();
-				expect(instances.at(-1)?.get().hasStarted).toBeFalsy();
+				expect(instances.at(-1)?.hasStarted).toBeFalsy();
 			});
 		});
 	});

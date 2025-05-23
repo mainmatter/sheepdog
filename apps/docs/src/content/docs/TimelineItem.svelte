@@ -1,22 +1,17 @@
 <script>
-	export let task;
-	export let top;
-	export let height;
-	export let width;
-	export let left;
-	export let idle;
+	let { task, top, height, width, left, idle } = $props();
 </script>
 
 <button
 	type="button"
-	on:click={() => {
-		if ($task.isFinished) return;
+	onclick={() => {
+		if (task.isFinished) return;
 		task.cancel();
 	}}
 	class="element"
-	class:canceled={$task.isCanceled}
-	class:completed={$task.isSuccessful}
-	class:dropped={!$task.hasStarted && $task.isCanceled}
+	class:canceled={task.isCanceled}
+	class:completed={task.isSuccessful}
+	class:dropped={!task.hasStarted && task.isCanceled}
 	style:--top={top}
 	style:--height={height}
 	style:--width={width}
@@ -26,20 +21,20 @@
 	<span class="queued">
 		<span class="status"> Queued </span>
 	</span>
-	{#if $task.hasStarted}
+	{#if task.hasStarted}
 		<span class="started">
 			<span class="status">
-				{#if $task.isSuccessful}
+				{#if task.isSuccessful}
 					Finished
-				{:else if $task.isRunning}
+				{:else if task.isRunning}
 					Running
 				{/if}
 			</span>
 		</span>
 	{/if}
-	{#if $task.isCanceled}
+	{#if task.isCanceled}
 		<span class="status">
-			{#if $task.hasStarted}
+			{#if task.hasStarted}
 				Canceled
 			{:else}
 				Dropped

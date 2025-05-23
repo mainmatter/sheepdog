@@ -1,15 +1,23 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import { onDestroy } from 'svelte';
 	import TimelineItem from './TimelineItem.svelte';
 
-	export let elements = [];
-	export let lines = 6;
-	export let gap = 15;
-	export let total_time = 10000;
-	export let stopped;
+	/**
+	 * @typedef {Object} Props
+	 * @property {any} [elements]
+	 * @property {number} [lines]
+	 * @property {number} [gap]
+	 * @property {number} [total_time]
+	 * @property {any} stopped
+	 */
 
-	let wrapper_width;
-	let wrapper_height;
+	/** @type {Props} */
+	let { elements = [], lines = 6, gap = 15, total_time = 10000, stopped } = $props();
+
+	let wrapper_width = $state();
+	let wrapper_height = $state();
 
 	function resize(node) {
 		const resize_observer = new ResizeObserver(([div]) => {
@@ -24,10 +32,10 @@
 			},
 		};
 	}
-	let elapsed = 0;
-	let start_time = 0;
-	let started = false;
-	let finished = false;
+	let elapsed = $state(0);
+	let start_time = $state(0);
+	let started = $state(false);
+	let finished = $state(false);
 
 	onDestroy(() => {
 		finished = true;
@@ -47,19 +55,23 @@
 		}
 		requestAnimationFrame(loop);
 	}
-	$: if (elements.length > 0 && !started) {
-		finished = false;
-		loop();
-	}
+	run(() => {
+		if (elements.length > 0 && !started) {
+			finished = false;
+			loop();
+		}
+	});
 
-	$: if (elements.length === 0) {
-		started = false;
-		finished = true;
-		start_time = 0;
-		elapsed = 0;
-	}
+	run(() => {
+		if (elements.length === 0) {
+			started = false;
+			finished = true;
+			start_time = 0;
+			elapsed = 0;
+		}
+	});
 
-	$: total = Math.max(total_time, elapsed);
+	let total = $derived(Math.max(total_time, elapsed));
 </script>
 
 <div class="wrapper" use:resize>

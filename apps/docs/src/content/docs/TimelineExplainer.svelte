@@ -1,9 +1,15 @@
 <script>
 	import Example from './Example.svelte';
 
-	export let selected_task_type = 'default';
-	export let show_max = true;
-	let max = 1;
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} [selected_task_type]
+	 * @property {boolean} [show_max]
+	 */
+
+	/** @type {Props} */
+	let { selected_task_type = 'default', show_max = true } = $props();
+	let max = $state(1);
 </script>
 
 <fieldset>

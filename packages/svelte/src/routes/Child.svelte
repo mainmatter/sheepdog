@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { timeout } from '$lib';
-	import { task } from '$lib/task.js';
-	import type { Task } from '$lib/task.js';
+	import { task } from '$lib/task.svelte.js';
+	import type { Task } from '$lib/task.svelte.js';
 
 	export let parent: Task<number, number>;
 
@@ -17,14 +17,14 @@
 </script>
 
 <button
-	on:click={async () => {
+	onclick={async () => {
 		num = child.perform();
 		alert(`Result: ${await num}`);
 	}}>Perform child</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		num.cancel();
 	}}>cancel child last instance</button
 >
-<pre>{JSON.stringify($child, null, '	')}</pre>
+<pre>{JSON.stringify(child, null, '	')}</pre>
