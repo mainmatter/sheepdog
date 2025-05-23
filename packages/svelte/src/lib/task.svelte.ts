@@ -67,7 +67,6 @@ const task = /*#__PURE__*/ (() => {
 		const task_result = new TaskState<TReturn>();
 
 		const updateResult = (instance: TaskInstance<TReturn>, new_instance: boolean = false) => {
-			task_result;
 			if (new_instance) {
 				task_result.performCount++;
 			}
