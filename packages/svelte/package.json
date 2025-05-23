@@ -14,9 +14,9 @@
       "import": "./dist/index.js"
     },
     "./task": {
-      "types": "./dist/task.d.ts",
-      "svelte": "./dist/task.js",
-      "import": "./dist/task.js"
+      "types": "./dist/task.svelte.d.ts",
+      "svelte": "./dist/task.svelte.js",
+      "import": "./dist/task.svelte.js"
     },
     "./utils": {
       "types": "./dist/utils.d.ts",

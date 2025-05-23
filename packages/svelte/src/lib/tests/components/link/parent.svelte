@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task, type SheepdogUtils } from '../../../index';
+	import { task, type SheepdogUtils } from '../../../index.js';
 	import Child from './child.svelte';
 
 	export let fn: (

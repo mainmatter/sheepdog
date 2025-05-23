@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task } from '$lib/task.js';
+	import { task, TaskInstance } from '$lib/task.svelte.js';
 	import { timeout } from '$lib/utils.js';
 	import Child from './Child.svelte';
 
@@ -57,7 +57,7 @@
 
 	let hidden = false;
 
-	let x;
+	let x: TaskInstance<number>;
 
 	let numbers: number[] = [];
 </script>
@@ -65,24 +65,25 @@
 <fieldset>
 	<legend>queue_log</legend>
 
-	<pre>{JSON.stringify($queue_log, null, '	')}</pre>
+	<pre>{JSON.stringify(queue_log, null, '	')}</pre>
 
 	<button
-		on:click={async () => {
+		onclick={async () => {
 			x = queue_log.perform(Math.random());
+			console.log('awaited', await x);
 		}}
 	>
 		Perform
 	</button>
-	<pre>{JSON.stringify($x, null, '	')}</pre>
+	<pre>{JSON.stringify(x, null, '	')}</pre>
 </fieldset>
 
 <fieldset>
 	<legend>also_queue_log</legend>
-	<pre>{JSON.stringify($also_queue_log, null, '	')}</pre>
+	<pre>{JSON.stringify(also_queue_log, null, '	')}</pre>
 
 	<button
-		on:click={() => {
+		onclick={() => {
 			also_queue_log.perform(Math.random());
 		}}
 	>
@@ -92,10 +93,10 @@
 
 <fieldset>
 	<legend>restart_log</legend>
-	<pre>{JSON.stringify($restart_log, null, '	')}</pre>
+	<pre>{JSON.stringify(restart_log, null, '	')}</pre>
 
 	<button
-		on:click={() => {
+		onclick={() => {
 			restart_log.perform(Math.random());
 		}}
 	>
@@ -105,10 +106,10 @@
 
 <fieldset>
 	<legend>drop_log</legend>
-	<pre>{JSON.stringify($drop_log, null, '	')}</pre>
+	<pre>{JSON.stringify(drop_log, null, '	')}</pre>
 
 	<button
-		on:click={() => {
+		onclick={() => {
 			drop_log.perform(Math.random());
 		}}
 	>
@@ -118,10 +119,10 @@
 
 <fieldset>
 	<legend>latest_log</legend>
-	<pre>{JSON.stringify($latest_log, null, '	')}</pre>
+	<pre>{JSON.stringify(latest_log, null, '	')}</pre>
 
 	<button
-		on:click={() => {
+		onclick={() => {
 			const num = Math.random();
 			numbers = [...numbers, num];
 			latest_log.perform(num);
@@ -130,7 +131,7 @@
 		Perform
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			numbers = [];
 		}}
 	>
@@ -146,12 +147,12 @@
 </fieldset>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		hidden = !hidden;
 	}}>{hidden ? 'mount' : 'unmount'} child</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		parent.perform(43);
 	}}>perform parent</button
 >
