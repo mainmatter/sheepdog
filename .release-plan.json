@@ -1,24 +1,18 @@
 {
   "solution": {
-    "@sheepdog/core": {
+    "@sheepdog/svelte": {
       "impact": "patch",
-      "oldVersion": "0.2.1",
-      "newVersion": "0.2.2",
-      "tagName": "latest",
+      "oldVersion": "0.12.5",
+      "newVersion": "0.12.6",
+      "tagName": "legacy",
       "constraints": [
         {
           "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
+          "reason": "Appears in changelog section :house: Internal"
         }
       ],
-      "pkgJSONPath": "./packages/core/package.json"
-    },
-    "@sheepdog/svelte": {
-      "oldVersion": "0.12.5"
-    },
-    "@sheepdog/vanilla": {
-      "oldVersion": "0.1.0"
+      "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2025-05-23)\n\n* @sheepdog/core 0.2.2 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`\n  * [#314](https://github.com/mainmatter/sheepdog/pull/314) fix: better types for optional arguments ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* [#303](https://github.com/mainmatter/sheepdog/pull/303) chore: add require label workflow ([@paoloricciuti](https://github.com/paoloricciuti))\n* [#297](https://github.com/mainmatter/sheepdog/pull/297) fix: use spaces in `package.json`'s ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-06-06)\n\n* @sheepdog/svelte 0.12.6 (patch)\n\n#### :memo: Documentation\n* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#321](https://github.com/mainmatter/sheepdog/pull/321) chore: setup release plan to publish to `legacy` ([@paoloricciuti](https://github.com/paoloricciuti))\n* Other\n  * [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
