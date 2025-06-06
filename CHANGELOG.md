@@ -1,5 +1,28 @@
 # Changelog
 
+## Release (2025-06-06)
+
+* @sheepdog/core 1.0.0 (major)
+* @sheepdog/svelte 1.0.0 (major)
+* @sheepdog/vanilla 1.0.0 (major)
+
+#### :boom: Breaking Change
+* `@sheepdog/vanilla`
+  * [#320](https://github.com/mainmatter/sheepdog/pull/320) breaking: bump `@sheepdog/vanilla` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))
+* `@sheepdog/core`
+  * [#319](https://github.com/mainmatter/sheepdog/pull/319) breaking: bump `@sheepdog/core` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))
+* `@sheepdog/svelte`
+  * [#315](https://github.com/mainmatter/sheepdog/pull/315) feat: upgrade `@sheepdog/svelte` to runes ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :memo: Documentation
+* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-05-23)
 
 * @sheepdog/core 0.2.2 (patch)
