@@ -88,17 +88,21 @@ const { current_package, available_packages } = Astro.locals;
 	}
 	details::details-content {
 		position: absolute;
-		overflow: hidden;
 		left: 0;
 		width: 100%;
 		top: 100%;
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 		block-size: 0;
 		--timing: 0.25s;
-		transition:
-			block-size var(--timing),
-			content-visibility var(--timing);
-		transition-behavior: allow-discrete;
+	}
+	@supports (interpolate-size: allow-keywords) {
+		details::details-content {
+			overflow: hidden;
+			transition-behavior: allow-discrete;
+			transition:
+				block-size var(--timing),
+				content-visibility var(--timing);
+		}
 	}
 	details:open::details-content {
 		block-size: auto;
