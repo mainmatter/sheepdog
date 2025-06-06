@@ -2,8 +2,8 @@
   "solution": {
     "@sheepdog/svelte": {
       "impact": "patch",
-      "oldVersion": "0.12.5",
-      "newVersion": "0.12.6",
+      "oldVersion": "0.12.6",
+      "newVersion": "0.12.7",
       "tagName": "legacy",
       "constraints": [
         {
@@ -14,5 +14,5 @@
       "pkgJSONPath": "./packages/svelte/package.json"
     }
   },
-  "description": "## Release (2025-06-06)\n\n* @sheepdog/svelte 0.12.6 (patch)\n\n#### :memo: Documentation\n* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/svelte`\n  * [#321](https://github.com/mainmatter/sheepdog/pull/321) chore: setup release plan to publish to `legacy` ([@paoloricciuti](https://github.com/paoloricciuti))\n* Other\n  * [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-06-06)\n\n* @sheepdog/svelte 0.12.7 (patch)\n\n#### :memo: Documentation\n* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* Other\n  * [#323](https://github.com/mainmatter/sheepdog/pull/323) fix publishing for legacy version ([@mansona](https://github.com/mansona))\n  * [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/svelte`\n  * [#322](https://github.com/mainmatter/sheepdog/pull/322) Prepare Release (legacy) ([@github-actions[bot]](https://github.com/apps/github-actions))\n  * [#321](https://github.com/mainmatter/sheepdog/pull/321) chore: setup release plan to publish to `legacy` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 3\n- Chris Manson ([@mansona](https://github.com/mansona))\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n- [@github-actions[bot]](https://github.com/apps/github-actions)\n"
 }
