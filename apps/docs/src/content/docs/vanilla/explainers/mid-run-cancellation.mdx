@@ -1,0 +1,267 @@
+---
+title: Mid run cancellation
+description: How to handle the cancellation of a task mid execution
+---
+
+import { LinkCard, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+import BlankLink from '@components/BlankLink.astro';
+
+As we hinted in the [What is it?](/vanilla/getting-started/what-is-it/) explainer, one of the
+advantages of `@sheepdog/vanilla` is that it allows you to really "cancel" a task. Let's look at the
+actual problem and how it is solved with `@sheepdog/vanilla`.
+
+## The problem
+
+Promises are the de facto way to run asynchronous code in JavaScript and (especially after the
+introduction of the `async` and `await` keywords) they are quite nice to work with.
+
+```ts
+// this automatically returns a promise
+async function myStuff() {
+	//i can await for the execution of async code to happen
+	const response = await fetch('/api/my-endpoint');
+	const myEndpoint = await response.json();
+
+	return myEndpoint.data;
+}
+```
+
+However, they have a big problem: Once invoked there is no way to stop the execution of the code.
+This can lead to performance problems in the simplest case or even bugs in more complex scenarios.
+
+```ts
+async function fetchALotOfStuff() {
+	const response = await fetch('/api/very-long-list');
+	const longList = await response.json();
+
+	// what if the user canceled the request before this step?
+	for (const element of longList) {
+		expensiveCalculation(element);
+	}
+}
+```
+
+This can be hard to wrap your head around especially if you directly manipulate the dom after the
+fetch call.
+
+```ts
+function fetchList() {
+	const response = await fetch('/api/very-long-list');
+	const list = await response.json();
+
+	for (let element of list) {
+		document.getElementById('my-list').appendChild(element);
+	}
+}
+
+button.addEventListener('click', fetchList);
+```
+
+The simplest way to solve this problem is to set up a variable and check it after the fetch.
+
+```ts
+let canceled = false;
+
+function fetchList() {
+	canceled = false;
+	const response = await fetch('/api/very-long-list');
+	const list = await response.json();
+	if (canceled) return;
+	for (let element of list) {
+		document.getElementById('my-list').appendChild(element);
+	}
+}
+
+button.addEventListener('click', fetchList);
+cancelButton.addEventListener('click', () => {
+	canceled = true;
+});
+```
+
+This works fine but it gets tedious pretty fast, especially if you need to do it multiple times.
+That's where `@sheepdog/vanilla` comes into play.
+
+## The solution(s)
+
+`@sheepdog/vanilla` provides you multiple tools to solve this problem (hence the parenthesized
+plural in the title of this section); let's go over them one by one
+
+<LinkCard
+	href="/vanilla/reference/default"
+	title="Task"
+	description="If you need more info on the task function please visit the relevant reference page"
+/>
+
+### Solution 1: `AbortSignal`
+
+The simplest but more verbose solution to this problem is to use `AbortSignal` solution:
+`@sheepdog/vanilla` invokes your task with a series of utils, one of which is the `AbortSignal`.
+Every task has its own `AbortController` and you can cancel a single task instance by invoking the
+`cancel` method on it or cancel **every** instance by invoking the `cancelAll` method on the task.
+
+```ts
+import { task } from '@sheepdog/vanilla';
+
+let list;
+let lastInstance;
+
+const fetchTask = task((_, { signal }) => {
+	// we can pass the signal to fetch to potentially abort the in-flight request
+	const response = await fetch('/api/very-long-list', { signal });
+	const list = await response.json();
+	for (let element of list) {
+		document.getElementById('my-list').appendChild(element);
+	}
+});
+
+button.addEventListener('click', () => {
+	lastInstance = fetchTask.perform();
+});
+cancelButton.addEventListener('click', () => {
+	lastInstance.cancel();
+});
+
+cancelAllButton.addEventListener('click', () => {
+	fetchTask.cancelAll();
+});
+```
+
+We've gained the ability to stop in-flight fetches with the `AbortSignal` without having to create a
+separate `canceled` variable. That's a win, but it does not cover other async functions or library
+APIs that do not support `AbortSignals`.
+
+### Solution 2: Async generators
+
+Those who don't know about <BlankLink
+	href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators"
+	body="generators"
+/> might be a bit confused right now and those who know about them might be already running away in
+fear, but please bear with us for a second and we will show you that generators are not really that
+scary.
+
+A generator is a particular function in JavaScript that is able to `yield` back the execution to the
+caller. The syntax to create one looks like this:
+
+```ts
+function* ping() {
+	console.log('in the generator');
+	const value = yield 'pong';
+	console.log(`after yield: ${value}`);
+}
+
+const generator = ping();
+const yielded = generator.next();
+// logs: "in the generator"
+console.log(yielded);
+// logs: { done: false, value: "pong" }
+generator.next('ping');
+// logs: "after yield: ping"
+```
+
+I know, I told you this wouldn't be scary and for the moment I haven't kept my promise (pun
+intended). But the main takeaway from this snippet of code is that generator functions have a way to
+stop executing and return something to the caller and the caller has a way to communicate something
+back.
+
+`@sheepdog/vanilla` has been built to be able to accept an async generator function and, most
+importantly, has been built to make the generator function work basically like a normal async
+function if you replace `await` with `yield`. Let's take a look
+
+<Tabs>
+
+<TabItem label="Generator">
+
+```ts
+let value;
+const myTask = task(async function* (_, { signal }) {
+	const response = yield fetch('/api/my-endpoint', { signal });
+	value = yield response.json();
+});
+```
+
+</TabItem>
+<TabItem label="Async">
+
+```ts
+let value;
+const myTask = task(async (_, { signal }) => {
+	const response = await fetch('/api/my-endpoint', { signal });
+	value = await response.json();
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+As you can see, the code in the two tabs changes very little but with generators `@sheepdog/vanilla`
+has the ability to never call `next` if the task was canceled. This means that if you cancel the
+task while fetch is still in-flight the second line of the function will **never** be called!
+
+There is one small detail we have hidden from you, however: `yield` doesn't work very well with
+TypeScript, especially if there are multiple of them. If you try to paste that code in a `.ts` file,
+you will see all sorts of errors. This is because TypeScript doesn't know which kind of data
+`@sheepdog/vanilla` will pass back to the generator.
+
+To fix this problem, you can use `yield` as a sort of `if+return`
+
+```ts
+let value;
+const myTask = task(async function* (_, { signal }) {
+	// use normal await here to get proper typing
+	const response = await fetch('/api/my-endpoint', { signal });
+	// yield after every await to allow `@sheepdog/vanilla` to cancel the function
+	yield;
+	// pay attention to never assign directly to an await if you want to still have proper cancellation
+	const tempValue = await response.json();
+	yield;
+	value = tempValue;
+});
+```
+
+Can we do better than this? Yes we can!
+
+### Solution 3: Async Transform
+
+`@sheepdog/vanilla` really cares about your DX and that's why we have built a Vite plugin that you
+can use to get the best of both worlds: The dynamic cancellation of generators and the expressivity
+and simplicity of async functions.
+
+<Aside type="tip">
+	You can read about how to set up the Async Transform in our [installation
+	guide](/vanilla/getting-started/installation/#setup-the-async-transform) or read more about how it
+	works in our [Async Transform guide](/vanilla/explainers/async-transform)
+</Aside>
+
+In short, what the Vite plugin does, is transform every async function inside a `task` to an async
+generator and it substitutes every `await` with a `yield`. This fixes all our problems because the
+TypeScript language server will resolve the types based on your actual code while at runtime
+`@sheepdog/vanilla` will be able to cancel every task, even in the middle of an execution!
+
+```ts
+import { task } from '@sheepdog/vanilla';
+
+let list;
+
+const fetchTask = task((_, { signal }) => {
+	const response = await fetch('/api/very-long-list', { signal });
+	// this line will never be executed if the task is canceled before fetch ends
+	const list = await response.json();
+	for (let element of list) {
+		document.getElementById('my-list').appendChild(element);
+	}
+});
+
+let lastInstance;
+
+button.addEventListener('click', () => {
+	lastInstance = fetchTask.perform();
+});
+cancelButton.addEventListener('click', () => {
+	lastInstance.cancel();
+});
+
+cancelAllButton.addEventListener('click', () => {
+	fetchTask.cancelAll();
+});
+```
