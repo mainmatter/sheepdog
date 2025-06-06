@@ -1,8 +1,11 @@
 ---
-import Default from '@astrojs/starlight/components/SiteTitle.astro';
 import BuiltBy from '../assets/BuiltBy.astro';
+import { is_homepage } from '@utils/is-homepage.ts';
 
-const isHomepage = Astro.locals.starlightRoute.id === '';
+const isHomepage = is_homepage(Astro.locals.starlightRoute.id);
+
+const { siteTitle, siteTitleHref } = Astro.locals.starlightRoute;
+const { current_package, available_packages } = Astro.locals;
 ---
 
 {
@@ -12,9 +15,34 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 			<span class="sr-only">built by Mainmatter</span>
 		</div>
 	) : (
-		<Default {...Astro.props}>
-			<slot />
-		</Default>
+		<>
+			<a href={siteTitleHref} class="site-title sl-flex">
+				<span translate="no">{siteTitle}</span>
+			</a>
+			<span class="site-title">/</span>
+			<details class="site-title">
+				<summary>
+					{current_package}
+					<span>
+						<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+							<path
+								d="M6 8l4 4 4-4"
+								stroke="currentColor"
+								stroke-width="2"
+								fill="none"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</span>
+				</summary>
+				<div>
+					{available_packages.map((pkg) => (
+						<a href={`/${pkg}/getting-started/what-is-it/`}>{pkg}</a>
+					))}
+				</div>
+			</details>
+		</>
 	)
 }
 
@@ -23,5 +51,82 @@ const isHomepage = Astro.locals.starlightRoute.id === '';
 		height: 2.5rem;
 		width: auto;
 		display: block;
+	}
+	.site-title {
+		align-items: center;
+		gap: var(--sl-nav-gap);
+		font-size: var(--sl-text-h4);
+		font-weight: 600;
+		color: var(--sl-color-text-accent);
+		text-decoration: none;
+		white-space: nowrap;
+		min-width: 0;
+		position: relative;
+		div {
+			display: grid;
+			padding-top: 0;
+			background-color: var(--sl-color-black);
+			border-radius: 0.5rem;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border: 1px solid var(--sl-color-gray-5);
+			a {
+				padding: 0.25rem 0.5rem;
+				font-size: var(--sl-text-base);
+				font-weight: 400;
+				text-decoration: none;
+				color: var(--sl-color-text-accent);
+				border-bottom: 1px solid var(--sl-color-gray-5);
+				&:last-child {
+					border-bottom: none;
+				}
+			}
+		}
+	}
+	details {
+		cursor: pointer;
+	}
+	details::details-content {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		top: 100%;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		block-size: 0;
+		--timing: 0.25s;
+	}
+	@supports (interpolate-size: allow-keywords) {
+		details::details-content {
+			overflow: hidden;
+			transition-behavior: allow-discrete;
+			transition:
+				block-size var(--timing),
+				content-visibility var(--timing);
+		}
+	}
+	details:open::details-content {
+		block-size: auto;
+	}
+	summary {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+
+		span {
+			font-family: monospace;
+			transition: transform 0.25s;
+			font-size: var(--sl-text-xs);
+			line-height: 0;
+			transform-origin: center;
+			details:open & {
+				transform: rotate(180deg);
+			}
+		}
+	}
+	summary::marker {
+		content: '';
+	}
+	span {
+		overflow: hidden;
 	}
 </style>
