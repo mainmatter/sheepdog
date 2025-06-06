@@ -2,6 +2,26 @@
 
 ## Release (2025-06-06)
 
+* @sheepdog/svelte 0.12.7 (patch)
+
+#### :memo: Documentation
+* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* Other
+  * [#323](https://github.com/mainmatter/sheepdog/pull/323) fix publishing for legacy version ([@mansona](https://github.com/mansona))
+  * [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))
+* `@sheepdog/svelte`
+  * [#322](https://github.com/mainmatter/sheepdog/pull/322) Prepare Release (legacy) ([@github-actions[bot]](https://github.com/apps/github-actions))
+  * [#321](https://github.com/mainmatter/sheepdog/pull/321) chore: setup release plan to publish to `legacy` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 3
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+- [@github-actions[bot]](https://github.com/apps/github-actions)
+
+## Release (2025-06-06)
+
 * @sheepdog/svelte 0.12.6 (patch)
 
 #### :memo: Documentation
