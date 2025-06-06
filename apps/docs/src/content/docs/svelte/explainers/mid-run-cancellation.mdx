@@ -46,7 +46,7 @@ assign values outside of the scope of the function to reactively show them in th
 
 ```svelte
 <script>
-	let list;
+	let list = $state([]);
 
 	function fetchList(){
 		const response = await fetch('/api/very-long-list');
@@ -54,7 +54,7 @@ assign values outside of the scope of the function to reactively show them in th
 	}
 </script>
 
-<button on:click={fetchList}>fetch</button>
+<button onclick={fetchList}>fetch</button>
 
 <ul>
 	{#each list as element}
@@ -67,7 +67,7 @@ The simplest way to solve this problem is to set up a variable and check it afte
 
 ```svelte
 <script>
-	let list;
+	let list = $state([]);
 
 	let canceled = false;
 
@@ -79,9 +79,9 @@ The simplest way to solve this problem is to set up a variable and check it afte
 	}
 </script>
 
-<button on:click={fetchList}>fetch</button>
+<button onclick={fetchList}>fetch</button>
 <button
-	on:click={() => {
+	onclick={() => {
 		canceled = true;
 	}}>cancel</button
 >
@@ -118,7 +118,7 @@ Every task has its own `AbortController` and you can cancel a single task instan
 <script>
 	import { task } from "@sheepdog/svelte";
 
-	let list;
+	let list = $state([]);
 
 	const fetchTask = task((_, { signal }) => {
 		// we can pass the signal to fetch to potentially abort the in-flight request
@@ -130,17 +130,17 @@ Every task has its own `AbortController` and you can cancel a single task instan
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		lastInstance = fetchTask.perform();
 	}}>fetch</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		lastInstance.cancel();
 	}}>cancel</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		fetchTask.cancelAll();
 	}}>cancel all</button
 >
@@ -185,9 +185,9 @@ generator.next('ping');
 ```
 
 I know, I told you this wouldn't be scary and for the moment I haven't kept my promise (pun
-intended). But the main takeaway from this snippet of code is that generator functions have
-a way to stop executing and return something to the caller and the caller has a way to communicate
-something back.
+intended). But the main takeaway from this snippet of code is that generator functions have a way to
+stop executing and return something to the caller and the caller has a way to communicate something
+back.
 
 `@sheepdog/svelte` has been built to be able to accept an async generator function and, most
 importantly, has been built to make the generator function work basically like a normal async
@@ -220,10 +220,9 @@ const myTask = task(async (_, { signal }) => {
 
 </Tabs>
 
-As you can see, the code in the two tabs changes very little but with generators
-`@sheepdog/svelte` has the ability to never call `next` if the task was canceled. This means that
-if you cancel the task while fetch is still in-flight the second line of the function will
-**never** be called!
+As you can see, the code in the two tabs changes very little but with generators `@sheepdog/svelte`
+has the ability to never call `next` if the task was canceled. This means that if you cancel the
+task while fetch is still in-flight the second line of the function will **never** be called!
 
 There is one small detail we have hidden from you, however: `yield` doesn't work very well with
 TypeScript, especially if there are multiple of them. If you try to paste that code in a `.ts` file
@@ -270,7 +269,7 @@ TypeScript language server will resolve the types based on your actual code whil
 <script>
 	import { task } from "@sheepdog/svelte";
 
-	let list;
+	let list = $state([]);
 
 	const fetchTask = task((_, { signal }) => {
 		const response = await fetch('/api/very-long-list', { signal });
@@ -282,17 +281,17 @@ TypeScript language server will resolve the types based on your actual code whil
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		lastInstance = fetchTask.perform();
 	}}>fetch</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		lastInstance.cancel();
 	}}>cancel</button
 >
 <button
-	on:click={() => {
+	onclick={() => {
 		fetchTask.cancelAll();
 	}}>cancel all</button
 >

@@ -22,14 +22,14 @@ const sheepdogDemoCode = `
 <input
 	name="search"
 	type="text"
-	on:input={(event) => searchTask.perform(event.target.value)}
+	oninput={(event) => searchTask.perform(event.target.value)}
 />
 
-{#if $searchTask.isRunning}
+{#if searchTask.isRunning}
 	Loading...
-{:else if $searchTask.lastSuccessful?.value.length}
+{:else if searchTask.lastSuccessful?.value.length}
 	<ul>
-		{#each $searchTask.lastSuccesful.value as name}
+		{#each searchTask.lastSuccesful.value as name}
 			<li>{name}</li>
 		{/each}
 	</ul>
@@ -67,7 +67,7 @@ const nativeDemoCode = `
 <input
 	name="search"
 	type="text"
-	on:input={(event) => search(event.target.value)}
+	oninput={(event) => search(event.target.value)}
 />
 
 {#if timeout}
@@ -87,8 +87,8 @@ const nativeDemoCode = `
 <section class="description">
 	<h2>Task management made simple</h2>
 	<p>
-		Sheepdog helps you maintain your async tasks and gives you useful derived state in your Svelte
-		app.
+		Sheepdog helps you maintain your async tasks and gives you useful derived state in your
+		Svelte app.
 	</p>
 	<p><i>Because managing tasks shouldn't feel like chasing sheep.</i></p>
 </section>

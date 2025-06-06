@@ -48,7 +48,7 @@ file uploads at a time.
 	import { task, timeout } from '@sheepdog/svelte';
 	import upload from './file-upload';
 
-	let files = [];
+	let files = $state([]);
 
 	const uploadFile = task.enqueue(
 		async (file: File) => {
@@ -61,12 +61,12 @@ file uploads at a time.
 <input
 	type="file"
 	multiple
-	on:change={(e) => {
+	onchange={(e) => {
 		files = [...e.target.files];
 	}}
 />
 <button
-	on:click={() => {
+	onclick={() => {
 		for (let file of files) {
 			uploadFile.perform(file);
 		}
@@ -101,7 +101,7 @@ example could be triggering a very expensive task that you want to make sure is 
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		expensiveTask.perform();
 	}}
 >
@@ -135,7 +135,7 @@ the user stops typing the last request will go through without being canceled.
 </script>
 
 <input
-	on:input={(e) => {
+	oninput={(e) => {
 		search.perform(e.target.value);
 	}}
 />
@@ -168,16 +168,15 @@ That's where `keepLatest` will come in handy!
 	import Document from '$lib/Document.svelte';
 	import { ws } from '$lib/websocket';
 	import { task } from '@sheepdogs/svelte';
-	import { onMount } from 'svelte';
 
-	let document;
+	let document = $state();
 
 	const loadDocument = task.keepLatest(async () => {
 		const res = await fetch(`/api/get-document`);
 		document = await res.json();
 	});
 
-	onMount(() => {
+	$effect(() => {
 		loadDocument.perform();
 		return ws.on('new-save', () => {
 			loadDocument.perform();
