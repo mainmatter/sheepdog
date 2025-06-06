@@ -1,5 +1,6 @@
 {
   "name": "@sheepdog/core",
+  "private": true,
   "version": "0.2.2",
   "repository": {
     "type": "git",
