@@ -105,7 +105,7 @@ const task = /*#__PURE__*/ (() => {
 						instance.isFinished = true;
 						instance.isRunning = false;
 						// we delete after a microtask to avoid returnModifier
-						// not founding the instance in case of a syncronous
+						// not finding the instance in case of a synchronous
 						// cancellation (for example with drop)
 						queueMicrotask(() => {
 							instances.delete(instance_id);
@@ -120,7 +120,7 @@ const task = /*#__PURE__*/ (() => {
 						instance.isFinished = true;
 						instance.isRunning = false;
 						// we delete after a microtask to avoid returnModifier
-						// not founding the instance in case of a syncronous
+						// not finding the instance in case of a synchronous
 						// cancellation (for example with drop)
 						queueMicrotask(() => {
 							instances.delete(instance_id);
