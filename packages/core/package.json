@@ -1,6 +1,6 @@
 {
   "name": "@sheepdog/core",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mainmatter/sheepdog.git"

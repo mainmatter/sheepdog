@@ -1,24 +1,52 @@
 {
   "solution": {
     "@sheepdog/core": {
-      "impact": "patch",
-      "oldVersion": "0.2.1",
-      "newVersion": "0.2.2",
+      "impact": "major",
+      "oldVersion": "0.2.2",
+      "newVersion": "1.0.0",
       "tagName": "latest",
       "constraints": [
         {
-          "impact": "patch",
-          "reason": "Appears in changelog section :bug: Bug Fix"
+          "impact": "major",
+          "reason": "Appears in changelog section :boom: Breaking Change"
         }
       ],
       "pkgJSONPath": "./packages/core/package.json"
     },
     "@sheepdog/svelte": {
-      "oldVersion": "0.12.5"
+      "impact": "major",
+      "oldVersion": "0.12.5",
+      "newVersion": "1.0.0",
+      "tagName": "latest",
+      "constraints": [
+        {
+          "impact": "patch",
+          "reason": "Has dependency `workspace:^` on @sheepdog/core"
+        },
+        {
+          "impact": "major",
+          "reason": "Appears in changelog section :boom: Breaking Change"
+        }
+      ],
+      "pkgJSONPath": "./packages/svelte/package.json"
     },
     "@sheepdog/vanilla": {
-      "oldVersion": "0.1.0"
+      "impact": "major",
+      "oldVersion": "0.1.0",
+      "newVersion": "1.0.0",
+      "tagName": "latest",
+      "constraints": [
+        {
+          "impact": "major",
+          "reason": "Appears in changelog section :boom: Breaking Change"
+        },
+        {
+          "impact": "patch",
+          "reason": "Has dependency `workspace:^` on @sheepdog/core"
+        }
+      ],
+      "pkgJSONPath": "./packages/vanilla/package.json"
     }
   },
-  "description": "## Release (2025-05-23)\n\n* @sheepdog/core 0.2.2 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`\n  * [#314](https://github.com/mainmatter/sheepdog/pull/314) fix: better types for optional arguments ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* [#303](https://github.com/mainmatter/sheepdog/pull/303) chore: add require label workflow ([@paoloricciuti](https://github.com/paoloricciuti))\n* [#297](https://github.com/mainmatter/sheepdog/pull/297) fix: use spaces in `package.json`'s ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-06-06)\n\n* @sheepdog/core 1.0.0 (major)\n* @sheepdog/svelte 1.0.0 (major)\n* @sheepdog/vanilla 1.0.0 (major)\n\n#### :boom: Breaking Change\n* `@sheepdog/vanilla`\n  * [#320](https://github.com/mainmatter/sheepdog/pull/320) breaking: bump `@sheepdog/vanilla` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/core`\n  * [#319](https://github.com/mainmatter/sheepdog/pull/319) breaking: bump `@sheepdog/core` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/svelte`\n  * [#315](https://github.com/mainmatter/sheepdog/pull/315) feat: upgrade `@sheepdog/svelte` to runes ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }
