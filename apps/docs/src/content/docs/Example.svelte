@@ -2,14 +2,19 @@
 	import { task, didCancel } from '@sheepdog/svelte';
 	import Timeline from './Timeline.svelte';
 	import Tabs from '../../components/Tabs.svelte';
-	import { readable } from 'svelte/store';
 
-	export let max = 1;
-	export let selected_task_type = 'enqueue';
-	export let show_tabs = false;
+	/**
+	 * @typedef {Object} Props
+	 * @property {number} [max]
+	 * @property {string} [selected_task_type]
+	 * @property {boolean} [show_tabs]
+	 */
 
-	let elements = [];
-	let start;
+	/** @type {Props} */
+	let { max = 1, selected_task_type = $bindable('enqueue'), show_tabs = false } = $props();
+
+	let elements = $state([]);
+	let start = $state();
 
 	const modifierTypes = [
 		{ label: 'Enqueue', value: 'enqueue' },
@@ -21,18 +26,16 @@
 
 	async function* fn({ to_add, now }) {
 		to_add.start = Date.now() - now;
-		elements = elements;
 		await new Promise((r) => setTimeout(r, 2000));
 		yield;
 		to_add.end = Date.now() - now;
-		elements = elements;
 	}
 
 	const stop_after = 3000;
 	let timeout;
-	let stopped = false;
+	let stopped = $state(false);
 
-	$: example_task = task(fn, { max, kind: selected_task_type });
+	let example_task = $derived(task(fn, { max, kind: selected_task_type }));
 
 	const set_stop_time = () => {
 		clearTimeout(timeout);
@@ -53,7 +56,7 @@
 	<Tabs>
 		{#each modifierTypes as type}
 			<button
-				on:click={() => setTaskType(type.value)}
+				onclick={() => setTaskType(type.value)}
 				class:active={selected_task_type === type.value}>{type.label}</button
 			>
 		{/each}
@@ -64,15 +67,15 @@
 	{#if !stopped}
 		<button
 			class="button"
-			on:click={() => {
+			onclick={() => {
 				if (!start) {
 					start = Date.now();
 				}
 				const now = Date.now();
-				const to_add = {
+				const to_add = $state({
 					added: now - start,
 					id: crypto.randomUUID(),
-				};
+				});
 
 				const task = example_task.perform({ to_add, now });
 				to_add.task = task;
@@ -89,13 +92,12 @@
 						}
 					});
 				elements.push(to_add);
-				elements = elements;
 			}}>Add</button
 		>
 	{/if}
 	<button
 		class="button"
-		on:click={() => {
+		onclick={() => {
 			start = undefined;
 			stopped = false;
 			elements = [];
@@ -105,8 +107,8 @@
 	{#if elements.length}
 		<button
 			class="button"
-			on:click={() => {
-				if (!$example_task.isRunning) return;
+			onclick={() => {
+				if (!example_task.isRunning) return;
 				example_task.cancelAll();
 			}}>Cancel all</button
 		>

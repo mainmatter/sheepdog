@@ -18,7 +18,7 @@ The simplest way to use `@sheepdog/svelte` is the following
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		myTask.perform();
 	}}
 >
@@ -29,8 +29,8 @@ The simplest way to use `@sheepdog/svelte` is the following
 This will run your async function when the user presses the button. _"But why not use a normal async
 function?"_ I hear you ask.
 
-**Because the `myTask` variable that you used to call `perform` is also a svelte store that contains
-a lot of useful information about your task!**
+**Because the `myTask` variable that you used to call `perform` is also a svelte stateful class that
+contains a lot of useful information about your task!**
 
 ## `Task` structure
 
@@ -78,7 +78,9 @@ type Task = {
 
 ## `TaskInstance` structure
 
-To make it easier to reason about, every type of task modifier utilizes the same underlying structure. You can find more detail about the structure of the `TaskInstance` in the [reference docs](/reference/task-instance).
+To make it easier to reason about, every type of task modifier utilizes the same underlying
+structure. You can find more detail about the structure of the `TaskInstance` in the
+[reference docs](/reference/task-instance).
 
 ## Task modifiers
 
@@ -101,7 +103,7 @@ Here's how you can specify the modifier:
     	});
     </script>
 
-    <button on:click={()=>{
+    <button onclick={()=>{
     	myTask.perform();
     }}>
     	do async stuff one by one
@@ -118,7 +120,7 @@ Here's how you can specify the modifier:
     	}, { kind: "enqueue" });
     </script>
 
-    <button on:click={()=>{
+    <button onclick={()=>{
     	myTask.perform();
     }}>
     	do async stuff one by one

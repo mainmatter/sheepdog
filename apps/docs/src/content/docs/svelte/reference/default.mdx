@@ -14,8 +14,8 @@ There's no concurrency management in this task and every `perform` will be execu
 To specify a default task, you can either use the dot notation or the options notation.
 
 <Aside type="note">
-	We call this tab "Dot notation" because you can define a default task with `task.default`. But it's
-	much easier and recommended to just use `task`.
+	We call this tab "Dot notation" because you can define a default task with `task.default`. But
+	it's much easier and recommended to just use `task`.
 </Aside>
 
 <Tabs syncKey="notation">
@@ -53,10 +53,10 @@ To specify a default task, you can either use the dot notation or the options no
 
 </Tabs>
 
-### The task store
+### The task class
 
-The return value of the task function will be a svelte store where you can access state from all the
-instances running and eventually cancel them with `cancelAll`.
+The return value of the task function will be a svelte stateful class where you can access state
+from all the instances running and eventually cancel them with `cancelAll`.
 
 <LinkCard
 	href="/getting-started/usage/#task-structure"
@@ -88,7 +88,7 @@ by the `perform` function (and it will be strongly typed too).
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		myTask.perform('42');
 	}}>perform</button
 >
@@ -111,7 +111,7 @@ by the `perform` function (and it will be strongly typed too).
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		myTask.perform('42');
 	}}>perform</button
 >
@@ -140,7 +140,7 @@ function.
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		const number = await myTask.perform();
 		console.log(number); // 42
 	}}>perform</button
@@ -164,7 +164,7 @@ function.
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		const number = await myTask.perform();
 		console.log(number); // 42
 	}}>perform</button
@@ -179,8 +179,7 @@ function.
 
 If you don't await the `perform` function, then you'll get back the
 [task instance](/reference/task-instance) that you can use either to cancel it or to get its current
-state. The `TaskInstance` is also a svelte store and you can access the current value with
-`instance.get()`.
+state. The `TaskInstance` is also a svelte stateful class and you can access the current value.
 
 <Tabs syncKey="notation">
 
@@ -196,9 +195,9 @@ state. The `TaskInstance` is also a svelte store and you can access the current 
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		const lastRun = myTask.perform();
-		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		console.log(lastRun); // { isRunning: true, hasStarted: true, ... }
 		lastRun.cancel();
 	}}>perform</button
 >
@@ -221,9 +220,9 @@ state. The `TaskInstance` is also a svelte store and you can access the current 
 </script>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		lastRun = myTask.perform();
-		console.log(lastRun.get()); // { isRunning: true, hasStarted: true, ... }
+		console.log(lastRun); // { isRunning: true, hasStarted: true, ... }
 		lastRun.cancel();
 	}}>perform</button
 >

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task, type SheepdogUtils } from '../../index';
+	import { task, type SheepdogUtils } from '../../index.js';
 
 	export let fn: (
 		args: number,
@@ -86,7 +86,7 @@
 		} catch (e) {
 			return_value({
 				error: e,
-				store: default_task,
+				task: default_task,
 			});
 		}
 	}}>perform</button

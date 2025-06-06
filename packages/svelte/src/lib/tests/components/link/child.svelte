@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { task, type Task } from '../../../index';
+	import { task, type Task } from '../../../index.js';
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export let parent: Task<number, any>;
