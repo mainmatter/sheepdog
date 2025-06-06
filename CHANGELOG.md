@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2025-06-06)
+
+* @sheepdog/svelte 0.12.6 (patch)
+
+#### :memo: Documentation
+* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/svelte`
+  * [#321](https://github.com/mainmatter/sheepdog/pull/321) chore: setup release plan to publish to `legacy` ([@paoloricciuti](https://github.com/paoloricciuti))
+* Other
+  * [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-05-23)
 
 * @sheepdog/core 0.2.2 (patch)
