@@ -1,5 +1,15 @@
 # Changelog
 
+## Release (2025-06-20)
+
+
+
+#### :memo: Documentation
+* [#328](https://github.com/mainmatter/sheepdog/pull/328) docs: fix favicon ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-06-06)
 
 * @sheepdog/core 1.0.0 (major)
