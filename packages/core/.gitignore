@@ -1,2 +1,3 @@
 dist
 tests/expected-transforms/**/_actual.js
+tests/expected-transforms/**/_actual.js.map

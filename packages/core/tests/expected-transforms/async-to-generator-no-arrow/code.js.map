@@ -1,0 +1,1 @@
+{"version":3,"names":[],"sources":["code.js"],"sourcesContent":["import { task } from \"@sheepdog/svelte\";\n\ntask(async function () {\n\n});"],"mappings":"SAAS,IAAI,QAAQ,kBAAkB;;AAEvC,IAAI,oBAAmB,CAAC,AAExB,CAAC"}

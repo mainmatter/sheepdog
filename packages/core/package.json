@@ -12,8 +12,8 @@
     "prepack": "pnpm build",
     "prepare": "pnpm build",
     "test": "vitest",
-    "generate-expected": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts",
-    "generate-expected-force": "tsm ./src/lib/tests/expected-transforms/generate-expected.ts -f"
+    "generate-expected": "tsm ./tests/expected-transforms/generate-expected.ts",
+    "generate-expected-force": "tsm ./tests/expected-transforms/generate-expected.ts -f"
   },
   "files": [
     "dist",
