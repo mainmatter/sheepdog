@@ -20,10 +20,7 @@ task(async function* () {
 
 	fns[yield Promise.resolve(0)]();
 
-	const [
-		array_destructure = yield Promise.resolve()
-	] = [undefined];
-
+	const [array_destructure = yield Promise.resolve()] = [undefined];
 	const function_call = fn(yield Promise.resolve(2));
 	const conditional1 = (yield Promise.resolve(true)) ? 1 : 2;
 	const conditional2 = true ? yield Promise.resolve(1) : 2;
@@ -39,15 +36,8 @@ task(async function* () {
 	const logical5 = (yield Promise.resolve(null)) && null;
 	const logical6 = true && (yield Promise.resolve(null));
 	const object_expression1 = { awaited: yield Promise.resolve(2) };
-
-	const object_expression2 = {
-		awaited: { nested: yield Promise.resolve(2) }
-	};
-
-	const object_expression3 = {
-		awaited: { nested: [yield Promise.resolve(2)] }
-	};
-
+	const object_expression2 = { awaited: { nested: yield Promise.resolve(2) } };
+	const object_expression3 = { awaited: { nested: [yield Promise.resolve(2)] } };
 	const tagged_template = str`something ${yield Promise.resolve("")}`;
 	const template_literal = `something ${yield Promise.resolve("")}`;
 	const unary = !(yield Promise.resolve(true));
