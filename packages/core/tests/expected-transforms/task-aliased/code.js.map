@@ -1,0 +1,1 @@
+{"version":3,"names":[],"sources":["code.js"],"sourcesContent":["import { task as other_name } from \"@sheepdog/svelte\";\n\nother_name(async () => {\n\tawait Promise.resolve();\n\tawait Promise.resolve();\n});"],"mappings":"SAAS,IAAI,IAAI,UAAU,QAAQ,kBAAkB;;AAErD,UAAU,oBAAa,CAAC;OACjB,OAAO,CAAC,OAAO;OACf,OAAO,CAAC,OAAO;AACtB,CAAC"}
