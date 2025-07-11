@@ -1,5 +1,19 @@
 # Changelog
 
+## Release (2025-07-11)
+
+* @sheepdog/core 1.0.1 (patch)
+
+#### :memo: Documentation
+* [#328](https://github.com/mainmatter/sheepdog/pull/328) docs: fix favicon ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/core`
+  * [#332](https://github.com/mainmatter/sheepdog/pull/332) chore: add sourcemaps tests ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-06-06)
 
 * @sheepdog/core 1.0.0 (major)
