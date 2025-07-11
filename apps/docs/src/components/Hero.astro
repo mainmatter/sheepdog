@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 
 const PAGE_TITLE_ID = '_top';
 const { data } = Astro.locals.starlightRoute.entry;
-const { title = data.title ?? 'Sheepdog', tagline, image, actions = [] } = data?.hero ?? {};
+const { tagline, image, actions = [] } = data?.hero ?? {};
 
 const imageAttrs = {
 	loading: 'eager' as const,

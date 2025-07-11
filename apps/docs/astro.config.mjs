@@ -164,7 +164,6 @@ export default defineConfig({
 		'/getting-started/installation': '/svelte/getting-started/installation',
 		'/getting-started/usage': '/svelte/getting-started/usage',
 		'/getting-started/what-is-it': '/svelte/getting-started/what-is-it',
-		'/reference/[...all]': '/svelte/reference/[...all]',
 		'/reference/default': '/svelte/reference/default',
 		'/reference/drop': '/svelte/reference/drop',
 		'/reference/enqueue': '/svelte/reference/enqueue',
