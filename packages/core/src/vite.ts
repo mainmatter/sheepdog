@@ -21,6 +21,7 @@ export function createAsyncTransformPlugin(specifiers: string[]) {
 	async function asyncTransform(): Promise<Plugin> {
 		const { parse } = await import('acorn');
 		const { print } = await import('esrap');
+		const { default: ts } = await import('esrap/languages/ts');
 		const { walk } = await import('zimmerframe');
 
 		return {
@@ -135,10 +136,16 @@ export function createAsyncTransformPlugin(specifiers: string[]) {
 					if (changed) {
 						return {
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							...print(returned as any, {
-								sourceMapContent: code,
-								sourceMapSource: id,
-							}),
+							...print(
+								returned as any,
+								ts({
+									quotes: 'single',
+								}),
+								{
+									sourceMapSource: id,
+									sourceMapContent: code,
+								},
+							),
 						};
 					}
 				} catch (e) {
