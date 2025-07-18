@@ -41,7 +41,7 @@
   "dependencies": {
     "acorn": "^8.11.3",
     "esm-env": "^1.1.4",
-    "esrap": "^1.2.2",
+    "esrap": "^2.0.1",
     "zimmerframe": "^1.1.2"
   },
   "volta": {

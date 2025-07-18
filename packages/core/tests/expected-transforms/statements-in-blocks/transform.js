@@ -13,6 +13,7 @@ task(async function* () {
 	}
 
 	for (const num of arr) console.log(yield Promise.resolve(num));
+
 	for (const letter in obj) console.log(yield Promise.resolve(letter));
 
 	let i = 0;
@@ -23,7 +24,9 @@ task(async function* () {
 	}
 
 	i = 0;
+
 	while (i < 10) console.log(yield Promise.resolve(i));
+
 	i = 0;
 
 	do {
