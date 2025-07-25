@@ -1,0 +1,1 @@
+{"version":3,"names":[],"sources":["code.js"],"sourcesContent":["import { task } from \"@sheepdog/svelte\";\n\ntask(async () => {\n\tawait Promise.resolve();\n});"],"mappings":"SAAS,IAAI,QAAQ,kBAAkB;;AAEvC,IAAI,oBAAa,CAAC;OACX,OAAO,CAAC,OAAO;AACtB,CAAC"}

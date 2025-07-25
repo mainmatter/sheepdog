@@ -24,10 +24,7 @@ export const task_fn = async function* () {
 
 	fns[yield Promise.resolve(0)]();
 
-	const [
-		array_destructure = yield Promise.resolve()
-	] = [undefined];
-
+	const [array_destructure = yield Promise.resolve()] = [undefined];
 	const function_call = fn(yield Promise.resolve(2));
 	const conditional1 = (yield Promise.resolve(true)) ? 1 : 2;
 	const conditional2 = true ? yield Promise.resolve(1) : 2;
@@ -43,15 +40,8 @@ export const task_fn = async function* () {
 	const logical5 = (yield Promise.resolve(null)) && null;
 	const logical6 = true && (yield Promise.resolve(null));
 	const object_expression1 = { awaited: yield Promise.resolve(2) };
-
-	const object_expression2 = {
-		awaited: { nested: yield Promise.resolve(2) }
-	};
-
-	const object_expression3 = {
-		awaited: { nested: [yield Promise.resolve(2)] }
-	};
-
+	const object_expression2 = { awaited: { nested: yield Promise.resolve(2) } };
+	const object_expression3 = { awaited: { nested: [yield Promise.resolve(2)] } };
 	const tagged_template = str`something ${yield Promise.resolve('')}`;
 	const template_literal = `something ${yield Promise.resolve('')}`;
 	const unary = !(yield Promise.resolve(true));
@@ -69,10 +59,7 @@ const task_fn_no_export = async function* () {
 
 	fns[yield Promise.resolve(0)]();
 
-	const [
-		array_destructure = yield Promise.resolve()
-	] = [undefined];
-
+	const [array_destructure = yield Promise.resolve()] = [undefined];
 	const function_call = fn(yield Promise.resolve(2));
 	const conditional1 = (yield Promise.resolve(true)) ? 1 : 2;
 	const conditional2 = true ? yield Promise.resolve(1) : 2;
@@ -88,15 +75,8 @@ const task_fn_no_export = async function* () {
 	const logical5 = (yield Promise.resolve(null)) && null;
 	const logical6 = true && (yield Promise.resolve(null));
 	const object_expression1 = { awaited: yield Promise.resolve(2) };
-
-	const object_expression2 = {
-		awaited: { nested: yield Promise.resolve(2) }
-	};
-
-	const object_expression3 = {
-		awaited: { nested: [yield Promise.resolve(2)] }
-	};
-
+	const object_expression2 = { awaited: { nested: yield Promise.resolve(2) } };
+	const object_expression3 = { awaited: { nested: [yield Promise.resolve(2)] } };
 	const tagged_template = str`something ${yield Promise.resolve('')}`;
 	const template_literal = `something ${yield Promise.resolve('')}`;
 	const unary = !(yield Promise.resolve(true));
@@ -114,10 +94,7 @@ async function with_no_transform() {
 
 	fns[await Promise.resolve(0)]();
 
-	const [
-		array_destructure = await Promise.resolve()
-	] = [undefined];
-
+	const [array_destructure = await Promise.resolve()] = [undefined];
 	const function_call = fn(await Promise.resolve(2));
 	const conditional1 = await Promise.resolve(true) ? 1 : 2;
 	const conditional2 = true ? await Promise.resolve(1) : 2;
@@ -133,15 +110,8 @@ async function with_no_transform() {
 	const logical5 = await Promise.resolve(null) && null;
 	const logical6 = true && await Promise.resolve(null);
 	const object_expression1 = { awaited: await Promise.resolve(2) };
-
-	const object_expression2 = {
-		awaited: { nested: await Promise.resolve(2) }
-	};
-
-	const object_expression3 = {
-		awaited: { nested: [await Promise.resolve(2)] }
-	};
-
+	const object_expression2 = { awaited: { nested: await Promise.resolve(2) } };
+	const object_expression3 = { awaited: { nested: [await Promise.resolve(2)] } };
 	const tagged_template = str`something ${await Promise.resolve('')}`;
 	const template_literal = `something ${await Promise.resolve('')}`;
 	const unary = !await Promise.resolve(true);
@@ -159,10 +129,7 @@ const different_transform = transform(async () => {
 
 	fns[await Promise.resolve(0)]();
 
-	const [
-		array_destructure = await Promise.resolve()
-	] = [undefined];
-
+	const [array_destructure = await Promise.resolve()] = [undefined];
 	const function_call = fn(await Promise.resolve(2));
 	const conditional1 = await Promise.resolve(true) ? 1 : 2;
 	const conditional2 = true ? await Promise.resolve(1) : 2;
@@ -178,15 +145,8 @@ const different_transform = transform(async () => {
 	const logical5 = await Promise.resolve(null) && null;
 	const logical6 = true && await Promise.resolve(null);
 	const object_expression1 = { awaited: await Promise.resolve(2) };
-
-	const object_expression2 = {
-		awaited: { nested: await Promise.resolve(2) }
-	};
-
-	const object_expression3 = {
-		awaited: { nested: [await Promise.resolve(2)] }
-	};
-
+	const object_expression2 = { awaited: { nested: await Promise.resolve(2) } };
+	const object_expression3 = { awaited: { nested: [await Promise.resolve(2)] } };
 	const tagged_template = str`something ${await Promise.resolve('')}`;
 	const template_literal = `something ${await Promise.resolve('')}`;
 	const unary = !await Promise.resolve(true);

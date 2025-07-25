@@ -1,5 +1,4 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
-import { is_homepage } from '@utils/is-homepage';
 
 const available_packages = ['svelte', 'vanilla'];
 

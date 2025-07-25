@@ -19,6 +19,18 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
+			favicon: '/images/favicon.svg',
+			head: [
+				// Add ICO favicon fallback for Safari.
+				{
+					tag: 'link',
+					attrs: {
+						rel: 'icon',
+						href: '/images/favicon.ico',
+						sizes: '32x32',
+					},
+				},
+			],
 			routeMiddleware: './src/route-data.ts',
 			components: {
 				SiteTitle: './src/components/SiteTitle.astro',
@@ -42,7 +54,7 @@ export default defineConfig({
 					tag: 'link',
 					attrs: {
 						rel: 'shortcut icon',
-						href: '/full-color.svg',
+						href: '/logo-light.svg',
 						media: '(prefers-color-scheme: light)',
 					},
 				},
@@ -50,7 +62,7 @@ export default defineConfig({
 					tag: 'link',
 					attrs: {
 						rel: 'shortcut icon',
-						href: '/1c-plus.svg',
+						href: '/logo-dark.svg',
 						media: '(prefers-color-scheme: dark)',
 					},
 				},
@@ -152,7 +164,6 @@ export default defineConfig({
 		'/getting-started/installation': '/svelte/getting-started/installation',
 		'/getting-started/usage': '/svelte/getting-started/usage',
 		'/getting-started/what-is-it': '/svelte/getting-started/what-is-it',
-		'/reference/[...all]': '/svelte/reference/[...all]',
 		'/reference/default': '/svelte/reference/default',
 		'/reference/drop': '/svelte/reference/drop',
 		'/reference/enqueue': '/svelte/reference/enqueue',

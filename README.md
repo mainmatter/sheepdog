@@ -2,8 +2,8 @@
 
 Handle async tasks in your svelte application with ease thanks to `@sheepdog/svelte`.
 
-![Sheepdog logo](./apps/docs/src/assets/1c-plus.svg#gh-dark-mode-only)
-![Sheepdog logo](./apps/docs/src/assets/full-color.svg#gh-light-mode-only)
+![Sheepdog logo](./apps/docs/src/assets/logo-dark.svg#gh-dark-mode-only)
+![Sheepdog logo](./apps/docs/src/assets/logo-light.svg#gh-light-mode-only)
 
 > [!NOTE]
 > Sheepdog was written and is maintained by [Mainmatter](https://mainmatter.com) and contributors.
