@@ -90,6 +90,7 @@ const task = /*#__PURE__*/ (() => {
 			return task_result;
 		};
 
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity
 		const instances = new Map<string, TaskInstance<TReturn>>();
 
 		const actual_task = createTask<TArgs, TReturn, TaskInstance<TReturn>>(
