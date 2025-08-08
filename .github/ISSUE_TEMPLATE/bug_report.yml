@@ -40,7 +40,8 @@ body:
       label: Package name
       description: Select the Sheepdog package
       options:
-        - svelte
         - core
+        - svelte
+        - vanilla
     validations:
       required: true
