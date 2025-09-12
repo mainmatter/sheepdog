@@ -11,5 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
+        with:
+          node-version: 24
       - run: pnpm i --frozen-lockfile
       - run: pnpm run test
