@@ -18,8 +18,8 @@ importers:
         specifier: ^10.0.0
         version: 10.1.8(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-svelte:
-        specifier: 3.12.3
-        version: 3.12.3(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2)
+        specifier: 3.12.4
+        version: 3.12.4(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2)
       globals:
         specifier: ^16.0.0
         version: 16.4.0
@@ -45,8 +45,8 @@ importers:
         specifier: ^6.0.0
         version: 6.5.13(@types/node@22.18.11)(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))(encoding@0.1.13)(jiti@2.6.1)(rollup@4.52.4)(yaml@2.8.1)
       '@astrojs/starlight':
-        specifier: ^0.35.0
-        version: 0.35.3(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))
+        specifier: ^0.36.0
+        version: 0.36.1(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))
       '@astrojs/svelte':
         specifier: ^7.0.0
         version: 7.2.0(@types/node@22.18.11)(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))(jiti@2.6.1)(svelte@5.40.2)(typescript@5.9.3)(yaml@2.8.1)
@@ -155,8 +155,8 @@ importers:
         specifier: ^2.0.0
         version: 2.2.2(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-svelte:
-        specifier: 3.12.3
-        version: 3.12.3(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2)
+        specifier: 3.12.4
+        version: 3.12.4(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2)
       execa:
         specifier: ^9.4.0
         version: 9.6.0
@@ -318,8 +318,8 @@ packages:
   '@astrojs/sitemap@3.6.0':
     resolution: {integrity: sha512-4aHkvcOZBWJigRmMIAJwRQXBS+ayoP5z40OklTXYXhUDhwusz+DyDl+nSshY6y9DvkVEavwNcFO8FD81iGhXjg==}
 
-  '@astrojs/starlight@0.35.3':
-    resolution: {integrity: sha512-z9MbODjZl/STU3PPU18iOTkLObJBw7PA8xMe5s+KPscQGL0LNZyQUYeClG+F1/em/k+2AsokGpVPta+aOTk1sg==}
+  '@astrojs/starlight@0.36.1':
+    resolution: {integrity: sha512-Fmt8mIsAIZN18Y4YQDI6p521GsYGe4hYxh9jWmz0pHBXnS5J7Na3TSXNya4eyIymCcKkuiKFbs7b/knsdGVYPg==}
     peerDependencies:
       astro: ^5.5.0
 
@@ -3063,8 +3063,8 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  eslint-plugin-svelte@3.12.3:
-    resolution: {integrity: sha512-YVNhKsHZeXVvsjZcSMjnce9gO31frICu453p5JjFiXNszHoG9k8WvsA/LAoLi4K8T69G7DIrgg1AqasDJLpgoQ==}
+  eslint-plugin-svelte@3.12.4:
+    resolution: {integrity: sha512-hD7wPe+vrPgx3U2X2b/wyTMtWobm660PygMGKrWWYTc9lvtY8DpNFDaU2CJQn1szLjGbn/aJ3g8WiXuKakrEkw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.1 || ^9.0.0
@@ -6396,7 +6396,7 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 3.25.76
 
-  '@astrojs/starlight@0.35.3(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))':
+  '@astrojs/starlight@0.36.1(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))':
     dependencies:
       '@astrojs/markdown-remark': 6.3.8
       '@astrojs/mdx': 4.3.7(astro@5.14.5(@netlify/blobs@10.1.0)(@types/node@22.18.11)(jiti@2.6.1)(rollup@4.52.4)(typescript@5.9.3)(yaml@2.8.1))
@@ -9535,7 +9535,7 @@ snapshots:
       eslint: 9.37.0(jiti@2.6.1)
       globals: 13.24.0
 
-  eslint-plugin-svelte@3.12.3(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2):
+  eslint-plugin-svelte@3.12.4(eslint@9.37.0(jiti@2.6.1))(svelte@5.40.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.37.0(jiti@2.6.1))
       '@jridgewell/sourcemap-codec': 1.5.5
