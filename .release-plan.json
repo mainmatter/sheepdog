@@ -1,52 +1,38 @@
 {
   "solution": {
     "@sheepdog/core": {
-      "impact": "major",
-      "oldVersion": "0.2.2",
-      "newVersion": "1.0.0",
+      "impact": "patch",
+      "oldVersion": "1.0.0",
+      "newVersion": "1.0.1",
       "tagName": "latest",
       "constraints": [
         {
-          "impact": "major",
-          "reason": "Appears in changelog section :boom: Breaking Change"
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./packages/core/package.json"
     },
     "@sheepdog/svelte": {
-      "impact": "major",
-      "oldVersion": "0.12.5",
-      "newVersion": "1.0.0",
-      "tagName": "latest",
-      "constraints": [
-        {
-          "impact": "patch",
-          "reason": "Has dependency `workspace:^` on @sheepdog/core"
-        },
-        {
-          "impact": "major",
-          "reason": "Appears in changelog section :boom: Breaking Change"
-        }
-      ],
-      "pkgJSONPath": "./packages/svelte/package.json"
+      "oldVersion": "1.0.0"
     },
     "@sheepdog/vanilla": {
-      "impact": "major",
-      "oldVersion": "0.1.0",
-      "newVersion": "1.0.0",
+      "impact": "patch",
+      "oldVersion": "1.0.0",
+      "newVersion": "1.0.1",
       "tagName": "latest",
       "constraints": [
         {
-          "impact": "major",
-          "reason": "Appears in changelog section :boom: Breaking Change"
-        },
-        {
           "impact": "patch",
-          "reason": "Has dependency `workspace:^` on @sheepdog/core"
+          "reason": "Appears in changelog section :bug: Bug Fix"
         }
       ],
       "pkgJSONPath": "./packages/vanilla/package.json"
     }
   },
-  "description": "## Release (2025-06-06)\n\n* @sheepdog/core 1.0.0 (major)\n* @sheepdog/svelte 1.0.0 (major)\n* @sheepdog/vanilla 1.0.0 (major)\n\n#### :boom: Breaking Change\n* `@sheepdog/vanilla`\n  * [#320](https://github.com/mainmatter/sheepdog/pull/320) breaking: bump `@sheepdog/vanilla` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/core`\n  * [#319](https://github.com/mainmatter/sheepdog/pull/319) breaking: bump `@sheepdog/core` version to 1.0 ([@paoloricciuti](https://github.com/paoloricciuti))\n* `@sheepdog/svelte`\n  * [#315](https://github.com/mainmatter/sheepdog/pull/315) feat: upgrade `@sheepdog/svelte` to runes ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* [#288](https://github.com/mainmatter/sheepdog/pull/288) docs: docs for multiple packages ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* [#316](https://github.com/mainmatter/sheepdog/pull/316) fix: allow breaking as `label` ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2025-10-17)\n\n* @sheepdog/core 1.0.1 (patch)\n* @sheepdog/vanilla 1.0.1 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`, `@sheepdog/vanilla`\n  * [#329](https://github.com/mainmatter/sheepdog/pull/329) fix: missing sourcemaps ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* [#328](https://github.com/mainmatter/sheepdog/pull/328) docs: fix favicon ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/core`\n  * [#333](https://github.com/mainmatter/sheepdog/pull/333) chore: update to esrap v2 ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#332](https://github.com/mainmatter/sheepdog/pull/332) chore: add sourcemaps tests ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

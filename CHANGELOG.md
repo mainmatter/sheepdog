@@ -1,5 +1,25 @@
 # Changelog
 
+## Release (2025-10-17)
+
+* @sheepdog/core 1.0.1 (patch)
+* @sheepdog/vanilla 1.0.1 (patch)
+
+#### :bug: Bug Fix
+* `@sheepdog/core`, `@sheepdog/vanilla`
+  * [#329](https://github.com/mainmatter/sheepdog/pull/329) fix: missing sourcemaps ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :memo: Documentation
+* [#328](https://github.com/mainmatter/sheepdog/pull/328) docs: fix favicon ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### :house: Internal
+* `@sheepdog/core`
+  * [#333](https://github.com/mainmatter/sheepdog/pull/333) chore: update to esrap v2 ([@paoloricciuti](https://github.com/paoloricciuti))
+  * [#332](https://github.com/mainmatter/sheepdog/pull/332) chore: add sourcemaps tests ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
 ## Release (2025-06-06)
 
 * @sheepdog/core 1.0.0 (major)
