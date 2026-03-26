@@ -2,17 +2,13 @@
   "solution": {
     "@sheepdog/core": {
       "impact": "patch",
-      "oldVersion": "1.0.0",
-      "newVersion": "1.0.1",
+      "oldVersion": "1.0.1",
+      "newVersion": "1.0.2",
       "tagName": "latest",
       "constraints": [
         {
           "impact": "patch",
           "reason": "Appears in changelog section :bug: Bug Fix"
-        },
-        {
-          "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
         }
       ],
       "pkgJSONPath": "./packages/core/package.json"
@@ -22,8 +18,8 @@
     },
     "@sheepdog/vanilla": {
       "impact": "patch",
-      "oldVersion": "1.0.0",
-      "newVersion": "1.0.1",
+      "oldVersion": "1.0.1",
+      "newVersion": "1.0.2",
       "tagName": "latest",
       "constraints": [
         {
@@ -34,5 +30,5 @@
       "pkgJSONPath": "./packages/vanilla/package.json"
     }
   },
-  "description": "## Release (2026-03-26)\n\n* @sheepdog/core 1.0.1 (patch)\n* @sheepdog/vanilla 1.0.1 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`, `@sheepdog/vanilla`\n  * [#329](https://github.com/mainmatter/sheepdog/pull/329) fix: missing sourcemaps ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :memo: Documentation\n* [#328](https://github.com/mainmatter/sheepdog/pull/328) docs: fix favicon ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### :house: Internal\n* `@sheepdog/core`\n  * [#333](https://github.com/mainmatter/sheepdog/pull/333) chore: update to esrap v2 ([@paoloricciuti](https://github.com/paoloricciuti))\n  * [#332](https://github.com/mainmatter/sheepdog/pull/332) chore: add sourcemaps tests ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
+  "description": "## Release (2026-03-26)\n\n* @sheepdog/core 1.0.2 (patch)\n* @sheepdog/vanilla 1.0.2 (patch)\n\n#### :bug: Bug Fix\n* `@sheepdog/core`, `@sheepdog/vanilla`\n  * [#368](https://github.com/mainmatter/sheepdog/pull/368) chore: trigger release ([@paoloricciuti](https://github.com/paoloricciuti))\n\n#### Committers: 1\n- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))\n"
 }

@@ -2,6 +2,18 @@
 
 ## Release (2026-03-26)
 
+* @sheepdog/core 1.0.2 (patch)
+* @sheepdog/vanilla 1.0.2 (patch)
+
+#### :bug: Bug Fix
+* `@sheepdog/core`, `@sheepdog/vanilla`
+  * [#368](https://github.com/mainmatter/sheepdog/pull/368) chore: trigger release ([@paoloricciuti](https://github.com/paoloricciuti))
+
+#### Committers: 1
+- Paolo Ricciuti ([@paoloricciuti](https://github.com/paoloricciuti))
+
+## Release (2026-03-26)
+
 * @sheepdog/core 1.0.1 (patch)
 * @sheepdog/vanilla 1.0.1 (patch)
 
