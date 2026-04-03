@@ -48,7 +48,7 @@
     "extends": "../../package.json"
   },
   "devDependencies": {
-    "@types/node": "^22.10.10",
+    "@types/node": "^24.0.0",
     "publint": "^0.3.0",
     "vite": "^7.0.0",
     "vitest": "^3.0.5"
