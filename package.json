@@ -24,7 +24,7 @@
     "@gravityci/cli": "^0.1.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-svelte": "3.12.4",
-    "globals": "^16.0.0",
+    "globals": "^17.0.0",
     "prettier-plugin-svelte": "^3.2.3",
     "release-plan": "^0.17.4",
     "typescript": "^5.4.5",
